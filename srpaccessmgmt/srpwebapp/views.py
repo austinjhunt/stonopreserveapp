@@ -110,7 +110,7 @@ def admin(request):
 @csrf_exempt
 def lockcodes(request):
 
-    template = loader.get_template()
+    template = loader.get_template('main/lockcodes.html')
     context = {
         '': '',
     }

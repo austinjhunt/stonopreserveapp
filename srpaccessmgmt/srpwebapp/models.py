@@ -7,4 +7,7 @@ class User(models.Model):
 
 class LockCode(models.Model):
     current_code = models.CharField(max_length=4)
-    
+
+
+class Visit(models.Model):
+    date = ''
