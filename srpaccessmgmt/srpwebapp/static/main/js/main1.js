@@ -1,3 +1,4 @@
+/* Function called on click of "Register" button on register.html template */
 function register_new_account(){
     var password = $("#inputPassword").val();
     var email = $("#inputEmail").val();
@@ -42,8 +43,43 @@ function register_new_account(){
                     csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
                 },
                 success: function (data) {
-                    window.location = '/login'; // auto log in after register
+                    console.log(data);
+                    if (data['result'] == 'register success'){
+                        window.location = '/login'; // auto log in after register
+                    }
+                    else{
+                        console.log(data['result']);
+                        alert("Unable to register your account at this time. Please try again soon.");
+
+                    }
                 }
             });
     }
+}
+
+/* Function called on click of "Login" button on login.html template */
+function login(){
+    var email = $("#inputEmail").val();
+    var password = $("#inputPassword").val();
+    if (email.trim() == '' || password.trim() == ''){
+        alert("Please ensure that both fields are filled in before submitting.");
+    }
+    $.ajax(
+            {
+                type: "POST",
+
+                data: {
+                    btnType: 'login',
+                    email: email,
+                    password: password,
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                },
+                success: function (data) {
+                    if (data['result'] == 'auth success')
+                        window.location = '/'; // log in.
+                    else
+                        alert("Could not authenticate. Please try a different email or password.");
+                }
+            });
+
 }
