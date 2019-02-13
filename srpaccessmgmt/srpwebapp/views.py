@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
 from django.template import RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-
+from django.contrib.auth import logout
 # default user table
 from django.contrib.auth.models import User
 
@@ -23,11 +23,23 @@ def render_to_json_response(context, **response_kwargs):
 # home page, aka "index.html"
 @csrf_exempt
 def index(request):
-
-    template = loader.get_template('main/index.html')
-    context = {
-        'name': request.session['full_name'],
-    }
+    if request.user.is_authenticated:
+        template = loader.get_template('main/index.html')
+        context = {
+            'name': request.session['full_name'],
+        }
+        if request.is_ajax() and request.POST.get('btnType') == 'logout':
+            try:
+                logout(request)
+                result = 'logout success'
+            except Exception as e:
+                print(e)
+                result = 'logout fail'
+            data = {'result':result}
+            return render_to_json_response(data)
+    else: # not authenticated, direct to login page
+        template = loader.get_template('main/login.html')
+        context = {'':''}
     return HttpResponse(template.render(context, request))
 
 # 404 page
