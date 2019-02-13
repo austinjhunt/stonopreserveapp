@@ -83,3 +83,20 @@ function login(){
             });
 
 }
+
+function logout(){
+    $.ajax(
+            {
+                type: "POST",
+                data: {
+                    btnType: 'logout',
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                },
+                success: function (data) {
+                    if (data['result'] == 'logout success')
+                        window.location = '/login'; // direct to log in page
+                    else
+                        alert("Could not log out.");
+                }
+            });
+}
