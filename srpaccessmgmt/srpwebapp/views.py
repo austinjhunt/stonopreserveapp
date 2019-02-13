@@ -105,4 +105,13 @@ def admin(request):
     context = {
         '': '',
     }
-    return HttpResponse(template.render(context,request))
+    return HttpResponse(template.render(context, request))
+
+@csrf_exempt
+def lockcodes(request):
+
+    template = loader.get_template()
+    context = {
+        '': '',
+    }
+    return HttpResponse(template.render(context, request))
