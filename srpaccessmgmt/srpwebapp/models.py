@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-<<<<<<< HEAD
+# Note: customary to use singular noun for table names (i.e. Visit instead of Visits)
 
-class User(models.Model):
-    user_email = models.CharField(max_length=50)
-
-
-class LockCode(models.Model):
-    current_code = models.CharField(max_length=4)
+# default user table
+from django.contrib.auth.models import User
 
 
+# table to store all visits
 class Visit(models.Model):
-    date = ''
+    scheduled_date = models.DateField()
+    scheduled_start_time = models.TimeField()
+    scheduled_end_time = models.TimeField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE) # which user scheduled it?; on deletion of user, also delete this
+
+
