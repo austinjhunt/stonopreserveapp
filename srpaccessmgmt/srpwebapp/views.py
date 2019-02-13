@@ -1,19 +1,24 @@
-from django.shortcuts import render
-from django.template import loader
-from django.db.models import Q, Count
-from django.forms.models import model_to_dict
-from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
 from django.template import RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.http import JsonResponse
 
-from math import ceil
-from random import *
+# default user table
+from django.contrib.auth.models import User
+
+# import the models
+from .models import *
+# use this function for returning json data on ajax requests
+import json
+# for ajax requests, returning JSON to JS
+def render_to_json_response(context, **response_kwargs):
+    data = json.dumps(context)
+    response_kwargs['content_type'] = 'application/json'
+    return HttpResponse(data, **response_kwargs)
+
+
 # Create your views here.
 
-# Create your views here.
 
 # home page, aka "index.html"
 @csrf_exempt
@@ -21,7 +26,7 @@ def index(request):
 
     template = loader.get_template('main/index.html')
     context = {
-        '': '',
+        'name': request.session['full_name'],
     }
     return HttpResponse(template.render(context, request))
 
@@ -69,7 +74,29 @@ def forgot_password(request):
 
 # login page
 @csrf_exempt
-def login(request):
+def srp_login(request):
+
+    if request.is_ajax() and request.POST.get('btnType') == 'login':
+        rp = request.POST
+        try:
+            result = 'auth fail' # initialize
+            print("Authenticating...")
+            user = authenticate(username=rp.get('email'), password=rp.get('password'))
+            print(user)
+            if user is not None:
+                result = 'auth success'
+                login(request, user)
+                request.session['user_id'] = str(user.id)
+                request.session['user_email'] = user.username
+                request.session['full_name'] = user.first_name + ' ' + user.last_name
+
+                print("Logging in..." )
+                print("Full name: " + request.session['full_name'])
+        except Exception as e:
+            print(e)
+
+        data = {'result': result}
+        return render_to_json_response(data)
 
     template = loader.get_template('main/login.html')
     context = {
@@ -80,6 +107,46 @@ def login(request):
 # register page
 @csrf_exempt
 def register(request):
+
+    # if user clicks logout on register page
+    if request.is_ajax() and request.user.is_authenticated and (request.POST.get('btnType') == 'logout'):
+        try:
+            logout(request)
+            result = 'logout success'
+        except Exception as e:
+            print(e)
+            result = 'logout fail'
+        data = {'result': result}
+        return render_to_json_response(data)
+
+    # ajax request to handle registering new account
+    if request.is_ajax() and request.POST.get('btnType') == 'register_new_account':
+        rp = request.POST
+        try:
+            is_superuser = 0 if rp.get('accountType') == 'student' else 1
+            result = 'register fail'
+            # only create a new user if there is not already one with this username/email
+            alreadyexists = User.objects.filter(username=rp.get('email'))
+            alreadyexists.delete()
+            if len(alreadyexists) == 0: # does not already exist
+                print("No users with this username yet...")
+                # create a new user instance (default User model from auth app
+                newUser = User.objects.create_user(username=rp.get('email'),
+                                                   email=rp.get('email'),
+                                                   password=rp.get('password'),
+                                                   first_name=rp.get('firstName'),
+                                                   last_name=rp.get('lastName'),
+                                                   is_superuser=is_superuser,
+                                                   is_active=True)
+                newUser.save()
+                result = 'register success'
+            else:
+                print(alreadyexists[0])
+        except Exception as e:
+            print(e)
+            result = e
+        data = {'result': result}
+        return render_to_json_response(data)
 
     template = loader.get_template('main/register.html')
     context = {

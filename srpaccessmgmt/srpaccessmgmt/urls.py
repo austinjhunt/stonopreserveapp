@@ -24,7 +24,7 @@ urlpatterns = [
     url(r'^404', views.err404),
     url(r'^blank', views.blank),
     url(r'^forgot-password',views.forgot_password),
-    url(r'^login', views.login),
+    url(r'^login', views.srp_login),
     url(r'^register', views.register),
     url(r'^tables', views.tables),
     url(r'^charts',views.charts),
