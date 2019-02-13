@@ -1,5 +1,7 @@
-from django.db import models
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 
+<<<<<<< HEAD
 
 class User(models.Model):
     user_email = models.CharField(max_length=50)
