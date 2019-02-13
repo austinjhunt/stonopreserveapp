@@ -97,3 +97,12 @@ def tables(request):
     }
     return HttpResponse(template.render(context, request))
 
+# admin page
+@csrf_exempt
+def admin(request):
+
+    template = loader.get_template()
+    context = {
+        '': '',
+    }
+    return HttpResponse(template.render(context,request))
