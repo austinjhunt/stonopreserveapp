@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
+from django.db import models
 # Note: customary to use singular noun for table names (i.e. Visit instead of Visits)
 
 # default user table
@@ -14,4 +14,7 @@ class Visit(models.Model):
     scheduled_end_time = models.TimeField()
     user = models.ForeignKey(User, on_delete=models.CASCADE) # which user scheduled it?; on deletion of user, also delete this
 
+
+class Code(models.Model):
+    pass
 
