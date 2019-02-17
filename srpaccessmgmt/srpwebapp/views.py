@@ -143,6 +143,7 @@ def register(request):
             if len(alreadyexists) == 0: # does not already exist
                 print("No users with this username yet...")
                 # create a new user instance (default User model from auth app
+
                 newUser = User.objects.create_user(username=rp.get('email'),
                                                    email=rp.get('email'),
                                                    password=rp.get('password'),
