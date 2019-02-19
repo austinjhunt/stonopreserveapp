@@ -42,9 +42,8 @@ def index(request):
                       scheduled_end_time=datetime.time(3,45), user_id=2,
                       datetime_visit_was_scheduled=datetime.datetime.now()).save()
 
-            print("All visit objects...")
-            print(Visit.objects.all())
-            print("\n\n")
+
+
             # get all visits, then visitors return to front end for display in table
             all_scheduled_visits = Visit.objects.all()
 
@@ -63,7 +62,8 @@ def index(request):
         else:
             template = loader.get_template('main/home_regular.html')
             context = {
-                'name': request.session['full_name'],
+                'first_name': request.session['first_name'],
+                'full_name': request.session['full_name'],
             }
         if request.is_ajax() and request.POST.get('btnType') == 'logout':
             try:
@@ -157,18 +157,15 @@ def srp_login(request):
         rp = request.POST
         try:
             result = 'auth fail' # initialize
-            print("Authenticating...")
             user = authenticate(username=rp.get('email'), password=rp.get('password'))
-            print(user)
             if user is not None:
                 result = 'auth success'
                 login(request, user)
                 request.session['user_id'] = str(user.id)
                 request.session['user_email'] = user.username
+                request.session['first_name'] = user.first_name
                 request.session['full_name'] = user.first_name + ' ' + user.last_name
 
-                print("Logging in..." )
-                print("Full name: " + request.session['full_name'])
         except Exception as e:
             print(e)
 
