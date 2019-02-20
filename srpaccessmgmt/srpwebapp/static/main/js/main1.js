@@ -18,7 +18,7 @@ function register_new_account(){
 
     //do some validation, make sure they use mycharleston email
     else if (!email.endsWith("cofc.edu")){
-        alert("Please use your College of Charleston email address.")
+        alert("Please use your College of Charleston email address.");
     }
 
     else {
@@ -131,5 +131,5 @@ function send_pw_reset_email() {
 
 
 
-        })
+        });
 }
