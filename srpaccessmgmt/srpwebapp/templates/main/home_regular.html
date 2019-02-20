@@ -97,7 +97,35 @@
 
 
           <!-- schedule visit -->
-        <button type="button" class="btn btn-primary btn-lg">Schedule Visit</button>
+        <button type="button" class="btn btn-primary btn-lg" onclick="schedule();">Schedule Visit</button>
+
+        <!-- schedule visit form  -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+      <form id = "scheduleform" style = "display:none">
+        <div class="form-group"  >
+          <div class="form-group" id="schedulefirstname">
+               <label for="exampleFormControlInput1">First Name</label>
+                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="first name">
+          </div>
+          <div class="form-group" id="schedulelastname">
+               <label for="exampleFormControlInput1">Last Name</label>
+                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="last name">
+          </div>
+          <div class="form-group" id="scheduledatetime">
+               <label for="exampleFormControlInput1">Date and Time</label>
+                <input type="datetime-local" class="form-control" id="exampleFormControlInput1" >
+          </div>
+
+          <div class="form-group">
+            <label for="exampleFormControlTextarea1">Reason for Visit</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+          </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+
 
           <div id='calendar'></div>
 
@@ -157,6 +185,11 @@
         <!-- panic buttion -->
           <button type="button" class="btn btn-danger btn-lg ">In Case of Emergency</button>
 
+
+
+
+
+
       </div>
       <!-- /.container-fluid -->
 
@@ -203,6 +236,9 @@
     </div>
   </div>
 </body>
+
+
+
 
 {% endblock %}
 
