@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3905d34c-121a-40ee-80a3-348613c10116" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/srpaccessmgmt/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/srpaccessmgmt/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/home_regular.html" beforeDir="false" afterPath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/home_regular.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -44,8 +44,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/home_regular.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="370">
-              <caret line="155" column="92" selection-start-line="155" selection-start-column="92" selection-end-line="155" selection-end-column="92" />
+            <state relative-caret-position="195">
+              <caret line="13" column="44" selection-start-line="13" selection-start-column="44" selection-end-line="13" selection-end-column="44" />
               <folding>
                 <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#div#1;n#body#0;n#!!top" expanded="true" />
               </folding>
@@ -105,6 +105,12 @@
               <item name="capstone-2019-cofc" type="b2602c69:ProjectViewProjectNode" />
               <item name="capstone-2019-cofc" type="462c0819:PsiDirectoryNode" />
               <item name="srpaccessmgmt" type="462c0819:PsiDirectoryNode" />
+              <item name="srpaccessmgmt" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="capstone-2019-cofc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="capstone-2019-cofc" type="462c0819:PsiDirectoryNode" />
+              <item name="srpaccessmgmt" type="462c0819:PsiDirectoryNode" />
               <item name="srpwebapp" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -120,6 +126,23 @@
               <item name="srpaccessmgmt" type="462c0819:PsiDirectoryNode" />
               <item name="srpwebapp" type="462c0819:PsiDirectoryNode" />
               <item name="static" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="capstone-2019-cofc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="capstone-2019-cofc" type="462c0819:PsiDirectoryNode" />
+              <item name="srpaccessmgmt" type="462c0819:PsiDirectoryNode" />
+              <item name="srpwebapp" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="capstone-2019-cofc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="capstone-2019-cofc" type="462c0819:PsiDirectoryNode" />
+              <item name="srpaccessmgmt" type="462c0819:PsiDirectoryNode" />
+              <item name="srpwebapp" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="js" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="capstone-2019-cofc" type="b2602c69:ProjectViewProjectNode" />
@@ -179,17 +202,18 @@
       <workItem from="1550594947944" duration="8000" />
       <workItem from="1550594980649" duration="686000" />
       <workItem from="1550595721439" duration="112000" />
-      <workItem from="1550596022564" duration="4063000" />
+      <workItem from="1550596022564" duration="4129000" />
+      <workItem from="1550673465834" duration="1020000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="8811000" />
+    <option name="totallyTimeSpent" value="9897000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1680" height="987" extended-state="0" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22954823" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23199023" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -203,7 +227,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32960895" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.17206705" />
+      <window_info anchor="bottom" id="Terminal" order="11" visible="true" weight="0.17206705" />
       <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -267,6 +291,12 @@
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/indexStudent.html" />
+    <entry file="file://$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/index.html" />
+    <entry file="file://$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/home_admin.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-936" />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/srpaccessmgmt/srpwebapp/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
@@ -277,22 +307,10 @@
     <entry file="file://$PROJECT_DIR$/srpaccessmgmt/manage.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4365">
-          <caret line="291" selection-start-line="291" selection-end-line="291" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/home_admin.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-936" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/home_regular.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="370">
-          <caret line="155" column="92" selection-start-line="155" selection-start-column="92" selection-end-line="155" selection-end-column="92" />
+        <state relative-caret-position="195">
+          <caret line="13" column="44" selection-start-line="13" selection-start-column="44" selection-end-line="13" selection-end-column="44" />
           <folding>
             <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#div#1;n#body#0;n#!!top" expanded="true" />
           </folding>
