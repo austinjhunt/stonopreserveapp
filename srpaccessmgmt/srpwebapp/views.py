@@ -152,11 +152,10 @@ def forgot_password(request):
 # login page
 @csrf_exempt
 def srp_login(request):
-
     if request.is_ajax() and request.POST.get('btnType') == 'login':
         rp = request.POST
         try:
-            result = 'auth fail' # initialize
+            result = 'auth fail' # initialize)
             user = authenticate(username=rp.get('email'), password=rp.get('password'))
             if user is not None:
                 result = 'auth success'
@@ -165,7 +164,6 @@ def srp_login(request):
                 request.session['user_email'] = user.username
                 request.session['first_name'] = user.first_name
                 request.session['full_name'] = user.first_name + ' ' + user.last_name
-
         except Exception as e:
             print(e)
 
