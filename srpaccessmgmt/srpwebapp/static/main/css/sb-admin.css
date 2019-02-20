@@ -10722,3 +10722,24 @@ body.sidebar-toggled footer.sticky-footer {
     width: calc(100% - 90px);
   }
 }
+
+
+/* Custom CSS */
+.emailfailednotification{
+  color:indianred;
+  font-size:17px;
+  display:none;
+}
+.emailsentnotification{
+  color:green;
+  font-size:17px;
+  display:none;
+}
+
+.SRPrightheader{
+  float: right;
+  font-weight:bold;
+  font-size:1.5em;
+  display:inline-block;
+  color:white;
+}

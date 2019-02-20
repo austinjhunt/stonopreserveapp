@@ -100,3 +100,36 @@ function logout(){
                 }
             });
 }
+
+
+
+function send_pw_reset_email() {
+
+    var email_address = $("#inputEmail").val();
+
+    $.ajax(
+        {
+            type: "POST",
+            data: {
+                /*same backend functionality as before, just for one question rather than entire quiz*/
+                btnType: 'password_reset_request',
+                email_address: email_address,
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success: function (data) {
+                if (data['result'] == "it worked") {
+                        $("#emailsent").fadeIn();
+                    }
+                else if (data['result'] == 'email DNE') {
+                    $("#emailfailed").fadeIn();
+                }
+                setTimeout(function(){
+                    window.location = '/login';
+                },5000)
+
+            }
+
+
+
+        })
+}

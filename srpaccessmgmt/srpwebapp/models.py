@@ -12,7 +12,9 @@ class Visit(models.Model):
     scheduled_date = models.DateField()
     scheduled_start_time = models.TimeField()
     scheduled_end_time = models.TimeField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE) # which user scheduled it?; on deletion of user, also delete this
+    user = models.ForeignKey(User,on_delete=models.CASCADE) # which user scheduled it?; on deletion of user, also delete this
+    datetime_visit_was_scheduled = models.DateTimeField()
+
 
 
 class Code(models.Model):
