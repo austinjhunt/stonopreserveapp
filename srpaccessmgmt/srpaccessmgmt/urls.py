@@ -28,6 +28,5 @@ urlpatterns = [
     url(r'^register', views.register),
     url(r'^tables', views.tables),
     url(r'^charts',views.charts),
-    path('admin/', admin.site.urls),
-    path('lockcodes', views.lockcodes)
+    path('admin/', admin.site.urls)
 ]
