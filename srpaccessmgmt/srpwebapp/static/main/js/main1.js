@@ -133,3 +133,7 @@ function send_pw_reset_email() {
 
         });
 }
+
+function schedule_event() {
+    console.log('event scheduled (not really)');
+}
