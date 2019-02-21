@@ -58,6 +58,20 @@ function register_new_account(){
 }
 
 /* Function called on click of "Login" button on login.html template */
+function schedule(){
+    var x = $("#scheduleform");
+    if (x.css('display') == "block"){
+        x.fadeOut();
+    }
+    else{
+        x.fadeIn();
+    }
+
+
+}
+
+
+
 function login(){
     var email = $("#inputEmail").val();
     var password = $("#inputPassword").val();
