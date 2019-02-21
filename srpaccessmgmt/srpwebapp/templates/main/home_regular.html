@@ -97,17 +97,29 @@
 
 
           <!-- schedule visit -->
-          <div id='calendar'></div>
+        <div class="card mb-3">
           <script type="text/javascript">
             $(function() {
-              $('#calendar').fullCalendar('changeView', 'agendaDay');
-              });
-          </script>
-          <button type="button" class="btn btn-primary btn-lg">Schedule Visit</button>
+
+              $('#calendar').fullCalendar({
+
+                  // put your options and callbacks here
+                      dayClick: function(date, jsEvent, view) {
+                      $('#confirmEventModal').modal();
+                      $('#event_details').html(date.format());
+                  }
+
+               });
+               $('#calendar').fullCalendar('changeView', 'agendaDay');
+
+            });
+           </script>
+          <div id='calendar'></div>
+          </div>
 
 
 
-        <!-- DataTables Example -->
+        <!-- DataTables Example
         <div class="card mb-3">
           <div class="card-header">
             <i class="fas fa-table"></i>
@@ -136,20 +148,20 @@
                   </tr>
                 </tfoot>
                 <tbody>
-                <!-- embed data from views.py context here -->
+                <!-- embed data from views.py context here --
                 </tbody>
               </table>
             </div>
           </div>
-          <!-- get time of most recent scheduled visit -->
+          <!-- get time of most recent scheduled visit --
           <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-        </div>
+        </div>-->
 
 
         <!-- card for important numbers -->
         <div class="card border-dark  text-black bg-info mb-3" style="width: 25rem;">
                 <div class="card-header">
-                  Importamnt Numbers
+                  Important Numbers
                 </div>
                   <ul class="list-group list-group-flush">
                     <li class="list-group-item">Public Safety: </li>
@@ -202,6 +214,27 @@
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
           <a class="btn btn-primary" onclick="logout();">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- create confirm schedule modal -->
+  <div class="modal fade" id="confirmEventModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmModalLabel">Confirm Event?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Confirm your event.</div>
+        <div class="modal-body" id="event_details"></div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <a class="btn btn-primary" data-dismiss="modal" onclick="schedule_event();">Confirm</a>
         </div>
       </div>
     </div>
