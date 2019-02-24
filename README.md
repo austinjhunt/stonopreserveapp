@@ -7,6 +7,7 @@ Note: Be sure to use python version 3.6.3 for this project.
 
 ***Be sure to activate the virtual environment you have created whenever you are modifying/executing code in the project.***
 
+Your virtual environment should not be inside the repository when you commit. If it is, please add it to the .gitignore file.
 Daniel Lee (Feb 4)
 
 Austin Hunt (Mar 4)
