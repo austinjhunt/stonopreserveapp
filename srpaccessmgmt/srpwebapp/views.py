@@ -203,6 +203,7 @@ def register(request):
             if len(alreadyexists) == 0: # does not already exist
                 print("No users with this username yet...")
                 # create a new user instance (default User model from auth app
+
                 newUser = User.objects.create_user(username=rp.get('email'),
                                                    email=rp.get('email'),
                                                    password=rp.get('password'),
@@ -236,4 +237,13 @@ def tables(request):
     }
     return HttpResponse(template.render(context, request))
 
+# admin page
+@csrf_exempt
+def admin(request):
+
+    template = loader.get_template()
+    context = {
+        '': '',
+    }
+    return HttpResponse(template.render(context, request))
 

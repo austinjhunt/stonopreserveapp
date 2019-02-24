@@ -6,15 +6,31 @@
 
 <body id="page-top">
 
+   <!-- header jumbotron-->
+
+    <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+       <h1 class="display-4">News and Information for SRP</h1>
+        <p class="lead"> news </p>
+      </div>
+    </div>
+
+
+
 <!-- by extending master page, don't need to include all of the doctype, header, meta, script lines etc -->
 
   <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
+
     <a class="navbar-brand mr-1" href="\">{{ name }}</a>
+
+
 
     <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
       <i class="fas fa-bars"></i>
     </button>
+
+
 
 
     <!-- Navbar Search -->
@@ -42,8 +58,19 @@
 
   <div id="wrapper">
 
+
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
+
+      <li class="nav-item active">
+        <a class="nav-link" href="/">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <!--<li class="nav-item dropdown">
+           may not be necessary to have  dropdown item
+      </li>-->
       <li class="nav-item">
         <a class="nav-link" >
           <!--<i class="fas fa-fw fa-chart-area"></i>-->
@@ -68,7 +95,32 @@
           </li>
         </ol>
 
-        <!-- DataTables Example -->
+
+          <!-- schedule visit -->
+        <div class="card mb-3">
+          <script type="text/javascript">
+            $(function() {
+
+              $('#calendar').fullCalendar({
+
+                  // put your options and callbacks here
+                      dayClick: function(date, jsEvent, view) {
+                      $('#confirmEventModal').modal();
+                      $('#event_details').html(date.format());
+                  }
+
+               });
+               $('#calendar').fullCalendar('changeView', 'agendaDay');
+
+            });
+           </script>
+          <div id='calendar'></div>
+          </div>
+
+
+
+        <!-- DataTables Example
+
         <div class="card mb-3">
           <div class="card-header">
             <i class="fas fa-table"></i>
@@ -82,6 +134,8 @@
                     <th>Last Name</th>
                     <th>Visit Date</th>
                     <th>Visit Time Interval</th>
+                    <th>Reason for Visit</th>
+
                   </tr>
                 </thead>
                 <tfoot>
@@ -90,17 +144,40 @@
                     <th>Last Name</th>
                     <th>Visit Date</th>
                     <th>Visit Time Interval</th>
+                    <th>Reason for Visit</th>
+
                   </tr>
                 </tfoot>
                 <tbody>
-                <!-- embed data from views.py context here -->
+                <!-- embed data from views.py context here --
                 </tbody>
               </table>
             </div>
           </div>
-          <!-- get time of most recent scheduled visit -->
+          <!-- get time of most recent scheduled visit --
           <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+        </div>-->
+
+
+        <!-- card for important numbers -->
+        <div class="card border-dark  text-black bg-info mb-3" style="width: 25rem;">
+                <div class="card-header">
+                  Important Numbers
+                </div>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Public Safety: </li>
+                    <li class="list-group-item">SRPManager: </li>
+                     <li class="list-group-item"> TBD</li>
+                  </ul>
         </div>
+
+        <!-- panic buttion -->
+          <button type="button" class="btn btn-danger btn-lg ">In Case of Emergency</button>
+
+
+
+
+
 
       </div>
       <!-- /.container-fluid -->
@@ -147,7 +224,31 @@
       </div>
     </div>
   </div>
+
+
+  <!-- create confirm schedule modal -->
+  <div class="modal fade" id="confirmEventModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmModalLabel">Confirm Event?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Confirm your event.</div>
+        <div class="modal-body" id="event_details"></div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <a class="btn btn-primary" data-dismiss="modal" onclick="schedule_event();">Confirm</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
+
+
+
 
 {% endblock %}
 
