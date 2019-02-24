@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
-# Create your models here.
 from django.db import models
-
 # Note: customary to use singular noun for table names (i.e. Visit instead of Visits)
 
 # default user table
@@ -20,5 +17,6 @@ class Visit(models.Model):
 
 
 
-
+class Code(models.Model):
+    pass
 

@@ -18,7 +18,7 @@ function register_new_account(){
 
     //do some validation, make sure they use mycharleston email
     else if (!email.endsWith("cofc.edu")){
-        alert("Please use your College of Charleston email address.")
+        alert("Please use your College of Charleston email address.");
     }
 
     else {
@@ -58,6 +58,20 @@ function register_new_account(){
 }
 
 /* Function called on click of "Login" button on login.html template */
+function schedule(){
+    var x = $("#scheduleform");
+    if (x.css('display') == "block"){
+        x.fadeOut();
+    }
+    else{
+        x.fadeIn();
+    }
+
+
+}
+
+
+
 function login(){
     var email = $("#inputEmail").val();
     var password = $("#inputPassword").val();
@@ -131,5 +145,9 @@ function send_pw_reset_email() {
 
 
 
-        })
+        });
+}
+
+function schedule_event() {
+    console.log('event scheduled (not really)');
 }

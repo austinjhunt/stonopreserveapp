@@ -17,7 +17,7 @@ from django.conf.urls import url, include
 from srpwebapp import views
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
@@ -28,5 +28,5 @@ urlpatterns = [
     url(r'^register', views.register),
     url(r'^tables', views.tables),
     url(r'^charts',views.charts),
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls)
 ]
