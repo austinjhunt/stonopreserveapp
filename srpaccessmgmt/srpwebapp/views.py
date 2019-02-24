@@ -37,11 +37,11 @@ def index(request):
     if request.user.is_authenticated:
         if request.user.is_superuser:
             print(User.objects.all()[0].id)
-            for i in range(5):
+            """for i in range(5):
                 Visit(scheduled_date=datetime.date(2019,4,23), scheduled_start_time=datetime.time(2,00),
                       scheduled_end_time=datetime.time(3,45), user_id=2,
                       datetime_visit_was_scheduled=datetime.datetime.now()).save()
-
+"""
 
 
             # get all visits, then visitors return to front end for display in table
