@@ -34,6 +34,7 @@ def render_to_json_response(context, **response_kwargs):
 # home page function
 @csrf_exempt
 def index(request):
+    print(User.objects.all())
     if request.user.is_authenticated:
         if request.user.is_superuser:
             print(User.objects.all()[0].id)
