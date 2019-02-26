@@ -72,7 +72,6 @@
         </li>
 
 
-
         <!--<li class="nav-item active">
             <a class="nav-link" href="/">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
@@ -111,6 +110,7 @@
                             <li class="regular_page_option"><a href="#">News &amp; Info</a></li>
                             <li class="regular_page_option"><a href="#">Schedule a Visit</a></li>
                             <li class="regular_page_option"><a href="#">Contacts and Directions</a></li>
+                            <li class="regular_page_option"><a href="#">Photo Gallery</a></li>
                         </ul>
                         <hr style="border: 1px solid lightgray; margin:10px;"/>
                     </div>
@@ -139,6 +139,26 @@
             </div>
 
             <div class="owl-carousel owl-theme">
+
+                <div id="newsandinfo">
+                    <!-- card for important numbers -->
+                    <section class="contactssection">
+                        <div class="newsheader">
+                            <i class="fas fa-fw fa-newspaper"></i>News and Info
+                        </div>
+                        <hr style="border:1px solid black; margin:20px;"/>
+                        <div class="newscontent">
+                            <ul class="newslist">
+                                <li class="newslistelement">Big news</li>
+                                <li class="newslistelement">Bad news</li>
+                                <li class="newslistelement">Weird news</li>
+                                <li class="newslistelement">Sad news</li>
+                            </ul>
+
+                        </div>
+                    </section>
+                </div>
+
                 <!--calendar view-->
                 <div id="calendar"></div>
 
@@ -164,6 +184,38 @@
                                     width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
                         </div>
                     </section>
+                </div>
+
+
+                <div id="gallery">
+                    <script>
+                        // MDB Lightbox Init
+                        $(function () {
+                            $("#mdb-lightbox-ui").load("mdb-addons/mdb-lightbox-ui.html");
+                        });
+                    </script>
+                    <!-- first row -->
+                    <div class="row">
+                        <!-- first column -->
+                        <div class="col-md-12">
+
+                            <div id="mdb-lightbox-ui"></div>
+
+                            <div class="mdb-lightbox no-margin">
+                                {% for img in imgs %}
+                                <figure data-size="1000x1000" class="col-md-4">
+                                    <a href="{{ img }}">
+                                        <img alt="picture"
+                                             src="{{img}}"
+                                             class="img-fluid">
+                                    </a>
+                                </figure>
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
 

@@ -149,3 +149,23 @@ li .calendar-li:hover:nth-child(n+8):nth-child(-n+38), li .calendar-li:nth-child
     padding:30px;
 
 }
+
+/* news */
+.newsheader{
+    font-size:6rem;
+    font-family:"Lane - Narrow";
+}
+.newscontent{
+    margin:30px;
+    padding:30px;
+    font-family:"Lane - Narrow";
+    font-size:3rem;
+}
+.newslist{
+    font-size:inherit !important;
+    font-family: inherit !important;
+}
+.newslistelement{
+    font-size:inherit !important;
+    font-family: inherit !important;
+}
