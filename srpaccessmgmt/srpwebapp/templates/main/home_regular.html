@@ -6,248 +6,294 @@
 
 <body id="page-top">
 
-   <!-- header jumbotron-->
-
-    <div class="jumbotron jumbotron-fluid">
-      <div class="container">
-       <h1 class="display-4">News and Information for SRP</h1>
-        <p class="lead"> news </p>
-      </div>
-    </div>
-
-
 
 <!-- by extending master page, don't need to include all of the doctype, header, meta, script lines etc -->
 
-  <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
+<nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
 
     <a class="navbar-brand mr-1" href="\">{{ name }}</a>
 
 
-
     <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
-      <i class="fas fa-bars"></i>
+        <i class="fas fa-bars"></i>
     </button>
-
-
 
 
     <!-- Navbar Search -->
     <div class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
-      <div class="SRPrightheader">Stono River Preserve Access Management</div>
+        <div class="SRPrightheader">Stono River Preserve Access Management</div>
 
-      </div>
+    </div>
     </div>
 
 
     <ul class="navbar-nav ml-auto ml-md-0">
-      <li class="nav-item dropdown no-arrow">
-        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-user-circle fa-fw"></i>
-        </a>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-          <!--<a class="dropdown-item" href="#">Settings</a>-->
-          <!--<div class="dropdown-divider"></div>-->
-          <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
-        </div>
-      </li>
+        <li class="nav-item dropdown no-arrow">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-user-circle fa-fw"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                <!--<a class="dropdown-item" href="#">Settings</a>-->
+                <!--<div class="dropdown-divider"></div>-->
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
+            </div>
+        </li>
     </ul>
 
-  </nav>
+</nav>
 
-  <div id="wrapper">
+<div id="wrapper">
 
 
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
 
-      <li class="nav-item active">
-        <a class="nav-link" href="/">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Dashboard</span>
-        </a>
-      </li>
-      <!--<li class="nav-item dropdown">
-           may not be necessary to have  dropdown item
-      </li>-->
-      <li class="nav-item">
-        <a class="nav-link" >
-          <!--<i class="fas fa-fw fa-chart-area"></i>-->
-          <i class="fas fa-fw fa-table"></i>
-          <span>Scheduler</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" >
-          <i class="fas fa-fw fa-map"></i>
-          <span>Map</span></a>
-      </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="/">
+                <i class="fas fa-fw fa-home"></i>
+                <span>Home</span>
+            </a>
+
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="/">
+                <i class="fas fa-fw fa-ambulance"></i>
+                <span>
+                    <button id="emergencybtnsidebar" type="button" class="btn btn-danger">
+                        EMRGNC
+                    </button>
+                </span>
+                </button>
+
+            </a>
+
+        </li>
+
+
+        <!--<li class="nav-item active">
+            <a class="nav-link" href="/">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>-->
+        <!--<li class="nav-item dropdown">
+             may not be necessary to have  dropdown item
+        </li>-->
+        <!--<li class="nav-item">
+            <a class="nav-link">
+                <i class="fas fa-fw fa-table"></i>
+                <span>Scheduler</span></a>
+        </li>-->
+        <!--
+        <li class="nav-item">
+            <a class="nav-link">
+                <i class="fas fa-fw fa-map"></i>
+                <span>Map</span></a>
+        </li>-->
     </ul>
 
     <div id="content-wrapper">
 
-      <div class="container-fluid">
-
-        <!-- Breadcrumbs-->
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <h5>Welcome to the Stono River Preserve, {{ first_name }}!</h5>
-          </li>
-        </ol>
+        <div class="container-fluid">
 
 
-          <!-- schedule visit -->
-        <div class="card mb-3">
-          <script type="text/javascript">
-            $(function() {
+            <div class="welcomeMsg">
+                <!-- header jumbotron-->
 
-              $('#calendar').fullCalendar({
-
-                  // put your options and callbacks here
-                      dayClick: function(date, jsEvent, view) {
-                      $('#confirmEventModal').modal();
-                      $('#event_details').html(date.format());
-                  }
-
-               });
-               $('#calendar').fullCalendar('changeView', 'agendaDay');
-
-            });
-           </script>
-          <div id='calendar'></div>
-          </div>
-
-
-
-        <!-- DataTables Example
-
-        <div class="card mb-3">
-          <div class="card-header">
-            <i class="fas fa-table"></i>
-            Scheduled Visits</div>
-          <div class="card-body">
-            <div class="table-responsive">
-              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead>
-                  <tr>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Visit Date</th>
-                    <th>Visit Time Interval</th>
-                    <th>Reason for Visit</th>
-
-                  </tr>
-                </thead>
-                <tfoot>
-                  <tr>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Visit Date</th>
-                    <th>Visit Time Interval</th>
-                    <th>Reason for Visit</th>
-
-                  </tr>
-                </tfoot>
-                <tbody>
-                <!-- embed data from views.py context here --
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <!-- get time of most recent scheduled visit --
-          <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-        </div>-->
-
-
-        <!-- card for important numbers -->
-        <div class="card border-dark  text-black bg-info mb-3" style="width: 25rem;">
-                <div class="card-header">
-                  Important Numbers
+                <div class="jumbotron jumbotron-fluid lanenarrow">
+                    <div class="container lanenarrow" style="padding:20px;">
+                        <div class="welcomeHeader">Welcome to the Stono River Preserve, {{ first_name }}!</div>
+                        <hr style="border: 1px solid lightgray; margin:10px;"/>
+                        <ul class="regular_page_option_container">
+                            <li class="regular_page_option"><a href="#">News &amp; Info</a></li>
+                            <li class="regular_page_option"><a href="#">Schedule a Visit</a></li>
+                            <li class="regular_page_option"><a href="#">Contacts and Directions</a></li>
+                            <li class="regular_page_option"><a href="#">Photo Gallery</a></li>
+                        </ul>
+                        <hr style="border: 1px solid lightgray; margin:10px;"/>
+                    </div>
                 </div>
-                  <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Public Safety: </li>
-                    <li class="list-group-item">SRPManager: </li>
-                     <li class="list-group-item"> TBD</li>
-                  </ul>
+            </div>
+
+
+            <!-- schedule visit -->
+            <div class="card mb-3">
+                <script type="text/javascript">
+                    $(function () {
+
+                        $('#calendar').fullCalendar({
+
+                            // put your options and callbacks here
+                            dayClick: function (date, jsEvent, view) {
+                                $('#confirmEventModal').modal();
+                                $('#event_details').html(date.format());
+                            }
+
+                        });
+                        $('#calendar').fullCalendar('changeView', 'agendaDay');
+
+                    });
+                </script>
+            </div>
+
+            <div class="owl-carousel owl-theme">
+
+                <div id="newsandinfo">
+                    <!-- card for important numbers -->
+                    <section class="contactssection">
+                        <div class="newsheader">
+                            <i class="fas fa-fw fa-newspaper"></i>News and Info
+                        </div>
+                        <hr style="border:1px solid black; margin:20px;"/>
+                        <div class="newscontent">
+                            <ul class="newslist">
+                                <li class="newslistelement">Big news</li>
+                                <li class="newslistelement">Bad news</li>
+                                <li class="newslistelement">Weird news</li>
+                                <li class="newslistelement">Sad news</li>
+                            </ul>
+
+                        </div>
+                    </section>
+                </div>
+
+                <!--calendar view-->
+                <div id="calendar"></div>
+
+                <div id="contacts" class="contactscontainer">
+                    <!-- card for important numbers -->
+                    <section class="contactssection">
+                        <div class="contactsheader">
+                            <i class="fas fa-fw fa-phone"></i>Important Numbers
+                        </div>
+                        <div class="card border-dark  text-black bg-info mb-3" style="margin:30px">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item contact">Public Safety: <a href="tel:+1-843-953-5609">843-953-5609</a>
+                                </li>
+                                <li class="list-group-item contact">SRPManager: <a
+                                        href="tel:+1-843-953-5609">843-953-5609</a></li>
+                            </ul>
+                        </div>
+                    </section>
+                    <section class="contactssection">
+                        <hr style="border: 1px solid lightgray; margin:30px;"/>
+                        <div class="contactsheader"><i class="fas fa-fw fa-search-location"></i>Where is it?
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5411.115764400425!2d-80.1796682757046!3d32.73817228260197!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88fe8177f5b98e21%3A0x6968cc8e6255522c!2sDixie+Plantation+-+College+of+Charleston!5e0!3m2!1sen!2sus!4v1551041630075"
+                                    width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+                        </div>
+                    </section>
+                </div>
+
+
+                <div id="gallery">
+                    <script>
+                        // MDB Lightbox Init
+                        $(function () {
+                            $("#mdb-lightbox-ui").load("mdb-addons/mdb-lightbox-ui.html");
+                        });
+                    </script>
+                    <!-- first row -->
+                    <div class="row">
+                        <!-- first column -->
+                        <div class="col-md-12">
+
+                            <div id="mdb-lightbox-ui"></div>
+
+                            <div class="mdb-lightbox no-margin">
+                                {% for img in imgs %}
+                                <figure data-size="1000x1000" class="col-md-4">
+                                    <a href="{{ img }}">
+                                        <img alt="picture"
+                                             src="{{img}}"
+                                             class="img-fluid">
+                                    </a>
+                                </figure>
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- panic buttion -->
+            <div class="panicbtncontainer">
+                <button type="button" class="btn btn-danger panicbtn ">EMERGENCY</button>
+            </div>
+
+
         </div>
+        <!-- /.container-fluid -->
 
-        <!-- panic buttion -->
-          <button type="button" class="btn btn-danger btn-lg ">In Case of Emergency</button>
-
-
-
-
-
-
-      </div>
-      <!-- /.container-fluid -->
-
-      <!-- Sticky Footer -->
-      <footer class="sticky-footer">
-        <div class="container my-auto">
-          <div class="copyright text-center my-auto">
+        <!-- Sticky Footer -->
+        <footer class="sticky-footer">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
             <span>Developed by <a href="http://huntaj.stu.cofc.edu" target="_blank">Austin Hunt</a>,
               <a href="https://www.linkedin.com/in/daniel-lee-b4003417b/" target="_blank">Daniel Lee</a>, &amp;
               <a href="https://www.linkedin.com/in/alex-thropp-7a4874133/" target="_blank">Alex Thropp</a></span>
-          </div>
-        </div>
-      </footer>
+                </div>
+            </div>
+        </footer>
 
     </div>
     <!-- /.content-wrapper -->
 
-  </div>
-  <!-- /#wrapper -->
+</div>
+<!-- /#wrapper -->
 
-  <!-- Scroll to Top Button-->
-  <a class="scroll-to-top rounded" href="#page-top">
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
-  </a>
+</a>
 
 
-
-  <!-- Logout Modal-->
-  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" onclick="logout();">Logout</a>
+            </div>
         </div>
-        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" onclick="logout();">Logout</a>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
 
 
-  <!-- create confirm schedule modal -->
-  <div class="modal fade" id="confirmEventModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+<!-- create confirm schedule modal -->
+<div class="modal fade" id="confirmEventModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="confirmModalLabel">Confirm Event?</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmModalLabel">Confirm Event?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Confirm your event.</div>
+            <div class="modal-body" id="event_details"></div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" data-dismiss="modal" onclick="schedule_event();">Confirm</a>
+            </div>
         </div>
-        <div class="modal-body">Confirm your event.</div>
-        <div class="modal-body" id="event_details"></div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" data-dismiss="modal" onclick="schedule_event();">Confirm</a>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
 </body>
-
-
 
 
 {% endblock %}
