@@ -12,7 +12,7 @@ function register_new_account(){
     }
 
     // make sure they entered same password in second field
-    else if (password != $("#confirmPassword").val()){
+    else if (password != confPass){
         alert("Password confirmation does not match password");
     }
 
@@ -58,7 +58,9 @@ function register_new_account(){
 }
 
 /* Function called on click of "Login" button on login.html template */
-function schedule(){
+
+//what is this from?
+/*function schedule(){
     var x = $("#scheduleform");
     if (x.css('display') == "block"){
         x.fadeOut();
@@ -68,7 +70,7 @@ function schedule(){
     }
 
 
-}
+}*/
 
 
 
@@ -149,5 +151,23 @@ function send_pw_reset_email() {
 }
 
 function schedule_event() {
+    var event_details = $("#event_details").val();
     console.log('event scheduled (not really)');
+    console.log(event_details);
+    $.ajax(
+        {
+        type: "POST",
+        data:
+            {
+            //put data from calendar here?
+            btnType: "schedule_event",
+            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            event_details: "event_details",
+            },
+        success: function (data)
+            {
+            //this goes to views where it will be saved in database?
+            }
+        }
+    );
 }

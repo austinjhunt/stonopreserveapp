@@ -34,6 +34,7 @@ def render_to_json_response(context, **response_kwargs):
 # home page function
 @csrf_exempt
 def index(request):
+
     print(User.objects.all())
     if request.user.is_authenticated:
         if request.user.is_superuser:
@@ -60,12 +61,19 @@ def index(request):
                 'name': request.session['full_name'],
                 'visit_objects': visit_objects,
             }
+
         else:
             template = loader.get_template('main/home_regular.html')
             context = {
                 'first_name': request.session['first_name'],
                 'full_name': request.session['full_name'],
             }
+
+        if request.is_ajax() and request.POST.get('btnType') == 'schedule_event':
+            #this print statement doesnt work for some reason
+            print("message received")
+            #pass event details to database
+
         if request.is_ajax() and request.POST.get('btnType') == 'logout':
             try:
                 logout(request)
@@ -131,7 +139,8 @@ def forgot_password(request):
                 email_template_name = 'registration/password_reset_email.html'
                 # copied from django/contrib/admin/templates/registration/password_reset_email.html to templates directory
                 email = loader.render_to_string(email_template_name, c)
-                send_mail("PolyPy Password Reset", email, 'error@amhajja.com', [user.email], fail_silently=False)
+                #This should be changed                  vvvvvvvvvvvvv
+                send_mail("SRP Password Reset", email, 'error@amhajja.com', [user.email], fail_silently=False)
                 data = {
                     'result': 'it worked'
                 }
