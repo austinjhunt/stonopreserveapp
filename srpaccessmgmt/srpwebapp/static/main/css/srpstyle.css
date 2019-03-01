@@ -25,10 +25,9 @@
 }
 
 .SRPrightheader{
-  float: right;
+    float: left;
   font-weight:bold;
   font-size:1.5em;
-  display:inline-block;
   color:white;
 }
 
@@ -90,7 +89,7 @@ li .calendar-li:hover:nth-child(n+8):nth-child(-n+38), li .calendar-li:nth-child
 
 .welcomeHeader{
     font-family:"Lane - Narrow" !important;
-    font-size:3.5em;
+    font-size:2.5rem !important;
     font-weight:normal;
     margin:0 auto;
     text-align:center;
@@ -107,8 +106,11 @@ li .calendar-li:hover:nth-child(n+8):nth-child(-n+38), li .calendar-li:nth-child
 
 .regular_page_option_container{
     text-align:center;
+    margin: 0px !important;
+    padding-inline-start: 0px !important;
 
 }
+
 .regular_page_option{
     display:inline-block;
     font-size: 1.5em;
@@ -116,7 +118,19 @@ li .calendar-li:hover:nth-child(n+8):nth-child(-n+38), li .calendar-li:nth-child
     margin-right:10px;
     margin-top:5px;
     margin-bottom:5px;
+} /* modify display in line block to display block for mobile */
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+    .regular_page_option{
+        display: block !important;
+    }
+/* Styles */
 }
+
+
+
 .lanenarrow{
     font-family:"Lane - Narrow";
 }
