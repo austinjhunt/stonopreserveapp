@@ -107,7 +107,9 @@
                       dayClick: function(date, jsEvent, view) {
                       $('#confirmEventModal').modal();
                       $('#event_details').html(date.format());
-                  }
+                      schedule_event(date.format());
+                  },
+                  allDaySlot: false
 
                });
                $('#calendar').fullCalendar('changeView', 'agendaDay');
@@ -240,7 +242,13 @@
         <div class="modal-body" id="event_details"></div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" data-dismiss="modal" onclick="schedule_event();">Confirm</a>
+
+          <!--
+           <a class="btn btn-primary" data-dismiss="modal" onclick="schedule_event();">Confirm</a>
+                  I'd like the schedule_event(); function to be triggered after confirm is clicked on the modal
+                  but I don't know how to pass the date into the function this way
+           -->
+          <a class="btn btn-primary" data-dismiss="modal" onclick="">Confirm</a>
         </div>
       </div>
     </div>

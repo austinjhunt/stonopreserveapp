@@ -70,8 +70,7 @@ def index(request):
             }
 
         if request.is_ajax() and request.POST.get('btnType') == 'schedule_event':
-            #this print statement doesnt work for some reason
-            print("message received")
+            print(request.POST.get('event_details'))
             #pass event details to database
 
         if request.is_ajax() and request.POST.get('btnType') == 'logout':

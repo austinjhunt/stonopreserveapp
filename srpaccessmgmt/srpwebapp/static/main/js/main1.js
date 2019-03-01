@@ -150,23 +150,20 @@ function send_pw_reset_email() {
         });
 }
 
-function schedule_event() {
-    var event_details = $("#event_details").val();
-    console.log('event scheduled (not really)');
-    console.log(event_details);
+function schedule_event(datetime) {
+    console.log(datetime);
     $.ajax(
         {
         type: "POST",
         data:
             {
-            //put data from calendar here?
             btnType: "schedule_event",
             csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
-            event_details: "event_details",
+            event_details: datetime,
             },
         success: function (data)
             {
-            //this goes to views where it will be saved in database?
+            //what goes here?
             }
         }
     );
