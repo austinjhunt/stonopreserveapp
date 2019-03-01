@@ -20,8 +20,10 @@ from django.contrib.auth.models import User
 from .models import *
 # use this function for returning json data on ajax requests
 import json
+import os
 
 from .views_classes import *
+from django.conf import settings
 # for ajax requests, returning JSON to JS
 def render_to_json_response(context, **response_kwargs):
     data = json.dumps(context)
@@ -37,11 +39,11 @@ def index(request):
     if request.user.is_authenticated:
         if request.user.is_superuser:
             print(User.objects.all()[0].id)
-            for i in range(5):
+            """for i in range(5):
                 Visit(scheduled_date=datetime.date(2019,4,23), scheduled_start_time=datetime.time(2,00),
                       scheduled_end_time=datetime.time(3,45), user_id=2,
                       datetime_visit_was_scheduled=datetime.datetime.now()).save()
-
+"""
 
 
             # get all visits, then visitors return to front end for display in table
@@ -60,10 +62,13 @@ def index(request):
                 'visit_objects': visit_objects,
             }
         else:
+            imgfiles = [settings.STATIC_URL + "main/img/" + el for el in os.listdir(settings.STATIC_ROOT + "main/img")]
             template = loader.get_template('main/home_regular.html')
             context = {
                 'first_name': request.session['first_name'],
                 'full_name': request.session['full_name'],
+                'imgs':imgfiles,
+
             }
         if request.is_ajax() and request.POST.get('btnType') == 'logout':
             try:

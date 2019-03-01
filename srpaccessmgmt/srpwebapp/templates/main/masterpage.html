@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-
 {%  load staticfiles %}
-
 <html>
 <head>
     <meta charset="utf-8" />
@@ -12,61 +10,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
 
+    <script src="{% static 'main/vendor/jquery/jquery.min.js' %} "></script>
     <!-- include scripts in master page so they dont have to be repeated in each template -->
     <!-- src="{% static 'main/js/jquery-ui.min.js' %}" type="text/javascript" follow this format for including scripts and css -->
     <link href="{% static 'main/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
-
     <!-- Page level plugin CSS-->
     <link href="{% static 'main/vendor/datatables/dataTables.bootstrap4.css' %} " rel="stylesheet">
-
     <!-- Custom styles for this template-->
     <link href="{% static 'main/css/sb-admin.css' %}" rel="stylesheet">
 
+    <link href="{% static 'main/css/srpstyle.css' %}" rel="stylesheet">
     <!-- for tables page -->
     <link href="{% static 'main/vendor/datatables/dataTables.bootstrap4.css' %}" rel="stylesheet">
-
-
     <!-- Bootstrap core JavaScript-->
-    <script src="{% static 'main/vendor/jquery/jquery.min.js' %} "></script>
     <script src="{% static 'main/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'main/vendor/bower_components/moment/min/moment.min.js' %}"></script>
-    <link href="{% static 'main/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-
+    <link href="{% static 'main/vendor/bootstrap/css/bootstrap.css' %}" rel="stylesheet">
     <!-- Core plugin JavaScript-->
     <script src="{% static 'main/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
-
     <!-- Page level plugin JavaScript-->
-    <script src="{% static 'main/vendor/chart.js/Chart.min.js' %}"></script>
     <script src="{% static 'main/vendor/datatables/jquery.dataTables.js' %} "></script>
     <script src="{% static 'main/vendor/datatables/dataTables.bootstrap4.js' %} "></script>
     <link rel="stylesheet" href="{% static 'main/vendor/bower_components/fullcalendar/dist/fullcalendar.css' %}" />
     <script src="{% static 'main/vendor/bower_components/fullcalendar/dist/fullcalendar.js' %}"></script>
-    <script type="text/javascript">
-    $(function() {});
-   </script>
+    <script>
+        $(document).ready(function () {
+            // Toggle the side navigation
+            $("#sidebarToggle").on('click', function (e) {
+                e.preventDefault();
+                $("body").toggleClass("sidebar-toggled");
+                $(".sidebar").toggleClass("toggled");
+                $("#sidebartoggleicon").toggleClass('fa-bars fa-plus');
+                $("#emergencybtnsidebar").toggleClass('btn-xs'); //make button much smaller on sidebar collapse
+            });
+            // activate the carousel on document.ready
+            $('.owl-carousel').owlCarousel({
+                    loop: true,
+                    nav: true,
+                    items: 1,
+                    stagePadding: 7,
+                    margin: 7,
+                    mouseDrag: true,
+                    pagination: false,
+                    singleItem: true,
+                });
 
+            //js for calendar activation
 
+            var winHeight = $('#fullDiv').height();
+            var height = ( winHeight * 16.6666 ) / 100;
+            var lineHeight = height + "px";
+            $(".calendar-li").css("line-height", lineHeight);
+            $(".calendar-li").css("height", height);
 
+        });
+    </script>
     <!-- Custom scripts for all pages-->
-
     <script src="{% static 'main/js/main1.js' %}"></script>
-    <script src="{% static 'main/js/sb-admin.min.js' %}"></script>
-
+    <script src="{% static 'main/js/sb-admin.js' %}"></script>
     <script src="{% static 'main/js/demo/datatables-demo.js' %} "></script>
-    <script src="{% static 'main/js/demo/chart-area-demo.js' %}"></script>
-
-
-    <script src="{% static 'main/js/demo/chart-area-demo.js' %}"></script>
-    <script src="{% static 'main/js/demo/chart-bar-demo.js' %}"></script>
-    <script src="{% static 'main/js/demo/chart-pie-demo.js' %}"></script>
-
+    <!-- owl carousel feature for minimizing page reloads -->
+    <link rel="stylesheet" href="{% static 'main/css/owl.carousel.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/owl.theme.default.css' %}">
+    <script src="{% static 'main/js/owl.carousel.min.js' %}" data-cover></script>
+    <script src="{% static 'main/js/owl.support.js'%}" data-cover></script>
+    <script src="{% static 'main/js/owl.autoplay.js' %}" data-cover></script>
 </head>
-
-
 {% block content %}
-
-
 {% endblock %}
-
 </html>
 
