@@ -82,41 +82,11 @@
 
       <div class="container-fluid">
 
-        <!-- Breadcrumbs-->
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <h5>Welcome to the Stono River Preserve, {{ first_name }}!</h5>
-          </li>
-        </ol>
-
-
-          <!-- schedule visit -->
-          <button type="button" class="btn btn-primary btn-lg">
-            Schedule Visit
-          </button>
-        <div class="card mb-3">
-          <script type="text/javascript">
-            $(function() {
-
-              $('#calendar').fullCalendar({
-
-                  // put your options and callbacks here
-                      dayClick: function(date, jsEvent, view) {
-                      $('#confirmEventModal').modal();
-                      $('#event_details').html(date.format());
-                  }
-
-               });
-               $('#calendar').fullCalendar('changeView', 'agendaDay');
-
-            });
-           </script>
-          <div id='calendar'></div>
-          </div>
+       
 
 
 
-        
+
                 <div class="jumbotron jumbotron-fluid lanenarrow">
                     <div class="container lanenarrow" style="padding:20px;">
                         <div class="welcomeHeader">Welcome to the Stono River Preserve, {{ first_name }}!</div>
@@ -133,25 +103,6 @@
             </div>
 
 
-            <!-- schedule visit -->
-            <div class="card mb-3">
-                <script type="text/javascript">
-                    $(function () {
-
-                        $('#calendar').fullCalendar({
-
-                            // put your options and callbacks here
-                            dayClick: function (date, jsEvent, view) {
-                                $('#confirmEventModal').modal();
-                                $('#event_details').html(date.format());
-                            }
-
-                        });
-                        $('#calendar').fullCalendar('changeView', 'agendaDay');
-
-                    });
-                </script>
-            </div>
 
             <div class="owl-carousel owl-theme">
 
@@ -175,7 +126,28 @@
                 </div>
 
                 <!--calendar view-->
-                <div id="calendar"></div>
+
+        <div class="card mb-3">
+          <script type="text/javascript">
+            $(function() {
+
+              $('#calendar').fullCalendar({
+
+                  // put your options and callbacks here
+                      dayClick: function(date, jsEvent, view) {
+                      $('#confirmEventModal').modal();
+                      $('#event_details').html(date.format());
+                  }
+
+               });
+               $('#calendar').fullCalendar('changeView', 'agendaDay');
+
+            });
+           </script>
+          <div id='calendar'></div>
+          </div>
+
+
 
                 <div id="contacts" class="contactscontainer">
                     <!-- card for important numbers -->
