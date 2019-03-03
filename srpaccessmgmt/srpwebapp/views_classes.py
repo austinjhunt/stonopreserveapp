@@ -43,3 +43,16 @@ class Announcement_Object:
         self.announcement = ann
         self.user_name = user.first_name + ' ' + user.last_name
         self.date_created = date_created
+
+# class to store users along with their total number of visits
+class User_Object:
+    def __init__(self,_id,fn,ln,dj,nv):
+        self.id=_id
+        self.first_name = fn
+        self.last_name = ln
+        self.date_joined = dj
+        self.num_visits = nv
+
+    # toJson method that converts data to json object for front end JS parsing
+    def toJSON(self):
+        return json.dumps(self, default=lambda o: json_default(o), sort_keys=True, indent=4)

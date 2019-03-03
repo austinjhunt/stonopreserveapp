@@ -97,7 +97,7 @@
             <div class="jumbotron jumbotron-fluid lanenarrow customheadertron">
                 <div class="container lanenarrow customcontainer" style="padding:20px;">
                     <div id="welcomemsg" class="welcomeHeader">Welcome to the Stono River Preserve, {{ first_name }}!
-                        <br/>Swipe between views or the options below!
+                        <br/>Swipe between views or use the options below!
                     </div>
                     <script>
                         if ($(window).width() < 480) {
@@ -134,10 +134,13 @@
                     {% endif %}
                     <hr class="headerHR"/>
                     <ul class="regular_page_option_container">
-                        <li class="regular_page_option"><a href="#">Announcements</a></li>
-                        <li class="regular_page_option"><a href="#">Schedule a Visit</a></li>
-                        <li class="regular_page_option"><a href="#">Contacts and Directions</a></li>
-                        <li class="regular_page_option"><a href="#">Photo Gallery</a></li>
+                        <li class="regular_page_option"><a onclick="showannouncementsview()">Announcements</a></li>
+                        <li class="regular_page_option"><a onclick="showscheduleview()">Schedule a Visit</a></li>
+                        <li class="regular_page_option"><a onclick="showphotosview();">Photo Gallery</a></li>
+                        {% if current_user.is_superuser %}
+                        <li class="regular_page_option"><a onclick="showlistview();">Visit Schedule</a></li>
+                        <li class="regular_page_option"><a onclick="showallusersview();">View All Users</a></li>
+                        {% endif %}
                     </ul>
                     <hr class="headerHR"/>
                 </div>
@@ -187,8 +190,8 @@
                 </div>
             </div>
 
-            <!--calendar view-->
-            <div class="card mb-3">
+            <!--student schedule ability view-->
+            <div id="studentScheduleAVisit" class="card mb-3">
                 <script type="text/javascript">
                     $(function () {
 
@@ -205,7 +208,7 @@
                 <div id="calendar"></div>
             </div>
 
-
+            <!-- photo gallery -->
             <div id="gallery" class="announcementsview">
                 <div class="newsheader">
                     Photo Gallery
@@ -224,6 +227,78 @@
                 </div>
             </div>
 
+             <!-- schedule list view -->
+            <div><!-- DataTables Example -->
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th style="text-align:center;">First Name</th>
+                                <th style="text-align:center;">Last Name</th>
+                                <th style="text-align:center;">Visit Date</th>
+                                <th style="text-align:center;">Visit Time Interval</th>
+                            </tr>
+                            </thead>
+                            {% for visit in visit_objects %}
+                            <tr>
+                                <td style="text-align:center;">{{ visit.visitor_first_name}}</td>
+                                <td style="text-align:center;">{{ visit.visitor_last_name}}</td>
+                                <td style="text-align:center;">{{ visit.visit_date}}</td>
+                                <td style="text-align:center;">{{ visit.start_time}} - {{ visit.end_time }}</td>
+                            </tr>
+                            {% endfor %}
+                            <tfoot>
+                            <tr>
+                                <th style="text-align:center;">First Name</th>
+                                <th style="text-align:center;">Last Name</th>
+                                <th style="text-align:center;">Visit Date</th>
+                                <th style="text-align:center;">Visit Time Interval</th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- all users view -->
+            <div><!-- DataTables Example -->
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable2" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th style="text-align:center;">First Name</th>
+                                <th style="text-align:center;">Last Name</th>
+                                <th style="text-align:center;">Account Created</th>
+                                <th style="text-align:center;">Total Visits</th>
+                                <th style="text-align:center;">Options</th>
+                            </tr>
+                            </thead>
+                            {% for user in all_users %}
+                            <tr>
+                                <td style="text-align:center;">{{user.first_name}}</td>
+                                <td style="text-align:center;">{{user.last_name}}</td>
+                                <td style="text-align: center">{{user.date_joined}}</td>
+                                <td style="text-align:center;">{{user.num_visits}}</td>
+                                <td style="text-align:center;">
+                                    <button class="btn btn-danger d-inline-block"><i class="fas fa-fw fa-trash"></i></button>
+                                    <button class="btn btn-info d-inline-block"><i class="fas fa-fw fa-edit"></i></button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            <tfoot>
+                            <tr>
+                                <th style="text-align:center;">First Name</th>
+                                <th style="text-align:center;">Last Name</th>
+                                <th style="text-align:center;">Visit Date</th>
+                                <th style="text-align:center;">Visit Time Interval</th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <!-- /.container-fluid -->
