@@ -15,6 +15,9 @@ $(document).ready(function(){
             pagination: false,
             singleItem: true,
         });
+
+    $("#dataTable").DataTable();
+    $("#dataTable2").DataTable();
 });
 function register_new_account(){
     var password = $("#inputPassword").val();
@@ -165,6 +168,13 @@ function send_pw_reset_email() {
         });
 }
 
+
+/* Student and Faculty View order will be the same */
+/* Announcements 0, Schedule a visit 1, photo gallery 2 */
+
+/* Put superuser exclusive pages last to avoid order inconsistencies */
+/* Announcements 0, Schedule a visit 1, photo gallery 2, View all users 3, All scheduled visits 4
+
 /* functions to automate navigation between slides */
 function showannouncementsview(){
     $('#myCarousel').trigger('to.owl.carousel', 0);
@@ -175,6 +185,10 @@ function showscheduleview(){
 function showphotosview(){
     $('#myCarousel').trigger('to.owl.carousel', 2);
 }
-function showallusersview(){
+function showlistview(){ // for superuser
     $('#myCarousel').trigger('to.owl.carousel', 3);
+}
+
+function showallusersview(){
+    $('#myCarousel').trigger('to.owl.carousel', 4);
 }

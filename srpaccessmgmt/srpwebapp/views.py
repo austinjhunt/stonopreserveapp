@@ -78,6 +78,9 @@ def index(request):
 
         lock_codes = Code.objects.all() # will only ever be one in table. delete current for gate when new one created
 
+        all_users = [User_Object(_id=u.id, fn=u.first_name, ln=u.last_name,dj=u.date_joined,
+                                 nv=len(Visit.objects.filter(user_id=u.id))) for u in User.objects.all()]
+
         template = loader.get_template('main/home.html')
         context = {
             'current_user': request.user, # use this on front end for toggling visibilities of elements
@@ -88,6 +91,8 @@ def index(request):
             'visit_objects': visit_objects,
             'announcements': announcements,
             'lock_codes': lock_codes,
+            'all_users': all_users,
+
         }
     else: # not authenticated, direct to login page
         template = loader.get_template('main/login.html')

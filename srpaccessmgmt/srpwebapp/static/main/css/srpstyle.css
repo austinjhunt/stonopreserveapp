@@ -127,6 +127,9 @@ li .calendar-li:hover:nth-child(n+8):nth-child(-n+38), li .calendar-li:nth-child
     margin-bottom:2px;
     color:blue;
 }
+.regular_page_option:hover{
+    cursor:pointer;
+}
 #headeroptionsdropdown{
     display:none;
 }
@@ -435,7 +438,6 @@ and (max-device-width : 480px) {
     }
 
     #mygallery{
-        background-color: #0b2e13;
         border-radius:8px;
         margin:2px !important;
 
