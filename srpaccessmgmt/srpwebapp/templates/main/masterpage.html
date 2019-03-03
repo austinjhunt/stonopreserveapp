@@ -18,12 +18,14 @@
     <link href="{% static 'main/vendor/datatables/dataTables.bootstrap4.css' %} " rel="stylesheet">
     <!-- Custom styles for this template-->
     <link href="{% static 'main/css/sb-admin.css' %}" rel="stylesheet">
+
+    <link href="{% static 'main/css/srpstyle.css' %}" rel="stylesheet">
     <!-- for tables page -->
     <link href="{% static 'main/vendor/datatables/dataTables.bootstrap4.css' %}" rel="stylesheet">
     <!-- Bootstrap core JavaScript-->
     <script src="{% static 'main/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'main/vendor/bower_components/moment/min/moment.min.js' %}"></script>
-    <link href="{% static 'main/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'main/vendor/bootstrap/css/bootstrap.css' %}" rel="stylesheet">
     <!-- Core plugin JavaScript-->
     <script src="{% static 'main/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
     <!-- Page level plugin JavaScript-->
@@ -39,6 +41,7 @@
                 $("body").toggleClass("sidebar-toggled");
                 $(".sidebar").toggleClass("toggled");
                 $("#sidebartoggleicon").toggleClass('fa-bars fa-plus');
+                $("#emergencybtnsidebar").toggleClass('btn-xs'); //make button much smaller on sidebar collapse
             });
             // activate the carousel on document.ready
             $('.owl-carousel').owlCarousel({
