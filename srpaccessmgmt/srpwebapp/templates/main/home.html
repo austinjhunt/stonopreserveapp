@@ -1,0 +1,300 @@
+{% extends 'main/masterpage.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+
+<body id="page-top">
+
+<div id="my_preloader_container">
+    <div style="position:absolute; top: 30%;text-align:center; left:30%; right:30%;">
+        <div class="my_preloader"></div>
+    </div>
+</div>
+
+<nav class="navbar navbar-expand navbar-dark bg-dark sticky-top">
+    <!-- Separate ul's for left and right; put the dropdown on left !-->
+    <!-- dropdown -->
+    <ul class="navbar-nav ml-md-0">
+        <li class="nav-item active" id="headeroptionsdropdown">
+            <div class="nav-link dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-fw fa-bars"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <!-- only for students -->
+                    {% if not current_user.is_staff and not current_user.is_superuser %}
+                    <a class="regular_page_option" onclick="showscheduleview();">Schedule a Visit</a>
+                    <div class="dropdown-divider"></div>
+                    {% endif %}
+                    <!-- only for admins -->
+                    {% if current_user.is_superuser %}
+                    <a class="regular_page_option" onclick="showallusersview();">All User Accounts</a>
+                    <div class="dropdown-divider"></div>
+                    {% endif %}
+                    <!-- for all accounts -->
+                    <a class="regular_page_option" onclick="showannouncementsview();">General</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="regular_page_option" onclick="showphotosview();">Photo Gallery</a>
+                </div>
+            </div>
+        </li>
+    </ul>
+
+    <!-- home, emergency, profile -->
+    <ul class="navbar-nav ml-auto mr-md-0">
+        <li class="nav-item active">
+            <div class="nav-link" href="/">
+                <span>
+                    <button id="homebtn" type="button" class="btn btn-secondary headerbtn">
+
+                <i class="fas fa-fw fa-home"></i>&nbsp;HOME
+                    </button>
+                </span>
+            </div>
+        </li>
+        <li class="nav-item active">
+            <div class="nav-link" href="/">
+                <span>
+                    <button id="emergencybtnsidebar" type="button" class="btn btn-danger headerbtn">
+                        <i class="fas fa-fw fa-ambulance"></i>&nbsp;EMERGENCY
+                    </button>
+                </span>
+            </div>
+        </li>
+        <li class="nav-item dropdown no-arrow">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+                <button id="userbtn" type="button" class="btn btn-dark">
+                    <i class="fas fa-user-circle fa-fw"></i>
+                </button>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right mr-1" aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
+            </div>
+        </li>
+    </ul>
+    <!-- use js to set button contents to only icons, can't be done with css -->
+    <script>
+        if ($(window).width() < 480) {
+            $("#homebtn").html('<i class="fas fa-fw fa-home"></i>');
+            $("#emergencybtnsidebar").html('<i class="fas fa-fw fa-ambulance"></i>');
+            // welcome msg different for mobile
+            $("#welcomemsg").html('Welcome to the Stono River Preserve, {{ first_name }}!<br/>Swipe between views or use' +
+                ' the top left dropdown!');
+        }
+
+    </script>
+</nav><!-- end navigation bar -->
+
+
+<!-- begin body wrapper -->
+<div id="wrapper">
+    <div id="content-wrapper">
+        <!-- Welcome message -->
+        <div class="container-fluid">
+            <div class="jumbotron jumbotron-fluid lanenarrow customheadertron">
+                <div class="container lanenarrow customcontainer" style="padding:20px;">
+                    <div id="welcomemsg" class="welcomeHeader">Welcome to the Stono River Preserve, {{ first_name }}!
+                        <br/>Swipe between views or the options below!
+                    </div>
+                    <script>
+                        if ($(window).width() < 480) {
+                            $("#welcomemsg").html('Welcome to the Stono River Preserve, {{ first_name }}!<br/>Swipe between views or use' +
+                                ' the top left dropdown!');
+                        }
+
+                    </script>
+                    <!-- table on top of first page shows lock codes if user is faculty or super user -->
+
+                    <div class="lockcodetablecontainer">
+                        <table class="lockcodetable">
+                            <thead>
+                            <th colspan="2">Current Lock Codes</th>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Lock Code</td>
+                                <td>Gate</td>
+                            </tr>
+                            {% for lc in lock_codes %}
+                            <tr>
+                                <td>{{ lc.lock_code }} <!-- only allow superuser to change code -->
+                                    {% if current_user.is_superuser %}
+                                    <a onclick="showchangecodeview();">CHANGE COMBO</a>
+                                    {% endif %}
+                                </td>
+                                <td>{{ lc.gate }}</td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr class="headerHR"/>
+                    <ul class="regular_page_option_container">
+                        <li class="regular_page_option"><a href="#">Announcements</a></li>
+                        <li class="regular_page_option"><a href="#">Schedule a Visit</a></li>
+                        <li class="regular_page_option"><a href="#">Contacts and Directions</a></li>
+                        <li class="regular_page_option"><a href="#">Photo Gallery</a></li>
+                    </ul>
+                    <hr class="headerHR"/>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- owl carousel for swiping between views without loading new pages -->
+        <div id="myCarousel" class="owl-carousel owl-theme">
+
+            <!-- announcements view, contains announcements & general info (contacts / location) -->
+            <div id="announcements" class="announcementsview">
+                <div class="newsheader">
+                    <i class="fas fa-fw fa-newspaper"></i> Announcements
+                </div>
+                <hr class="announcementsviewHR"/>
+                <div class="announcementscontent">
+                    <ul>
+                        {% for a in announcements %}
+                        <li class="announcement">{{a}}</li>
+                        <ul>
+                            <li>created on {{a.date_created}} by {{a.username}}</li>
+                        </ul>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <!-- card for important numbers -->
+                <div class="contactssection">
+                    <div class="newsheader">
+                        <i class="fas fa-fw fa-phone"></i> Contacts
+                    </div>
+                    <div class="card border-dark  text-black bg-info mb-3" style="margin:30px">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item contact">Public Safety: <a href="tel:+1-843-953-5609">843-953-5609</a>
+                            </li>
+                            <li class="list-group-item contact">SRPManager: <a
+                                    href="tel:+1-843-953-5609">843-953-5609</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="contactssection">
+                    <hr style="border: 1px solid lightgray; margin:30px;"/>
+                    <div class="newsheader"><i class="fas fa-fw fa-search-location"></i>Where is it?
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5411.115764400425!2d-80.1796682757046!3d32.73817228260197!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88fe8177f5b98e21%3A0x6968cc8e6255522c!2sDixie+Plantation+-+College+of+Charleston!5e0!3m2!1sen!2sus!4v1551041630075"
+                                width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <!--calendar view-->
+            <div class="card mb-3">
+                <script type="text/javascript">
+                    $(function () {
+
+                        $('#calendar').fullCalendar({
+                            // put your options and callbacks here
+                            dayClick: function (date, jsEvent, view) {
+                                $('#confirmEventModal').modal();
+                                $('#event_details').html(date.format());
+                            }
+                        });
+                        $('#calendar').fullCalendar('changeView', 'agendaDay');
+                    });
+                </script>
+                <div id="calendar"></div>
+            </div>
+
+
+            <div id="gallery" class="announcementsview">
+                <div class="newsheader">
+                    Photo Gallery
+                </div>
+                <div class="tz-gallery">
+                    <div id="mygallery" class="row">
+                        {% for img in imgs %}
+                        <div class="col-sm-12 col-md-4 myimgcontainer">
+                            <a class="lightbox" href="{{img}}">
+                                <img style="border-radius:8px;" src="{{img}}">
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+
+    <!-- Sticky Footer -->
+    <footer class="sticky-footer customfooter">
+        <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+            <span>Developed by <a href="http://huntaj.stu.cofc.edu" target="_blank">Austin Hunt</a>,
+              <a href="https://www.linkedin.com/in/daniel-lee-b4003417b/" target="_blank">Daniel Lee</a>, &amp;
+              <a href="https://www.linkedin.com/in/alex-thropp-7a4874133/" target="_blank">Alex Thropp</a></span>
+            </div>
+        </div>
+    </footer>
+
+</div>
+<!-- /.content-wrapper -->
+
+</div>
+<!-- /#wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" onclick="logout();">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- create confirm schedule modal -->
+<div class="modal fade" id="confirmEventModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmModalLabel">Confirm Event?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Confirm your event.</div>
+            <div class="modal-body" id="event_details"></div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" data-dismiss="modal" onclick="schedule_event();">Confirm</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+
+{% endblock %}
+
+
+
