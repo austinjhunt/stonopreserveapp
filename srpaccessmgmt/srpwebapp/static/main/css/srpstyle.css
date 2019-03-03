@@ -155,6 +155,12 @@ and (max-device-width : 480px) {
     font-size:2.5em;
     font-family:"Lane - Narrow";
 }
+
+.lockheader{
+    font-size:1.5em;
+    font-family:"Lane - Narrow";
+    text-align:center;
+}
 .contact{
     font-size:2em !important;
 }
