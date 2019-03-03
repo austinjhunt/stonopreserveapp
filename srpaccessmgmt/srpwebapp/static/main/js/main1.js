@@ -1,4 +1,21 @@
 /* Function called on click of "Register" button on register.html template */
+
+"use strict";
+$(document).ready(function(){
+    $("#my_preloader_container").fadeOut('slow');
+
+    // activate the carousel on document.ready
+    $('.owl-carousel').owlCarousel({
+            loop: false,
+            nav: true,
+            items: 1,
+            stagePadding: 7,
+            margin: 7,
+            mouseDrag: true,
+            pagination: false,
+            singleItem: true,
+        });
+});
 function register_new_account(){
     var password = $("#inputPassword").val();
     var email = $("#inputEmail").val();
@@ -148,6 +165,16 @@ function send_pw_reset_email() {
         });
 }
 
-function schedule_event() {
-    console.log('event scheduled (not really)');
+/* functions to automate navigation between slides */
+function showannouncementsview(){
+    $('#myCarousel').trigger('to.owl.carousel', 0);
+}
+function showscheduleview(){
+    $('#myCarousel').trigger('to.owl.carousel', 1);
+}
+function showphotosview(){
+    $('#myCarousel').trigger('to.owl.carousel', 2);
+}
+function showallusersview(){
+    $('#myCarousel').trigger('to.owl.carousel', 3);
 }

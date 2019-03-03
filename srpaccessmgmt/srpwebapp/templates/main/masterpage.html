@@ -33,38 +33,6 @@
     <script src="{% static 'main/vendor/datatables/dataTables.bootstrap4.js' %} "></script>
     <link rel="stylesheet" href="{% static 'main/vendor/bower_components/fullcalendar/dist/fullcalendar.css' %}" />
     <script src="{% static 'main/vendor/bower_components/fullcalendar/dist/fullcalendar.js' %}"></script>
-    <script>
-        $(document).ready(function () {
-            // Toggle the side navigation
-            $("#sidebarToggle").on('click', function (e) {
-                e.preventDefault();
-                $("body").toggleClass("sidebar-toggled");
-                $(".sidebar").toggleClass("toggled");
-                $("#sidebartoggleicon").toggleClass('fa-bars fa-plus');
-                $("#emergencybtnsidebar").toggleClass('btn-xs'); //make button much smaller on sidebar collapse
-            });
-            // activate the carousel on document.ready
-            $('.owl-carousel').owlCarousel({
-                    loop: true,
-                    nav: true,
-                    items: 1,
-                    stagePadding: 7,
-                    margin: 7,
-                    mouseDrag: true,
-                    pagination: false,
-                    singleItem: true,
-                });
-
-            //js for calendar activation
-
-            var winHeight = $('#fullDiv').height();
-            var height = ( winHeight * 16.6666 ) / 100;
-            var lineHeight = height + "px";
-            $(".calendar-li").css("line-height", lineHeight);
-            $(".calendar-li").css("height", height);
-
-        });
-    </script>
     <!-- Custom scripts for all pages-->
     <script src="{% static 'main/js/main1.js' %}"></script>
     <script src="{% static 'main/js/sb-admin.js' %}"></script>

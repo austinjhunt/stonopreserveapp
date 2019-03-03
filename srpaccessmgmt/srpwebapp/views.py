@@ -33,43 +33,31 @@ def render_to_json_response(context, **response_kwargs):
 
 
 
+
 # home page function
 @csrf_exempt
 def index(request):
     if request.user.is_authenticated:
-        if request.user.is_superuser:
-            print(User.objects.all()[0].id)
-            """for i in range(5):
-                Visit(scheduled_date=datetime.date(2019,4,23), scheduled_start_time=datetime.time(2,00),
-                      scheduled_end_time=datetime.time(3,45), user_id=2,
-                      datetime_visit_was_scheduled=datetime.datetime.now()).save()
+        print(Code.objects.all())
+        """for i in range(5):
+            Visit(scheduled_date=datetime.date(2019,4,23), scheduled_start_time=datetime.time(2,00),
+                  scheduled_end_time=datetime.time(3,45), user_id=2,
+                  datetime_visit_was_scheduled=datetime.datetime.now()).save()
 """
 
 
-            # get all visits, then visitors return to front end for display in table
-            all_scheduled_visits = Visit.objects.all()
+        # get all visits, then visitors return to front end for display in table
+        all_scheduled_visits = Visit.objects.all()
 
-            # create json serializable objects that store the visitor name as well as visit information
-            visit_objects = []
-            for sv in all_scheduled_visits:
-                visitor = User.objects.get(id=sv.user_id)
-                visit_objects.append(Visit_Object(sv.id, sv.scheduled_start_time, sv.scheduled_end_time,sv.scheduled_date,
-                                                  visitor.first_name,visitor.last_name))
+        # create json serializable objects that store the visitor name as well as visit information
+        visit_objects = []
+        for sv in all_scheduled_visits:
+            visitor = User.objects.get(id=sv.user_id)
+            visit_objects.append(Visit_Object(sv.id, sv.scheduled_start_time, sv.scheduled_end_time,sv.scheduled_date,
+                                              visitor.first_name,visitor.last_name))
 
-            template = loader.get_template('main/home_admin.html')
-            context = {
-                'name': request.session['full_name'],
-                'visit_objects': visit_objects,
-            }
-        else:
-            imgfiles = [settings.STATIC_URL + "main/img/" + el for el in os.listdir(settings.STATIC_ROOT + "main/img")]
-            template = loader.get_template('main/home_regular.html')
-            context = {
-                'first_name': request.session['first_name'],
-                'full_name': request.session['full_name'],
-                'imgs':imgfiles,
 
-            }
+        imgfiles = [settings.STATIC_URL + "main/img/" + el for el in os.listdir(settings.STATIC_ROOT + "main/img")]
         if request.is_ajax() and request.POST.get('btnType') == 'logout':
             try:
                 logout(request)
@@ -79,6 +67,28 @@ def index(request):
                 result = 'logout fail'
             data = {'result':result}
             return render_to_json_response(data)
+
+        # get all the announcements from last 30 days
+        announcements = [Announcement_Object(_id=a.id,
+                                             ann=a.announcement,
+                                             user=request.user,
+                                             date_created=a.date_created)
+                         for a in Announcement.objects.filter(date_created__lte=datetime.datetime.today(),
+                                     date_created__gt=datetime.datetime.today() - datetime.timedelta(days=30))]
+
+        lock_codes = Code.objects.all() # will only ever be one in table. delete current for gate when new one created
+
+        template = loader.get_template('main/home.html')
+        context = {
+            'current_user': request.user, # use this on front end for toggling visibilities of elements
+            'first_name': request.session['first_name'],
+            'full_name': request.session['full_name'],
+            'imgs': imgfiles,
+            'full_name': request.session['full_name'],
+            'visit_objects': visit_objects,
+            'announcements': announcements,
+            'lock_codes': lock_codes,
+        }
     else: # not authenticated, direct to login page
         template = loader.get_template('main/login.html')
         context = {'':''}
@@ -200,7 +210,9 @@ def register(request):
     if request.is_ajax() and request.POST.get('btnType') == 'register_new_account':
         rp = request.POST
         try:
-            is_superuser = 0 if rp.get('accountType') == 'student' else 1
+
+            is_faculty = 0 if rp.get('accountType') == 'student' else 1
+            is_superuser = 0 #FIXME: HOW TO CREATE ADMIN ACCTS
             result = 'register fail'
             # only create a new user if there is not already one with this username/email
             alreadyexists = User.objects.filter(username=rp.get('email'))
@@ -215,6 +227,7 @@ def register(request):
                                                    first_name=rp.get('firstName'),
                                                    last_name=rp.get('lastName'),
                                                    is_superuser=is_superuser,
+                                                   is_faculty=is_faculty,
                                                    is_active=True)
                 newUser.save()
                 result = 'register success'

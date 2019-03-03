@@ -16,4 +16,15 @@ class Visit(models.Model):
     datetime_visit_was_scheduled = models.DateTimeField()
 
 class Code(models.Model):
-    pass
+    lock_code = models.IntegerField(null=True) # this will most likely be 4 digits
+    gate = models.IntegerField(null=True) # will most likely be < 3 digits
+
+
+class Announcement(models.Model):
+    date_created = models.DateTimeField() # when was it made?
+    user = models.ForeignKey(User,on_delete=models.CASCADE) #who made it?
+    announcement = models.TextField() # what is the announcement?
+
+class Photo_Upload_Record(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    img_filename = models.CharField(max_length=50)

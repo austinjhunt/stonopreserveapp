@@ -110,9 +110,7 @@ li .calendar-li:hover:nth-child(n+8):nth-child(-n+38), li .calendar-li:nth-child
     font-weight:bold;
     text-transform:uppercase;
     display:block;
-}
-.regular_page_option_container{
-    margin-bottom: 0 !important;
+    margin-bottom: 0!important;
 }
 .headerHR{
     border: 1px solid lightgray;
@@ -127,49 +125,10 @@ li .calendar-li:hover:nth-child(n+8):nth-child(-n+38), li .calendar-li:nth-child
     margin-right:10px;
     margin-top:2px;
     margin-bottom:2px;
+    color:blue;
 }
 #headeroptionsdropdown{
     display:none;
-}
-/* modifications for smartphones*/
-/* Smartphones (portrait and landscape) ----------- */
-@media only screen
-and (max-device-width : 480px) {
-    .headerHR{
-        display:none;
-    }
-    #headeroptionsdropdown{
-        display:inline-block;
-    }
-    .regular_page_option_container{
-        display:none;
-    }
-    .regular_page_option{
-        display: block !important;
-        margin-left:10%;
-        font-size:0.4rem;
-    }
-    .welcomeHeader{
-        font-size:1rem; !important;
-    }
-    .headerbtn{
-        font-size:1rem !important;
-    }
-    .customheadertron{
-        padding: 8px !important;
-        height:auto !important;
-        border:0.5px solid green !important;
-        border-radius:4px !important;
-    }
-    .customcontainer{
-        padding:2px !important;
-        height:auto !important;
-    }
-    .nav-link{
-        padding:2px !important;
-    }
-
-/* Styles */
 }
 
 .lanenarrow{
@@ -197,12 +156,7 @@ and (max-device-width : 480px) {
     font-family:"Lane - Narrow" ;
 }
 .contact{
-    font-size:2em !important;
-}
-.contactssection{
-    margin-bottom:30px;
-    padding:30px;
-
+    font-size:1.5em !important;
 }
 
 /* news */
@@ -225,9 +179,280 @@ and (max-device-width : 480px) {
     font-family: inherit !important;
 }
 
+/* announcements view */
+
+.announcementsview{
+    padding:3%;
+    text-align:center !important;
+}
+.announcementsviewHR{
+    border: 1px solid lightgray;
+    margin:0 auto;
+    width:70%;
+    margin-top:2px;
+    margin-bottom:2px;
+}
+.announcementscontent{
+    margin:5px;
+    padding:5px;
+    font-size:1.9rem;
+    font-family: "Lane - Narrow";
+
+}
+.announcementscontent ul{
+    font-size:inherit !important;
+    font-family: inherit !important;
+}
+.announcementscontent ul li{
+    float:left;
+}
+
 /*nav header */
 .navheader{
     font-family: "Lane - Narrow" !important;
     font-size: 1.6rem !important;
     color:white !important;
+}
+
+/*lock codes */
+.lockcodetablecontainer{
+    text-align:center !important;
+    margin:2px !important;
+    font-size:1.5rem !important;
+    font-family:"Lane - Narrow";
+    padding:20px;
+}
+.lockcodetable{
+    border: 0.5px solid black !important;
+    border-radius:5px !important;
+    float:none;
+    margin:0 auto;
+}
+.lockcodetable thead th{
+    text-align:center;
+    border: 0.5px solid black !important;
+    padding:4px;
+
+}
+.lockcodetable tr td{
+    text-align:center;
+    border: 0.5px solid black !important;
+    padding:4px;
+}
+
+/* customize footer with additional class */
+.customfooter{
+    right:0 !important;
+    left:0 !important;
+    width:100% !important;
+}
+
+.customheadertron img{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: auto;
+    opacity: 0.6;
+    overflow:hidden;
+}
+
+
+/* photogallery */
+
+.container.gallery-container {
+    background-color: #fff;
+    color: #35373a;
+    min-height: 100vh;
+    padding: 30px 50px;
+}
+
+.gallery-container h1 {
+    text-align: center;
+    margin-top: 50px;
+    font-family: 'Droid Sans', sans-serif;
+    font-weight: bold;
+}
+
+.gallery-container p.page-description {
+    text-align: center;
+    margin: 25px auto;
+    font-size: 18px;
+    color: #999;
+}
+
+.tz-gallery {
+    padding: 40px;
+}
+
+/* Override bootstrap column paddings */
+.tz-gallery .row > div {
+    padding: 2px;
+}
+
+.tz-gallery .lightbox img {
+    width: 100%;
+    border-radius: 0;
+    position: relative;
+}
+
+.tz-gallery .lightbox:before {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -13px;
+    margin-left: -13px;
+    opacity: 0;
+    color: #fff;
+    font-size: 26px;
+    font-family: 'Glyphicons Halflings';
+    content: '\e003';
+    pointer-events: none;
+    z-index: 9000;
+    transition: 0.4s;
+}
+
+
+.tz-gallery .lightbox:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    background-color: rgba(46, 132, 206, 0.7);
+    content: '';
+    transition: 0.4s;
+}
+
+.tz-gallery .lightbox:hover:after,
+.tz-gallery .lightbox:hover:before {
+    opacity: 1;
+}
+
+.baguetteBox-button {
+    background-color: transparent !important;
+}
+
+
+#my_preloader_container{
+    text-align:center;
+    font-family: "Lane - Narrow";
+    font-size: 27px;
+    overflow:hidden;
+    z-index: 999999999999;
+    background-color: rgba(255, 255, 255, 1);
+    bottom: 0;
+    display: block;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+}
+.my_preloader {
+    border-top: 16px solid #477e36; /* Blue */
+    border-right: 16px solid #ecffc8;
+    border-bottom: 16px solid #359178;
+    border-left: 16px solid #575A4B;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    margin:0 auto;
+    top:55%;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+
+
+
+
+/* modifications for smartphones*/
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen
+and (max-device-width : 480px) {
+    .headerHR{
+        display:none;
+    }
+    #headeroptionsdropdown{
+        display:inline-block;
+    }
+    .regular_page_option_container{
+        display:none;
+    }
+    .regular_page_option{
+        display: block !important;
+        margin-left:10%;
+        font-size:0.6rem;
+
+    }
+    .newsheader{
+        font-size:1.5rem !important;
+    }
+    .welcomeHeader{
+        font-size:1rem; !important;
+        font-weight:bold;
+    }
+    .headerbtn{
+        font-size:1rem !important;
+    }
+    .customheadertron{
+        padding: 8px !important;
+        height:auto !important;
+        border:0.5px solid !important;
+        border-radius:4px !important;
+    }
+    .customcontainer{
+        padding:2px !important;
+        height:auto !important;
+    }
+    .nav-link{
+        padding:2px !important;
+    }
+
+    .announcementscontent{
+    margin:5px;
+    padding:5px;
+    font-size:1.2rem;
+    font-family: "Lane - Narrow";
+
+    }
+    .announcementscontent ul{
+        font-size:inherit !important;
+        font-family: inherit !important;
+    }
+    .announcementscontent ul li{
+        float:left;
+    }
+
+    .lockcodetablecontainer{
+        font-size:1rem !important;
+    }
+
+    #mygallery{
+        background-color: #0b2e13;
+        border-radius:8px;
+        margin:2px !important;
+
+    }
+
+    .tz-gallery{
+        padding: 2px !important;
+        margin: 2px;
+    }
+    .tz-gallery a,img {
+        max-width:100%;
+        padding:1px;
+    }
+    .myimgcontainer{
+        display:inline-block !important;
+        max-width:48% !important;
+    }
+
+/* Styles */
 }
