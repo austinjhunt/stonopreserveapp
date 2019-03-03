@@ -107,7 +107,7 @@
 
                     </script>
                     <!-- table on top of first page shows lock codes if user is faculty or super user -->
-
+                    {% if current_user.is_faculty or current_user.is_superuser %}
                     <div class="lockcodetablecontainer">
                         <table class="lockcodetable">
                             <thead>
@@ -131,6 +131,7 @@
                             </tbody>
                         </table>
                     </div>
+                    {% endif %}
                     <hr class="headerHR"/>
                     <ul class="regular_page_option_container">
                         <li class="regular_page_option"><a href="#">Announcements</a></li>
