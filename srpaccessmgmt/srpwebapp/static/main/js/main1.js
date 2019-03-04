@@ -34,7 +34,7 @@ $(document).ready(function(){
 
     /* use a more responsive date/time picker for mobile */
     else if ($(window).width() < 480) {
-        $('#date_picker').dtpicker();
+
     }
 });
 function register_new_account(){
@@ -213,4 +213,31 @@ function showlistview(){ // for superuser
 
 function showallusersview(){
     $('#myCarousel').trigger('to.owl.carousel', 4);
+}
+
+
+function schedulevisit(){
+    var starttime = $("#input_starttime").val();
+    var endtime = $("#input_endtime").val();
+    $.ajax(
+        {
+            type: "POST",
+            data: {
+                /*same backend functionality as before, just for one question rather than entire quiz*/
+                btnType: 'schedule_visit',
+                start_time: starttime,
+                end_time: endtime,
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success: function (data) {
+
+                $("#schedulevisitresult").html("Your visit has been scheduled! Updating calendar...");
+                setTimeout(function(){
+                    window.location.reload();
+                },3000);
+            }
+
+
+
+        });
 }
