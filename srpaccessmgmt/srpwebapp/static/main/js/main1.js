@@ -18,6 +18,24 @@ $(document).ready(function(){
 
     $("#dataTable").DataTable();
     $("#dataTable2").DataTable();
+
+    if ($(window).width() > 480) {
+        $('#calendar').fullCalendar({
+            height: 650,
+            selectable: true, /* allow user to select multiple time slots by clicking and dragging */
+            // put your options and callbacks here
+            dayClick: function (date, jsEvent, view) {
+                $('#confirmEventModal').modal();
+                $('#event_details').html(date.format());
+            }
+        });
+        $('#calendar').fullCalendar('changeView', 'agendaDay');
+    }
+
+    /* use a more responsive date/time picker for mobile */
+    else if ($(window).width() < 480) {
+        $('#date_picker').dtpicker();
+    }
 });
 function register_new_account(){
     var password = $("#inputPassword").val();
@@ -166,6 +184,10 @@ function send_pw_reset_email() {
 
 
         });
+}
+
+function showdtpicker(){
+    $("#date_picker").toggle();
 }
 
 
