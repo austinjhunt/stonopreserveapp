@@ -12,15 +12,15 @@
     </div>
 </div>
 
-<nav class="navbar navbar-expand navbar-dark bg-dark sticky-top">
+<nav class="navbar navbar-expand navbar-dark bg-dark sticky-top" >
     <!-- Separate ul's for left and right; put the dropdown on left !-->
     <!-- dropdown -->
     <ul class="navbar-nav ml-md-0">
         <li class="nav-item active" id="headeroptionsdropdown">
-            <div class="nav-link dropdown">
+            <div class="nav-link dropdown ml-3">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-fw fa-bars"></i>
+                    <i class="fa fa-fw fa-bars"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <!-- only for students -->
@@ -49,7 +49,7 @@
                 <span>
                     <button id="homebtn" type="button" class="btn btn-secondary headerbtn">
 
-                <i class="fas fa-fw fa-home"></i>&nbsp;HOME
+                <i class="fa fa-fw fa-home"></i>&nbsp;HOME
                     </button>
                 </span>
             </div>
@@ -58,16 +58,16 @@
             <div class="nav-link" href="/">
                 <span>
                     <button id="emergencybtnsidebar" type="button" class="btn btn-danger headerbtn">
-                        <i class="fas fa-fw fa-ambulance"></i>&nbsp;EMERGENCY
+                        <i class="fa fa-fw fa-ambulance"></i>&nbsp;EMERGENCY
                     </button>
                 </span>
             </div>
         </li>
-        <li class="nav-item dropdown no-arrow">
+        <li class="nav-item dropdown no-arrow mr-2">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
                aria-haspopup="true" aria-expanded="false">
                 <button id="userbtn" type="button" class="btn btn-dark">
-                    <i class="fas fa-user-circle fa-fw"></i>
+                    <i class="fa fa-user-circle fa-fw"></i>
                 </button>
             </a>
             <div class="dropdown-menu dropdown-menu-right mr-1" aria-labelledby="userDropdown">
@@ -145,7 +145,6 @@
                     <hr class="headerHR"/>
                 </div>
             </div>
-        </div>
 
 
         <!-- owl carousel for swiping between views without loading new pages -->
@@ -192,9 +191,46 @@
 
             <div id="studentscheduler" class="scheduleviewcontainer">
                 <div class="visible_only_mobile">
-
-                    <input class="toggledtpickerinput" onclick="showdtpicker();">
-                    <div id="date_picker"></div>
+                    <div class="container">
+                        <div class="newsheader">Schedule a visit start time:</div>
+                        <div class='col-md-5'>
+                            <div class="form-group">
+                                <div class='input-group date' id='datetimepicker6'>
+                                    <input id="input_starttime" type='text' class="form-control"/>
+                                    <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="newsheader">Schedule a visit end time:</div>
+                        <div class='col-md-5'>
+                            <div class="form-group">
+                                <div class='input-group date' id='datetimepicker7'>
+                                    <input id="input_endtime" type='text' class="form-control"/>
+                                    <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary lanenarrow" onclick="schedulevisit();">Schedule Visit</button>
+                        <div id="schedulevisitresult" class="schedulevisitresult"></div>
+                    </div>
+                    <script type="text/javascript">
+                        $(function () {
+                            $('#datetimepicker6').datetimepicker();
+                            $('#datetimepicker7').datetimepicker({
+                                useCurrent: false //Important! See issue #1075
+                            });
+                            $("#datetimepicker6").on("dp.change", function (e) {
+                                $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
+                            });
+                            $("#datetimepicker7").on("dp.change", function (e) {
+                                $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+                            });
+                        });
+                    </script>
                 </div>
 
                 <!--student schedule ability view-->

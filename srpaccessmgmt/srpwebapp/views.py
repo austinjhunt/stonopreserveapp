@@ -15,7 +15,7 @@ from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 
 from django.contrib.auth.models import User
-
+import datetime
 # import the models
 from .models import *
 # use this function for returning json data on ajax requests
@@ -68,6 +68,23 @@ def index(request):
             data = {'result':result}
             return render_to_json_response(data)
 
+        if request.is_ajax() and request.POST.get('btnType') == 'schedule_visit':
+            start_time = request.POST.get('start_time')
+            end_time = request.POST.get('end_time')
+
+            start_time = datetime.datetime.strptime(start_time, '%m/%d/%Y %I:%M %p').replace(tzinfo=datetime.timezone.utc)
+            scheduleddate = start_time.date()
+            start_time = start_time.time()
+            print(start_time)
+            end_time = datetime.datetime.strptime(end_time, '%m/%d/%Y %I:%M %p').replace(tzinfo=datetime.timezone.utc).time()
+            print(end_time)
+
+            Visit(scheduled_date=scheduleddate, scheduled_start_time=start_time,scheduled_end_time=end_time,user_id=request.user.id,
+                  datetime_visit_was_scheduled=datetime.datetime.now().replace(tzinfo=datetime.timezone.utc)).save()
+            data = {'res':'success'}
+            return render_to_json_response(data)
+
+
         # get all the announcements from last 30 days
         announcements = [Announcement_Object(_id=a.id,
                                              ann=a.announcement,
@@ -94,6 +111,7 @@ def index(request):
             'all_users': all_users,
 
         }
+
     else: # not authenticated, direct to login page
         template = loader.get_template('main/login.html')
         context = {'':''}
