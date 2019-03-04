@@ -190,22 +190,17 @@
                 </div>
             </div>
 
-            <!--student schedule ability view-->
-            <div id="studentScheduleAVisit" class="card mb-3">
-                <script type="text/javascript">
-                    $(function () {
+            <div id="studentscheduler" class="scheduleviewcontainer">
+                <div class="visible_only_mobile">
 
-                        $('#calendar').fullCalendar({
-                            // put your options and callbacks here
-                            dayClick: function (date, jsEvent, view) {
-                                $('#confirmEventModal').modal();
-                                $('#event_details').html(date.format());
-                            }
-                        });
-                        $('#calendar').fullCalendar('changeView', 'agendaDay');
-                    });
-                </script>
-                <div id="calendar"></div>
+                    <input class="toggledtpickerinput" onclick="showdtpicker();">
+                    <div id="date_picker"></div>
+                </div>
+
+                <!--student schedule ability view-->
+                <div id="studentScheduleAVisit" class="card mb-3 visible_only_desktop">
+                    <div id="calendar"></div>
+                </div>
             </div>
 
             <!-- photo gallery -->
@@ -227,7 +222,7 @@
                 </div>
             </div>
 
-             <!-- schedule list view -->
+            <!-- schedule list view -->
             <div><!-- DataTables Example -->
                 <div class="card-body">
                     <div class="table-responsive">
@@ -282,8 +277,10 @@
                                 <td style="text-align: center">{{user.date_joined}}</td>
                                 <td style="text-align:center;">{{user.num_visits}}</td>
                                 <td style="text-align:center;">
-                                    <button class="btn btn-danger d-inline-block"><i class="fas fa-fw fa-trash"></i></button>
-                                    <button class="btn btn-info d-inline-block"><i class="fas fa-fw fa-edit"></i></button>
+                                    <button class="btn btn-danger d-inline-block"><i class="fas fa-fw fa-trash"></i>
+                                    </button>
+                                    <button class="btn btn-info d-inline-block"><i class="fas fa-fw fa-edit"></i>
+                                    </button>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -321,7 +318,7 @@
 <!-- /#wrapper -->
 
 <!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
+<a class="scroll-to-top rounded infront" href="#page-top">
     <i class="fas fa-angle-up"></i>
 </a>
 

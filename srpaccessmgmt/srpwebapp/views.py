@@ -216,7 +216,7 @@ def register(request):
         rp = request.POST
         try:
 
-            is_faculty = 0 if rp.get('accountType') == 'student' else 1
+            is_staff = 0 if rp.get('accountType') == 'student' else 1
             is_superuser = 0 #FIXME: HOW TO CREATE ADMIN ACCTS
             result = 'register fail'
             # only create a new user if there is not already one with this username/email
@@ -232,7 +232,7 @@ def register(request):
                                                    first_name=rp.get('firstName'),
                                                    last_name=rp.get('lastName'),
                                                    is_superuser=is_superuser,
-                                                   is_faculty=is_faculty,
+                                                   is_staff=is_staff,
                                                    is_active=True)
                 newUser.save()
                 result = 'register success'

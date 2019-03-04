@@ -370,11 +370,25 @@ li .calendar-li:hover:nth-child(n+8):nth-child(-n+38), li .calendar-li:nth-child
     100% { transform: rotate(360deg); }
 }
 
+/* calendar */
 
+#studentScheduleAVisit{
+    padding:1%;
+    margin:2%;
+}
+.fc-left h2{
+    font-size: 1rem !important;
+}
+/* change color on mouseover */
+.fc-day:hover{background:lightblue !important;cursor: pointer !important;}
+.fc-slats tr:hover{background:lightblue !important;cursor: pointer !important;}
 
-
-
-
+.visible_only_mobile{
+    display:none;
+}
+.visible_only_desktop{
+    display:block;
+}
 /* modifications for smartphones*/
 /* Smartphones (portrait and landscape) ----------- */
 @media only screen
@@ -454,6 +468,44 @@ and (max-device-width : 480px) {
     .myimgcontainer{
         display:inline-block !important;
         max-width:48% !important;
+    }
+
+    #studentScheduleAVisit{
+         /* give room to scroll, scroll disabled in actual calendar */
+        left: 0;
+        width: 90% !important;
+    }
+    .visible_only_mobile{
+        display:block;
+    }
+    .scheduleviewcontainer{
+        padding:8px;
+        margin:2px;
+        text-align:center;
+        margin-bottom: 10px;
+    }
+    .infront{
+        z-index: 10000 !important;
+    }
+
+    .dpickerinputcontainer{
+        display:block !important;
+        margin:2% !important;
+        width: 100% !important;
+    }
+    .visible_only_desktop{
+        display:none !important;
+    }
+    #date_picker{
+        display:none;
+    }
+    .toggledtpickerinput{
+        margin:0 auto;
+        left: 2%;
+        border-radius: 4px;
+        border: 1px solid lightgray;
+        right: 2%;
+        display: block !important;
     }
 
 /* Styles */
