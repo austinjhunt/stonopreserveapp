@@ -250,8 +250,8 @@ function showeditlockcodemodal(lockid,gate,lockcode){
     $(header).append('<th>Lock Code</th><th>Gate</th>');
 
     var editrow = document.createElement('tr');
-    $(editrow).append('<td><input id="lockcodeinput_"' + lockid + '" autofocus value="'+ lockcode + '"></td><td>' +
-        '<input id="gatenuminput_"' + lockid + '"  value="' + gate + '"></td>');
+    $(editrow).append('<td><input id="lockcodeinput_' + lockid + '" autofocus value="'+ lockcode + '"></td><td>' +
+        '<input id="gatenuminput_' + lockid + '"  value="' + gate + '"></td>');
 
     $(editcodetable).append(header).append(editrow);
     $("#savelockcodeeditsbutton").on("click", function(){ savelockcodeedits(lockid); });
@@ -291,7 +291,6 @@ function savelockcodeedits(lockid){
 
 function showdeletelockcodemodal(lockid){
     $("#deletelockcodemodal").modal('show');
-    console.log(lockid);
     $("#deletelockcodecontent").html("Are you sure you want to delete this lock code?");
 
     $("#deletelockcodebutton").on("click", function(){ deletelockcode(lockid); });
