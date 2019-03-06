@@ -111,15 +111,16 @@ function schedule(){
 
 
 function login(){
-    var email = $("#inputEmail").val();
-    var password = $("#inputPassword").val();
-    if (email.trim() == '' || password.trim() == ''){
+    var email = $("#inputEmail").val().trim();
+    var password = $("#inputPassword").val().trim();
+    if (email == '' || password == ''){
         alert("Please ensure that both fields are filled in before submitting.");
     }
+    console.log("Email: " + email);
+    console.log("Password: " + password)
     $.ajax(
             {
                 type: "POST",
-
                 data: {
                     btnType: 'login',
                     email: email,
@@ -236,8 +237,87 @@ function schedulevisit(){
                     window.location.reload();
                 },3000);
             }
-
-
-
         });
 }
+
+
+/* edit lock code modal functions */
+function showeditlockcodemodal(lockid,gate,lockcode){
+
+    $("#editlockcodemodal").modal('show');
+    var editcodetable = document.createElement('table');
+    var header = document.createElement('thead');
+    $(header).append('<th>Lock Code</th><th>Gate</th>');
+
+    var editrow = document.createElement('tr');
+    $(editrow).append('<td><input id="lockcodeinput_"' + lockid + '" autofocus value="'+ lockcode + '"></td><td>' +
+        '<input id="gatenuminput_"' + lockid + '"  value="' + gate + '"></td>');
+
+    $(editcodetable).append(header).append(editrow);
+    $("#savelockcodeeditsbutton").on("click", function(){ savelockcodeedits(lockid); });
+    $("#editlockcodecontent").html(editcodetable);
+
+}
+function savelockcodeedits(lockid){
+    var newlockcode  = $("#lockcodeinput_" + lockid).val();
+    var newgatenum = $("#gatenuminput_" + lockid).val();
+    console.log("new stuff");
+    console.log(newlockcode);
+    console.log(newgatenum);
+    $.ajax(
+        {
+            type: "POST",
+            data: {
+                /*same backend functionality as before, just for one question rather than entire quiz*/
+                btnType: 'edit_lock_code',
+                lock_id: lockid,
+                new_lock_code: newlockcode,
+                new_gate_num: newgatenum,
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success: function (data) {
+
+                $("#editlockcodecontent").html("<h5>Lock code updating...</h5>")
+                setTimeout(function(){
+                    window.location.reload();
+                },3000);
+            }
+        });
+
+
+}
+
+
+
+function showdeletelockcodemodal(lockid){
+    $("#deletelockcodemodal").modal('show');
+    console.log(lockid);
+    $("#deletelockcodecontent").html("Are you sure you want to delete this lock code?");
+
+    $("#deletelockcodebutton").on("click", function(){ deletelockcode(lockid); });
+}
+
+function deletelockcode(lockid){
+    $.ajax(
+        {
+            type: "POST",
+            data: {
+                /*same backend functionality as before, just for one question rather than entire quiz*/
+                btnType: 'delete_lock_code',
+                lock_id: lockid,
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success: function (data) {
+
+                $("#deletelockcodecontent").html("<h5>Deleting gate...</h5>")
+                setTimeout(function(){
+                    window.location.reload();
+                },3000);
+            }
+        });
+}
+
+function showaddgatemodal(){
+    $("#addgatemodal").modal('show');
+}
+

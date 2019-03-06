@@ -403,6 +403,32 @@ li .calendar-li:hover:nth-child(n+8):nth-child(-n+38), li .calendar-li:nth-child
     text-align:center !important;
     background-color:lightgrey !important;
 }
+
+.changecombolabel{
+    color:blue;
+    font-weight:bold;
+}
+
+#editlockcodecontent{
+    text-align:center;
+    font-weight:bold;
+    font-size:1rem !important;
+}
+#editlockcodecontent table {
+    margin:0 auto !important;
+}
+
+#editlockcodecontent th,td,input{
+    text-align:center !important;
+    font-size: 1.3rem !important;
+    border: 1px solid lightgray;
+}
+#editlockcodecontent input{
+    width:100% !important;
+}
+#editlockcodecontent th{
+    border:1px solid black;
+}
 /* modifications for smartphones*/
 /* Smartphones (portrait and landscape) ----------- */
 @media only screen

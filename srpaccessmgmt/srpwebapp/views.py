@@ -38,13 +38,6 @@ def render_to_json_response(context, **response_kwargs):
 @csrf_exempt
 def index(request):
     if request.user.is_authenticated:
-        print(Code.objects.all())
-        """for i in range(5):
-            Visit(scheduled_date=datetime.date(2019,4,23), scheduled_start_time=datetime.time(2,00),
-                  scheduled_end_time=datetime.time(3,45), user_id=2,
-                  datetime_visit_was_scheduled=datetime.datetime.now()).save()
-"""
-
 
         # get all visits, then visitors return to front end for display in table
         all_scheduled_visits = Visit.objects.all()
@@ -84,6 +77,25 @@ def index(request):
             data = {'res':'success'}
             return render_to_json_response(data)
 
+        if request.is_ajax() and request.POST.get('btnType') == 'edit_lock_code':
+            # lock id is actually the primary key of the Gate table
+            lock_id, new_lock_code,new_gate_num = request.POST.get('lock_id'), request.POST.get('new_lock_code'), \
+                                     request.POST.get('new_gate_num')
+            # do the update
+            print("\n\nLock id: " + lock_id)
+            print("New lock code: " + new_lock_code)
+            print("New gate num: " + new_gate_num)
+            gate_to_edit = Gate.objects.filter(id=lock_id)[0] # use filter instead of get to avoid backend error on empty result
+            gate_to_edit.lock_code = new_lock_code
+            gate_to_edit.gate_number = new_gate_num
+            gate_to_edit.save()
+
+        if request.is_ajax() and request.POST.get('btnType') == 'delete_lock_code':
+            lock_id = request.POST.get('lock_id')
+            Gate.objects.filter(id=lock_id).delete()
+            data = {'res': 'success'}
+            return render_to_json_response(data)
+
 
         # get all the announcements from last 30 days
         announcements = [Announcement_Object(_id=a.id,
@@ -93,7 +105,7 @@ def index(request):
                          for a in Announcement.objects.filter(date_created__lte=datetime.datetime.today(),
                                      date_created__gt=datetime.datetime.today() - datetime.timedelta(days=30))]
 
-        lock_codes = Code.objects.all() # will only ever be one in table. delete current for gate when new one created
+        lock_codes = Gate.objects.all() # will only ever be one in table. delete current for gate when new one created
 
         all_users = [User_Object(_id=u.id, fn=u.first_name, ln=u.last_name,dj=u.date_joined,
                                  nv=len(Visit.objects.filter(user_id=u.id))) for u in User.objects.all()]
@@ -111,11 +123,12 @@ def index(request):
             'all_users': all_users,
 
         }
+        return HttpResponse(template.render(context, request))
 
     else: # not authenticated, direct to login page
-        template = loader.get_template('main/login.html')
+        return srp_login(request) # use the function to
         context = {'':''}
-    return HttpResponse(template.render(context, request))
+
 
 # 404 page
 @csrf_exempt
@@ -191,7 +204,12 @@ def forgot_password(request):
 @csrf_exempt
 def srp_login(request):
     if request.is_ajax() and request.POST.get('btnType') == 'login':
+        print("request button type:")
+        print(request.POST.get('btnType'))
         rp = request.POST
+        print("\n\nAll users...")
+        print(User.objects.all())
+
         try:
             result = 'auth fail' # initialize)
             user = authenticate(username=rp.get('email'), password=rp.get('password'))
