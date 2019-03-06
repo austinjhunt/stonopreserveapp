@@ -15,9 +15,10 @@ class Visit(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE) # which user scheduled it?; on deletion of user, also delete this
     datetime_visit_was_scheduled = models.DateTimeField()
 
-class Code(models.Model):
+
+class Gate(models.Model):
     lock_code = models.IntegerField(null=True) # this will most likely be 4 digits
-    gate = models.IntegerField(null=True) # will most likely be < 3 digits
+    gate_number = models.IntegerField(null=True) # will most likely be < 3 digits
 
 
 class Announcement(models.Model):

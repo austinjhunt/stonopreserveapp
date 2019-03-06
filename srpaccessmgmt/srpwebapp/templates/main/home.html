@@ -6,6 +6,57 @@
 
 <body id="page-top">
 
+
+<!-- modals -->
+<!-- Edit selected lock code -->
+<div class="modal" id="editlockcodemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editlockcodemodaltitle">Edit Lock Code</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="editlockcodecontent">
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button id="savelockcodeeditsbutton" onclick="savelockcodeedits();" type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete selected lock code -->
+<div class="modal" id="deletelockcodemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deletelockcodemodaltitle">Delete Gate Confirmation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="deletelockcodecontent">
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button id="deletelockcodebutton" onclick="deletelockcode();" type="button" class="btn btn-primary">Delete Gate</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
 <div id="my_preloader_container">
     <div style="position:absolute; top: 30%;text-align:center; left:30%; right:30%;">
         <div class="my_preloader"></div>
@@ -71,7 +122,7 @@
                 </button>
             </a>
             <div class="dropdown-menu dropdown-menu-right mr-1" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal" onclick="logout();">Logout</a>
             </div>
         </li>
     </ul>
@@ -111,23 +162,28 @@
                     <div class="lockcodetablecontainer">
                         <table class="lockcodetable">
                             <thead>
-                            <th colspan="2">Current Lock Codes</th>
+                            <th colspan="3">Current Lock Codes</th>
                             </thead>
                             <tbody>
                             <tr>
                                 <td>Lock Code</td>
                                 <td>Gate</td>
+                                <td>Updates</td>
                             </tr>
                             {% for lc in lock_codes %}
                             <tr>
-                                <td>{{ lc.lock_code }} <!-- only allow superuser to change code -->
-                                    {% if current_user.is_superuser %}
-                                    <a onclick="showchangecodeview();">CHANGE COMBO</a>
-                                    {% endif %}
-                                </td>
-                                <td>{{ lc.gate }}</td>
+                                <td>{{ lc.lock_code }}</td>
+                                <td>{{ lc.gate_number }}</td>
+                                <td>{% if current_user.is_superuser %}
+                                    <button class="btn btn-info" onclick="showeditlockcodemodal({{lc.id}},{{lc.gate_number}},{{lc.lock_code}});"><i class="fa fa-edit"></i></button>
+                                    <button class="btn btn-danger" onclick="showdeletelockcodemodal({{lc.id}});"><i class="fa fa-trash"></i></button>
+                                    {% endif %}</td>
                             </tr>
                             {% endfor %}
+                            <tr>
+                                <td colspan="3"><button class="btn btn-success" onclick="showaddgatemodal();">
+                                    <i class="fa fa-plus"></i> Add New Gate</button></td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -360,7 +416,7 @@
 
 
 <!-- Logout Modal-->
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -381,7 +437,7 @@
 
 
 <!-- create confirm schedule modal -->
-<div class="modal fade" id="confirmEventModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel"
+<div class="modal" id="confirmEventModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
