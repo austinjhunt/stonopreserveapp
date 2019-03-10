@@ -82,8 +82,8 @@ function register_new_account(){
                 },
                 success: function (data) {
                     console.log(data);
-                    if (data['result'] == 'register success'){
-                        window.location = '/login'; // auto log in after register
+                    if (data['result'] == 'email sent'){
+                        $("#emailsentmodal").modal('show'); // auto log in after register
                     }
                     else{
                         console.log(data['result']);

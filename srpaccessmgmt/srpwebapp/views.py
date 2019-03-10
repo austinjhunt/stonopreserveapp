@@ -7,7 +7,7 @@ from django.contrib.auth import logout
 
 # for forgot password feature
 from django.contrib.auth.tokens import default_token_generator
-from django.utils.encoding import force_bytes
+from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template import loader
 from django.core.validators import validate_email
@@ -21,6 +21,15 @@ from .models import *
 # use this function for returning json data on ajax requests
 import json
 import os
+
+
+# for email verification
+from .tokens import *
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
+from django.contrib.sites.shortcuts import get_current_site
+
+
 
 from .views_classes import *
 from django.conf import settings
@@ -81,10 +90,7 @@ def index(request):
             # lock id is actually the primary key of the Gate table
             lock_id, new_lock_code,new_gate_num = request.POST.get('lock_id'), request.POST.get('new_lock_code'), \
                                      request.POST.get('new_gate_num')
-            # do the update
-            print("\n\nLock id: " + lock_id)
-            print("New lock code: " + new_lock_code)
-            print("New gate num: " + new_gate_num)
+
             gate_to_edit = Gate.objects.filter(id=lock_id)[0] # use filter instead of get to avoid backend error on empty result
             gate_to_edit.lock_code = new_lock_code
             gate_to_edit.gate_number = new_gate_num
@@ -250,6 +256,7 @@ def register(request):
     # ajax request to handle registering new account
     if request.is_ajax() and request.POST.get('btnType') == 'register_new_account':
         rp = request.POST
+
         try:
 
             is_staff = 0 if rp.get('accountType') == 'student' else 1
@@ -269,14 +276,28 @@ def register(request):
                                                    last_name=rp.get('lastName'),
                                                    is_superuser=is_superuser,
                                                    is_staff=is_staff,
-                                                   is_active=True)
+                                                   is_active=False) # make is_active false initially until email verified
                 newUser.save()
-                result = 'register success'
+
+                # Send a verification email to the address they provided.
+                mail_subject = 'Activate your SRP Web App Account'
+                message = render_to_string('main/acc_active_email.html', {
+                    'user': newUser,
+                    'domain': get_current_site(request).domain,
+                    'uid': urlsafe_base64_encode(force_bytes(newUser.id)).decode(),
+                    'token': account_activation_token.make_token(newUser),
+                })
+                to_email = rp.get('email')
+                email = EmailMessage(
+                    mail_subject, message, to=[to_email]
+                )
+                email.send()
+                result = 'email sent'
             else:
-                print(alreadyexists[0])
+                result = 'email taken'
         except Exception as e:
             print(e)
-            result = e
+            result = str(e)
         data = {'result': result}
         return render_to_json_response(data)
 
@@ -286,15 +307,30 @@ def register(request):
     }
     return HttpResponse(template.render(context, request))
 
-# tables page
-@csrf_exempt
-def tables(request):
 
-    template = loader.get_template('main/tables.html')
-    context = {
-        '': '',
-    }
-    return HttpResponse(template.render(context, request))
+# function for account activation
+def activate(request, uidb64, token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(id=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        login(request, user)
+        # return redirect('home')
+        context = {
+            'success': 1,
+        }
+    else:
+        context = {
+            'success': 0,
+        }
+
+    template = loader.get_template('main/email_verification_result.html')
+    return HttpResponse(template.render(context,request))
+
 
 # admin page
 @csrf_exempt
