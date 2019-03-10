@@ -26,7 +26,8 @@ urlpatterns = [
     url(r'^forgot-password',views.forgot_password),
     url(r'^login', views.srp_login),
     url(r'^register', views.register),
-    url(r'^tables', views.tables),
-    url(r'^charts',views.charts),
+    url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        views.activate, name='activate'),
     path('admin/', admin.site.urls)
+
 ]
