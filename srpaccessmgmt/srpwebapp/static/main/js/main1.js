@@ -67,6 +67,7 @@ function register_new_account(){
         else{ // must just be a xxx@cofc.edu address, so: faculty
             acctType = "faculty";
         }
+        $("#my_preloader_container").fadeIn('slow');
         $.ajax(
             {
                 type: "POST",
@@ -81,9 +82,12 @@ function register_new_account(){
                     csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
                 },
                 success: function (data) {
-                    console.log(data);
+                    $("#my_preloader_container").fadeOut('slow');
                     if (data['result'] == 'email sent'){
                         $("#emailsentmodal").modal('show'); // auto log in after register
+                    }
+                    else if (data['result'] == 'email taken'){
+                        alert("This email address is already in use for an existing account.");
                     }
                     else{
                         console.log(data['result']);

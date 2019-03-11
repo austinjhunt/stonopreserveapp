@@ -21,11 +21,11 @@ from django.urls import include, path
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    url(r'^404', views.err404),
-    url(r'^blank', views.blank),
-    url(r'^forgot-password',views.forgot_password),
-    url(r'^login', views.srp_login),
-    url(r'^register', views.register),
+    url(r'^404', views.err404, name='404'),
+    url(r'^blank', views.blank,name='blank'),
+    url(r'^forgot-password',views.forgot_password,name='forgot_password'),
+    url(r'^login', views.srp_login,name='login_page'),
+    url(r'^register', views.register,name='register_page'),
     url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         views.activate, name='activate'),
     path('admin/', admin.site.urls)
