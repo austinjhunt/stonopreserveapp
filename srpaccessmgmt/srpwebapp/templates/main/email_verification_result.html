@@ -1,0 +1,136 @@
+{% extends 'main/masterpage.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+
+<body id="page-top">
+
+
+
+
+
+<div id="my_preloader_container">
+    <div style="position:absolute; top: 30%;text-align:center; left:30%; right:30%;">
+        <div class="my_preloader"></div>
+    </div>
+</div>
+
+<nav class="navbar navbar-expand navbar-dark bg-dark sticky-top" >
+
+
+</nav><!-- end navigation bar -->
+
+
+<!-- begin body wrapper -->
+<div id="wrapper">
+    <div id="content-wrapper">
+        <!-- Welcome message -->
+        <div class="container-fluid">
+            <div class="jumbotron jumbotron-fluid lanenarrow customheadertron">
+                <div class="container lanenarrow customcontainer" style="padding:20px;">
+                    {% if success %}
+                    <div class="text-center h3">
+                        Your account has been activated!
+                    </div>
+                    <div class="d-block text-center">
+                        <button class="btn btn-primary btn-lg" >
+                            <a href="\login" class="h4 lanenarrow p-0 m-0">
+                                Log In
+                            </a>
+                        </button>
+                    </div>
+
+                    {% else %}
+                    <div class="text-center h3">
+                        Token invalid. Your account was not activated.
+                    </div>
+                    <div class="d-block text-center">
+                        <button class="btn btn-primary btn-lg">
+                            <a href="\register" class="h4 lanenarrow p-0 m-0">
+                                Register
+                            </a>
+                        </button>
+                    </div>
+
+                    {% endif %}
+
+                </div>
+            </div>
+
+
+
+        </div>
+        <!-- /.container-fluid -->
+
+        <!-- Sticky Footer -->
+        <footer class="sticky-footer customfooter">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                <span>Developed by <a href="http://huntaj.stu.cofc.edu" target="_blank">Austin Hunt</a>,
+                  <a href="https://www.linkedin.com/in/daniel-lee-b4003417b/" target="_blank">Daniel Lee</a>, &amp;
+                  <a href="https://www.linkedin.com/in/alex-thropp-7a4874133/" target="_blank">Alex Thropp</a></span>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+    <!-- /.content-wrapper -->
+
+</div>
+<!-- /#wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded infront" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+
+<!-- Logout Modal-->
+<div class="modal" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" onclick="logout();">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- create confirm schedule modal -->
+<div class="modal" id="confirmEventModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmModalLabel">Confirm Event?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Confirm your event.</div>
+            <div class="modal-body" id="event_details"></div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" data-dismiss="modal" onclick="schedule_event();">Confirm</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+
+{% endblock %}
+
+
+
