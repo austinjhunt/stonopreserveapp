@@ -324,3 +324,15 @@ function showaddgatemodal(){
     $("#addgatemodal").modal('show');
 }
 
+function swapbtn(){
+
+    if($("#arrivebtn").html().includes("Arrived")){
+        $("#arrivebtn").html($("#arrivebtn").html().replace("Arrived","Leaving"));
+    }
+    else{
+        $("#arrivebtn").html($("#arrivebtn").html().replace("Leaving", "Arrived"));
+    }
+    $("#arrivebtn").toggleClass('btn-info  btn-danger');
+    $("#arrivebtnicon").toggleClass('fa-check fa-sign-out-alt');
+    
+}

@@ -2,38 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d83a5d26-bda0-4132-8af3-a9df2fcac7fd" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/migrations/0004_auto_20190302_2044.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/migrations/0005_photo_upload_record.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/migrations/0006_auto_20190306_1132.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/static/main/fonts/LANENAR_-webfont.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/static/main/fonts/LANENAR_-webfont.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/static/main/fonts/LANENAR_-webfont.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/static/main/fonts/LANENAR_-webfont.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/acc_active_email.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/email_verification_result.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/home.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/tokens.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/srpaccessmgmt/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/srpaccessmgmt/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srpaccessmgmt/srpaccessmgmt/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/srpaccessmgmt/srpaccessmgmt/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srpaccessmgmt/srpaccessmgmt/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/srpaccessmgmt/srpaccessmgmt/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/static/main/css/sb-admin.css" beforeDir="false" afterPath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/static/main/css/sb-admin.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/static/main/css/srpstyle.css" beforeDir="false" afterPath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/static/main/css/srpstyle.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/static/main/js/demo/chart-area-demo.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/static/main/js/demo/chart-bar-demo.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/static/main/js/demo/chart-pie-demo.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/static/main/js/demo/datatables-demo.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/static/main/js/main1.js" beforeDir="false" afterPath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/static/main/js/main1.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/home_regular.html" beforeDir="false" afterPath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/home_regular.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/index_old.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/lockcodes.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/masterpage.html" beforeDir="false" afterPath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/masterpage.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/register.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/tables.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/views_classes.py" beforeDir="false" afterPath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/views_classes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/home.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -65,38 +36,26 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/srpaccessmgmt/srpwebapp/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="555">
+            <state relative-caret-position="180">
               <caret line="46" column="19" selection-start-line="46" selection-start-column="19" selection-end-line="46" selection-end-column="19" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/home_regular.html">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/home.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="231">
-              <caret line="56" column="8" selection-start-line="56" selection-start-column="8" selection-end-line="56" selection-end-column="8" />
-              <folding>
-                <element signature="n#style#0;n#ul#0;n#nav#0;n#body#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#hr#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#!!top" expanded="true" />
-                <element signature="e#2915#2920#0" expanded="true" />
-                <element signature="n#style#0;n#hr#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#hr#0;n#section#0;n#div#0;n#div#1;n#div#0;n#div#0;n#body#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#1;n#section#0;n#div#2;n#div#1;n#div#0;n#div#0;n#body#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#hr#0;n#section#1;n#div#2;n#div#1;n#div#0;n#div#0;n#body#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#iframe#0;n#div#0;n#section#1;n#div#2;n#div#1;n#div#0;n#div#0;n#body#0;n#!!top" expanded="true" />
-                <element signature="e#8736#8741#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="399">
+              <caret line="110" column="39" selection-start-line="110" selection-start-column="39" selection-end-line="110" selection-end-column="39" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/srpaccessmgmt/srpwebapp/static/main/js/main1.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="604">
-              <caret line="326" selection-start-line="326" selection-end-line="326" />
+            <state relative-caret-position="364">
+              <caret line="323" column="3" selection-start-line="323" selection-start-column="3" selection-end-line="323" selection-end-column="3" />
             </state>
           </provider>
         </entry>
@@ -145,6 +104,7 @@
       <find>login</find>
       <find>mr-0</find>
       <find>emergencybtnsidebar</find>
+      <find>home</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -154,8 +114,9 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/static/main/css/srpstyle.css" />
-        <option value="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/static/main/js/main1.js" />
         <option value="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/home_regular.html" />
+        <option value="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/home.html" />
+        <option value="$PROJECT_DIR$/srpaccessmgmt/srpwebapp/static/main/js/main1.js" />
       </list>
     </option>
   </component>
@@ -246,12 +207,12 @@
       <workItem from="1550596022564" duration="4063000" />
       <workItem from="1550701992397" duration="970000" />
       <workItem from="1551394435330" duration="9391000" />
-      <workItem from="1552258606871" duration="4534000" />
+      <workItem from="1552258606871" duration="7094000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="7556000" />
+    <option name="totallyTimeSpent" value="10116000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1680" height="987" extended-state="0" />
@@ -271,7 +232,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.32960895" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.17206705" />
+      <window_info anchor="bottom" id="Terminal" order="11" visible="true" weight="0.17206705" />
       <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -279,20 +240,13 @@
       <window_info anchor="right" id="SciView" order="3" />
       <window_info anchor="right" id="R Graphics" order="4" />
       <window_info anchor="right" id="R Packages" order="5" />
-      <window_info anchor="right" id="Database" order="6" visible="true" weight="0.114163615" />
+      <window_info active="true" anchor="right" id="Database" order="6" visible="true" weight="0.114163615" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/srpaccessmgmt/srpwebapp/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="555">
-          <caret line="46" column="19" selection-start-line="46" selection-start-column="19" selection-end-line="46" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/srpaccessmgmt/srpaccessmgmt/settings.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -320,17 +274,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/srpaccessmgmt/srpwebapp/static/main/js/main1.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="604">
-          <caret line="326" selection-start-line="326" selection-end-line="326" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/home_regular.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="56" column="8" selection-start-line="56" selection-start-column="8" selection-end-line="56" selection-end-column="8" />
+        <state relative-caret-position="120">
+          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
           <folding>
             <element signature="n#style#0;n#ul#0;n#nav#0;n#body#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#!!top" expanded="true" />
@@ -343,6 +290,27 @@
             <element signature="n#style#0;n#iframe#0;n#div#0;n#section#1;n#div#2;n#div#1;n#div#0;n#div#0;n#body#0;n#!!top" expanded="true" />
             <element signature="e#8736#8741#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/srpaccessmgmt/srpwebapp/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="46" column="19" selection-start-line="46" selection-start-column="19" selection-end-line="46" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/srpaccessmgmt/srpwebapp/templates/main/home.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="110" column="39" selection-start-line="110" selection-start-column="39" selection-end-line="110" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/srpaccessmgmt/srpwebapp/static/main/js/main1.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="364">
+          <caret line="323" column="3" selection-start-line="323" selection-start-column="3" selection-end-line="323" selection-end-column="3" />
         </state>
       </provider>
     </entry>
