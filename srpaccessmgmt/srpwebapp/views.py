@@ -28,8 +28,7 @@ from .tokens import *
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 from django.contrib.sites.shortcuts import get_current_site
-
-
+import base64
 
 from .views_classes import *
 from django.conf import settings
@@ -240,8 +239,9 @@ def srp_login(request):
 
 # register page
 @csrf_exempt
-def register(request):
 
+def register(request):
+    #User.objects.filter(email='huntaj@g.cofc.edu').delete()
     # if user clicks logout on register page
     if request.is_ajax() and request.user.is_authenticated and (request.POST.get('btnType') == 'logout'):
         try:
@@ -278,13 +278,18 @@ def register(request):
                                                    is_staff=is_staff,
                                                    is_active=False) # make is_active false initially until email verified
                 newUser.save()
+                print("Your new user id is " + str(newUser.id))
 
                 # Send a verification email to the address they provided.
                 mail_subject = 'Activate your SRP Web App Account'
+
+                uid = urlsafe_base64_encode(force_bytes(newUser.id)).decode()
+                print("Creating UID with base64 encoding....\n")
+                print(uid)
                 message = render_to_string('main/acc_active_email.html', {
                     'user': newUser,
                     'domain': get_current_site(request).domain,
-                    'uid': urlsafe_base64_encode(force_bytes(newUser.id)).decode(),
+                    'uid': uid,
                     'token': account_activation_token.make_token(newUser),
                 })
                 to_email = rp.get('email')
@@ -298,6 +303,7 @@ def register(request):
         except Exception as e:
             print(e)
             result = str(e)
+
         data = {'result': result}
         return render_to_json_response(data)
 
@@ -311,14 +317,20 @@ def register(request):
 # function for account activation
 def activate(request, uidb64, token):
     try:
+        print(type(uidb64))
+        print(uidb64)
         uid = force_text(urlsafe_base64_decode(uidb64))
+        print("UID: " + uid)
         user = User.objects.get(id=uid)
-    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        print("UID: " + str(uid))
+        print("USER: ")
+        print(User)
+    except Exception as e:
+        print(e)
         user = None
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        login(request, user)
         # return redirect('home')
         context = {
             'success': 1,

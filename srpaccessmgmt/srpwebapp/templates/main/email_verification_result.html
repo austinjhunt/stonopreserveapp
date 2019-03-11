@@ -30,15 +30,27 @@
             <div class="jumbotron jumbotron-fluid lanenarrow customheadertron">
                 <div class="container lanenarrow customcontainer" style="padding:20px;">
                     {% if success %}
-                    <div class="text-lg-center">
+                    <div class="text-center h3">
                         Your account has been activated!
-                        <button class="btn btn-primary btn-lg" href="\login">Log In</button>
+                    </div>
+                    <div class="d-block text-center">
+                        <button class="btn btn-primary btn-lg" >
+                            <a href="\login" class="h4 lanenarrow p-0 m-0">
+                                Log In
+                            </a>
+                        </button>
                     </div>
 
                     {% else %}
-                    <div class="text-lg-center">
+                    <div class="text-center h3">
                         Token invalid. Your account was not activated.
-                        <button class="btn btn-primary btn-lg" href="\register">Register</button>
+                    </div>
+                    <div class="d-block text-center">
+                        <button class="btn btn-primary btn-lg">
+                            <a href="\register" class="h4 lanenarrow p-0 m-0">
+                                Register
+                            </a>
+                        </button>
                     </div>
 
                     {% endif %}
