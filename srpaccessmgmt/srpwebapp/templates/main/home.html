@@ -167,7 +167,7 @@
 
                     </script>
                     <!-- table on top of first page shows lock codes if user is faculty or super user -->
-                    {% if current_user.is_faculty or current_user.is_superuser %}
+                    {% if current_user.is_staff or current_user.is_superuser %}
                     <div class="lockcodetablecontainer">
                         <table class="lockcodetable">
                             <thead>
