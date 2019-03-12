@@ -332,7 +332,7 @@ function swapbtn(){
     else{
         $("#arrivebtn").html($("#arrivebtn").html().replace("Leaving", "Arrived"));
     }
-    $("#arrivebtn").toggleClass('btn-info  btn-danger');
+    $("#arrivebtn").toggleClass('btn-info  btn-warning');
     $("#arrivebtnicon").toggleClass('fa-check fa-sign-out-alt');
-    
+
 }
