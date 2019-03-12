@@ -31,6 +31,33 @@
   </div>
 </div>
 
+
+
+<!-- add new gate modal -->
+<!-- Edit selected lock code -->
+<div class="modal" id="addnewgatemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addnewgatemodaltitle">Enter New Gate Info</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="addnewgatemodalcontent">
+                <input autofocus type="number" id="newgatenum" class="d-inline-block p-2" placeholder="Gate Number">
+                <input type="number" id="newgatecode" class="d-inline-block p-2" placeholder="Lock Code">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button id="savenewgatebutton" onclick="savenewgate();" type="button" class="btn btn-primary">Create New Gate</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Delete selected lock code -->
 <div class="modal" id="deletelockcodemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -190,7 +217,7 @@
                             </tr>
                             {% endfor %}
                             <tr>
-                                <td colspan="3"><button class="btn btn-success" onclick="showaddgatemodal();">
+                                <td colspan="3"><button class="btn btn-success" onclick="$('#addnewgatemodal').modal('show');">
                                     <i class="fa fa-plus"></i> Add New Gate</button></td>
                             </tr>
                             </tbody>
