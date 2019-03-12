@@ -101,6 +101,19 @@ def index(request):
             data = {'res': 'success'}
             return render_to_json_response(data)
 
+        if request.is_ajax() and request.POST.get('btnType') == 'create_new_gate':
+            result = 'fail'
+            try:
+                gate_num, gate_code = int(request.POST.get('new_gate_num')),int(request.POST.get('new_gate_code'))
+                result = 'success'
+                Gate(lock_code=gate_code,gate_number=gate_num).save()
+            except Exception as e:
+                print(e)
+
+            data = {
+                'result': result
+            }
+            return render_to_json_response(data)
 
         # get all the announcements from last 30 days
         announcements = [Announcement_Object(_id=a.id,
