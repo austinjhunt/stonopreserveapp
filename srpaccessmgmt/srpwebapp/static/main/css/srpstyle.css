@@ -1,10 +1,10 @@
 @font-face {
-    font-family: 'lane_-_poshregular';
-    src: url('../fonts/LANEPOSH-webfont.eot');
-    src: url('../fonts/LANEPOSH-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/LANEPOSH-webfont.woff') format('woff'),
-         url('../fonts/LANEPOSH-webfont.ttf') format('truetype'),
-         url('../fonts/LANEPOSH-webfont.svg#lane_-_poshregular') format('svg');
+    font-family: 'Lane - Narrow';
+    src: url('../fonts/LANENAR_-webfont.eot');
+    src: url('../fonts/LANENAR_-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/LANENAR_-webfont.woff') format('woff'),
+         url('../fonts/LANENAR_-webfont.ttf') format('truetype'),
+         url('../fonts/LANENAR_-webfont.svg#lane_-_poshregular') format('svg');
     font-weight: normal;
     font-style: normal;
 
@@ -88,8 +88,8 @@ li .calendar-li:hover:nth-child(n+8):nth-child(-n+38), li .calendar-li:nth-child
 }
 
 .welcomeHeader{
-    font-family:"Lane - Narrow" !important;
-    font-size:2.5rem !important;
+    font-family: "Lane - Narrow" !important;
+    font-size:2.5rem;
     font-weight:normal;
     margin:0 auto;
     text-align:center;
@@ -106,33 +106,36 @@ li .calendar-li:hover:nth-child(n+8):nth-child(-n+38), li .calendar-li:nth-child
 
 .regular_page_option_container{
     text-align:center;
-    margin: 0px !important;
-    padding-inline-start: 0px !important;
-
+    font-size:1rem;
+    font-weight:bold;
+    text-transform:uppercase;
+    display:block;
+    margin-bottom: 0!important;
 }
-
+.headerHR{
+    border: 1px solid lightgray;
+    margin:0 auto;
+    width:70%;
+    margin-top:2px;
+    margin-bottom:2px;
+}
 .regular_page_option{
     display:inline-block;
-    font-size: 1.5em;
     margin-left:10px;
     margin-right:10px;
-    margin-top:5px;
-    margin-bottom:5px;
-} /* modify display in line block to display block for mobile */
-/* Smartphones (portrait and landscape) ----------- */
-@media only screen
-and (min-device-width : 320px)
-and (max-device-width : 480px) {
-    .regular_page_option{
-        display: block !important;
-    }
-/* Styles */
+    margin-top:2px;
+    margin-bottom:2px;
+    color:blue;
+}
+.regular_page_option:hover{
+    cursor:pointer;
+}
+#headeroptionsdropdown{
+    display:none;
 }
 
-
-
 .lanenarrow{
-    font-family:"Lane - Narrow";
+    font-family:"Lane - Narrow" !important;
 }
 
 .panicbtncontainer{
@@ -153,20 +156,21 @@ and (max-device-width : 480px) {
 }
 .contactsheader{
     font-size:2.5em;
+    font-family:"Lane - Narrow" ;
+}
+
+.lockheader{
+    font-size:1.5em;
     font-family:"Lane - Narrow";
+    text-align:center;
 }
 .contact{
-    font-size:2em !important;
-}
-.contactssection{
-    margin-bottom:30px;
-    padding:30px;
-
+    font-size:1.5em !important;
 }
 
 /* news */
 .newsheader{
-    font-size:6rem;
+    font-size:2rem;
     font-family:"Lane - Narrow";
 }
 .newscontent{
@@ -182,4 +186,372 @@ and (max-device-width : 480px) {
 .newslistelement{
     font-size:inherit !important;
     font-family: inherit !important;
+}
+
+/* announcements view */
+
+.announcementsview{
+    padding:3%;
+    text-align:center !important;
+}
+.announcementsviewHR{
+    border: 1px solid lightgray;
+    margin:0 auto;
+    width:70%;
+    margin-top:2px;
+    margin-bottom:2px;
+}
+.announcementscontent{
+    margin:5px;
+    padding:5px;
+    font-size:1.9rem;
+    font-family: "Lane - Narrow";
+
+}
+.announcementscontent ul{
+    font-size:inherit !important;
+    font-family: inherit !important;
+}
+.announcementscontent ul li{
+    float:left;
+}
+
+/*nav header */
+.navheader{
+    font-family: "Lane - Narrow" !important;
+    font-size: 1.6rem !important;
+    color:white !important;
+}
+
+/*lock codes */
+.lockcodetablecontainer{
+    text-align:center !important;
+    margin:2px !important;
+    font-size:1.5rem !important;
+    font-family:"Lane - Narrow";
+    padding:20px;
+}
+.lockcodetable{
+    border: 0.5px solid black !important;
+    border-radius:5px !important;
+    float:none;
+    margin:0 auto;
+}
+.lockcodetable thead th{
+    text-align:center;
+    border: 0.5px solid black !important;
+    padding:4px;
+
+}
+.lockcodetable tr td{
+    text-align:center;
+    border: 0.5px solid black !important;
+    padding:4px;
+}
+
+/* customize footer with additional class */
+.customfooter{
+    right:0 !important;
+    left:0 !important;
+    width:100% !important;
+}
+
+.customheadertron img{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: auto;
+    opacity: 0.6;
+    overflow:hidden;
+}
+
+
+/* photogallery */
+
+.container.gallery-container {
+    background-color: #fff;
+    color: #35373a;
+    min-height: 100vh;
+    padding: 30px 50px;
+}
+
+.gallery-container h1 {
+    text-align: center;
+    margin-top: 50px;
+    font-family: 'Droid Sans', sans-serif;
+    font-weight: bold;
+}
+
+.gallery-container p.page-description {
+    text-align: center;
+    margin: 25px auto;
+    font-size: 18px;
+    color: #999;
+}
+
+.tz-gallery {
+    padding: 40px;
+}
+
+/* Override bootstrap column paddings */
+.tz-gallery .row > div {
+    padding: 2px;
+}
+
+.tz-gallery .lightbox img {
+    width: 100%;
+    border-radius: 0;
+    position: relative;
+}
+
+.tz-gallery .lightbox:before {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -13px;
+    margin-left: -13px;
+    opacity: 0;
+    color: #fff;
+    font-size: 26px;
+    font-family: 'Glyphicons Halflings';
+    content: '\e003';
+    pointer-events: none;
+    z-index: 9000;
+    transition: 0.4s;
+}
+
+
+.tz-gallery .lightbox:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    background-color: rgba(46, 132, 206, 0.7);
+    content: '';
+    transition: 0.4s;
+}
+
+.tz-gallery .lightbox:hover:after,
+.tz-gallery .lightbox:hover:before {
+    opacity: 1;
+}
+
+.baguetteBox-button {
+    background-color: transparent !important;
+}
+
+
+#my_preloader_container{
+    text-align:center;
+    font-family: "Lane - Narrow";
+    font-size: 27px;
+    overflow:hidden;
+    z-index: 999999999999;
+    background-color: rgba(255, 255, 255, 1);
+    bottom: 0;
+    display: block;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+}
+.my_preloader {
+    border-top: 16px solid #477e36; /* Blue */
+    border-right: 16px solid #ecffc8;
+    border-bottom: 16px solid #359178;
+    border-left: 16px solid #575A4B;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    margin:0 auto;
+    top:55%;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* calendar */
+
+#studentScheduleAVisit{
+    padding:1%;
+    margin:2%;
+}
+.fc-left h2{
+    font-size: 1rem !important;
+}
+/* change color on mouseover */
+.fc-day:hover{background:lightblue !important;cursor: pointer !important;}
+.fc-slats tr:hover{background:lightblue !important;cursor: pointer !important;}
+
+.visible_only_mobile{
+    display:none;
+}
+.visible_only_desktop{
+    display:block;
+}
+
+
+/* datetime picker */
+.customdatetimeinput{
+        display:inline-block !important;
+}
+.customdateiconcontainer{
+    display:inline-block !important;
+    left:0 !important;
+    width:fit-content !important;
+    padding:4px !important;
+    text-align:center !important;
+    background-color:lightgrey !important;
+}
+
+.changecombolabel{
+    color:blue;
+    font-weight:bold;
+}
+
+#editlockcodecontent{
+    text-align:center;
+    font-weight:bold;
+    font-size:1rem !important;
+}
+#editlockcodecontent table {
+    margin:0 auto !important;
+}
+
+#editlockcodecontent th,td,input{
+    text-align:center !important;
+    font-size: 1.3rem !important;
+    border: 1px solid lightgray;
+}
+#editlockcodecontent input{
+    width:100% !important;
+}
+#editlockcodecontent th{
+    border:1px solid black;
+}
+/* modifications for smartphones*/
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen
+and (max-device-width : 480px) {
+    .headerHR{
+        display:none;
+    }
+    #headeroptionsdropdown{
+        display:inline-block;
+    }
+    .regular_page_option_container{
+        display:none;
+    }
+    .regular_page_option{
+        display: block !important;
+        margin-left:10%;
+        font-size:0.9rem;
+
+    }
+    .newsheader{
+        font-size:1.5rem !important;
+    }
+    .welcomeHeader{
+        font-size:1rem; !important;
+        font-weight:bold;
+    }
+    .headerbtn{
+        font-size:1.3rem !important;
+    }
+    .customheadertron{
+        padding: 8px !important;
+        height:auto !important;
+        border:0.5px solid !important;
+        border-radius:4px !important;
+    }
+    .customcontainer{
+        padding:2px !important;
+        height:auto !important;
+    }
+    .nav-link{
+        padding:2px !important;
+    }
+
+    .announcementscontent{
+    margin:5px;
+    padding:5px;
+    font-size:1.2rem;
+    font-family: "Lane - Narrow";
+
+    }
+    .announcementscontent ul{
+        font-size:inherit !important;
+        font-family: inherit !important;
+    }
+    .announcementscontent ul li{
+        float:left;
+    }
+
+    .lockcodetablecontainer{
+        font-size:1rem !important;
+    }
+
+    #mygallery{
+        border-radius:8px;
+        margin:2px !important;
+
+    }
+
+    .tz-gallery{
+        padding: 2px !important;
+        margin: 2px;
+    }
+    .tz-gallery a,img {
+        max-width:100%;
+        padding:1px;
+    }
+    .myimgcontainer{
+        display:inline-block !important;
+        max-width:48% !important;
+    }
+
+    #studentScheduleAVisit{
+         /* give room to scroll, scroll disabled in actual calendar */
+        left: 0;
+        width: 90% !important;
+    }
+    .visible_only_mobile{
+        display:block;
+    }
+    .scheduleviewcontainer{
+        padding:8px;
+        margin:2px;
+        text-align:center;
+        margin-bottom: 10px;
+    }
+    .infront{
+        z-index: 10000 !important;
+    }
+
+    .dpickerinputcontainer{
+        display:block !important;
+        margin:2% !important;
+        width: 100% !important;
+    }
+    .visible_only_desktop{
+        display:none !important;
+    }
+    #date_picker{
+        display:none;
+    }
+    .schedulevisitresult{
+        font-family: "Lane - Narrow";
+        font-weight:bold;
+        text-align:center;
+        padding:3%;
+        margin:1%;
+    }
+
+/* Styles */
 }

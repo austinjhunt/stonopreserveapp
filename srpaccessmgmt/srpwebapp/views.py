@@ -7,7 +7,7 @@ from django.contrib.auth import logout
 
 # for forgot password feature
 from django.contrib.auth.tokens import default_token_generator
-from django.utils.encoding import force_bytes
+from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template import loader
 from django.core.validators import validate_email
@@ -15,12 +15,20 @@ from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 
 from django.contrib.auth.models import User
-
+import datetime
 # import the models
 from .models import *
 # use this function for returning json data on ajax requests
 import json
 import os
+
+
+# for email verification
+from .tokens import *
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
+from django.contrib.sites.shortcuts import get_current_site
+import base64
 
 from .views_classes import *
 from django.conf import settings
@@ -33,43 +41,24 @@ def render_to_json_response(context, **response_kwargs):
 
 
 
+
 # home page function
 @csrf_exempt
 def index(request):
     if request.user.is_authenticated:
-        if request.user.is_superuser:
-            print(User.objects.all()[0].id)
-            """for i in range(5):
-                Visit(scheduled_date=datetime.date(2019,4,23), scheduled_start_time=datetime.time(2,00),
-                      scheduled_end_time=datetime.time(3,45), user_id=2,
-                      datetime_visit_was_scheduled=datetime.datetime.now()).save()
-"""
+
+        # get all visits, then visitors return to front end for display in table
+        all_scheduled_visits = Visit.objects.all()
+
+        # create json serializable objects that store the visitor name as well as visit information
+        visit_objects = []
+        for sv in all_scheduled_visits:
+            visitor = User.objects.get(id=sv.user_id)
+            visit_objects.append(Visit_Object(sv.id, sv.scheduled_start_time, sv.scheduled_end_time,sv.scheduled_date,
+                                              visitor.first_name,visitor.last_name))
 
 
-            # get all visits, then visitors return to front end for display in table
-            all_scheduled_visits = Visit.objects.all()
-
-            # create json serializable objects that store the visitor name as well as visit information
-            visit_objects = []
-            for sv in all_scheduled_visits:
-                visitor = User.objects.get(id=sv.user_id)
-                visit_objects.append(Visit_Object(sv.id, sv.scheduled_start_time, sv.scheduled_end_time,sv.scheduled_date,
-                                                  visitor.first_name,visitor.last_name))
-
-            template = loader.get_template('main/home_admin.html')
-            context = {
-                'name': request.session['full_name'],
-                'visit_objects': visit_objects,
-            }
-        else:
-            imgfiles = [settings.STATIC_URL + "main/img/" + el for el in os.listdir(settings.STATIC_ROOT + "main/img")]
-            template = loader.get_template('main/home_regular.html')
-            context = {
-                'first_name': request.session['first_name'],
-                'full_name': request.session['full_name'],
-                'imgs':imgfiles,
-
-            }
+        imgfiles = [settings.STATIC_URL + "main/img/" + el for el in os.listdir(settings.STATIC_ROOT + "main/img")]
         if request.is_ajax() and request.POST.get('btnType') == 'logout':
             try:
                 logout(request)
@@ -79,10 +68,72 @@ def index(request):
                 result = 'logout fail'
             data = {'result':result}
             return render_to_json_response(data)
+
+        if request.is_ajax() and request.POST.get('btnType') == 'schedule_visit':
+            start_time = request.POST.get('start_time')
+            end_time = request.POST.get('end_time')
+
+            start_time = datetime.datetime.strptime(start_time, '%m/%d/%Y %I:%M %p').replace(tzinfo=datetime.timezone.utc)
+            scheduleddate = start_time.date()
+            start_time = start_time.time()
+            print(start_time)
+            end_time = datetime.datetime.strptime(end_time, '%m/%d/%Y %I:%M %p').replace(tzinfo=datetime.timezone.utc).time()
+            print(end_time)
+
+            Visit(scheduled_date=scheduleddate, scheduled_start_time=start_time,scheduled_end_time=end_time,user_id=request.user.id,
+                  datetime_visit_was_scheduled=datetime.datetime.now().replace(tzinfo=datetime.timezone.utc)).save()
+            data = {'res':'success'}
+            return render_to_json_response(data)
+
+        if request.is_ajax() and request.POST.get('btnType') == 'edit_lock_code':
+            # lock id is actually the primary key of the Gate table
+            lock_id, new_lock_code,new_gate_num = request.POST.get('lock_id'), request.POST.get('new_lock_code'), \
+                                     request.POST.get('new_gate_num')
+
+            gate_to_edit = Gate.objects.filter(id=lock_id)[0] # use filter instead of get to avoid backend error on empty result
+            gate_to_edit.lock_code = new_lock_code
+            gate_to_edit.gate_number = new_gate_num
+            gate_to_edit.save()
+
+        if request.is_ajax() and request.POST.get('btnType') == 'delete_lock_code':
+            lock_id = request.POST.get('lock_id')
+            Gate.objects.filter(id=lock_id).delete()
+            data = {'res': 'success'}
+            return render_to_json_response(data)
+
+
+        # get all the announcements from last 30 days
+        announcements = [Announcement_Object(_id=a.id,
+                                             ann=a.announcement,
+                                             user=request.user,
+                                             date_created=a.date_created)
+                         for a in Announcement.objects.filter(date_created__lte=datetime.datetime.today(),
+                                     date_created__gt=datetime.datetime.today() - datetime.timedelta(days=30))]
+
+        lock_codes = Gate.objects.all() # will only ever be one in table. delete current for gate when new one created
+
+        all_users = [User_Object(_id=u.id, fn=u.first_name, ln=u.last_name,dj=u.date_joined,
+                                 nv=len(Visit.objects.filter(user_id=u.id))) for u in User.objects.all()]
+
+        template = loader.get_template('main/home.html')
+        context = {
+            'current_user': request.user, # use this on front end for toggling visibilities of elements
+            'first_name': request.session['first_name'],
+            'full_name': request.session['full_name'],
+            'imgs': imgfiles,
+            'full_name': request.session['full_name'],
+            'visit_objects': visit_objects,
+            'announcements': announcements,
+            'lock_codes': lock_codes,
+            'all_users': all_users,
+
+        }
+        return HttpResponse(template.render(context, request))
+
     else: # not authenticated, direct to login page
-        template = loader.get_template('main/login.html')
+        return srp_login(request) # use the function to
         context = {'':''}
-    return HttpResponse(template.render(context, request))
+
 
 # 404 page
 @csrf_exempt
@@ -158,7 +209,12 @@ def forgot_password(request):
 @csrf_exempt
 def srp_login(request):
     if request.is_ajax() and request.POST.get('btnType') == 'login':
+        print("request button type:")
+        print(request.POST.get('btnType'))
         rp = request.POST
+        print("\n\nAll users...")
+        print(User.objects.all())
+
         try:
             result = 'auth fail' # initialize)
             user = authenticate(username=rp.get('email'), password=rp.get('password'))
@@ -183,8 +239,9 @@ def srp_login(request):
 
 # register page
 @csrf_exempt
-def register(request):
 
+def register(request):
+    #User.objects.filter(email='huntaj@g.cofc.edu').delete()
     # if user clicks logout on register page
     if request.is_ajax() and request.user.is_authenticated and (request.POST.get('btnType') == 'logout'):
         try:
@@ -199,8 +256,11 @@ def register(request):
     # ajax request to handle registering new account
     if request.is_ajax() and request.POST.get('btnType') == 'register_new_account':
         rp = request.POST
+
         try:
-            is_superuser = 0 if rp.get('accountType') == 'student' else 1
+
+            is_staff = 0 if rp.get('accountType') == 'student' else 1
+            is_superuser = 0 #FIXME: HOW TO CREATE ADMIN ACCTS
             result = 'register fail'
             # only create a new user if there is not already one with this username/email
             alreadyexists = User.objects.filter(username=rp.get('email'))
@@ -215,14 +275,35 @@ def register(request):
                                                    first_name=rp.get('firstName'),
                                                    last_name=rp.get('lastName'),
                                                    is_superuser=is_superuser,
-                                                   is_active=True)
+                                                   is_staff=is_staff,
+                                                   is_active=False) # make is_active false initially until email verified
                 newUser.save()
-                result = 'register success'
+                print("Your new user id is " + str(newUser.id))
+
+                # Send a verification email to the address they provided.
+                mail_subject = 'Activate your SRP Web App Account'
+
+                uid = urlsafe_base64_encode(force_bytes(newUser.id)).decode()
+                print("Creating UID with base64 encoding....\n")
+                print(uid)
+                message = render_to_string('main/acc_active_email.html', {
+                    'user': newUser,
+                    'domain': get_current_site(request).domain,
+                    'uid': uid,
+                    'token': account_activation_token.make_token(newUser),
+                })
+                to_email = rp.get('email')
+                email = EmailMessage(
+                    mail_subject, message, to=[to_email]
+                )
+                email.send()
+                result = 'email sent'
             else:
-                print(alreadyexists[0])
+                result = 'email taken'
         except Exception as e:
             print(e)
-            result = e
+            result = str(e)
+
         data = {'result': result}
         return render_to_json_response(data)
 
@@ -232,15 +313,36 @@ def register(request):
     }
     return HttpResponse(template.render(context, request))
 
-# tables page
-@csrf_exempt
-def tables(request):
 
-    template = loader.get_template('main/tables.html')
-    context = {
-        '': '',
-    }
-    return HttpResponse(template.render(context, request))
+# function for account activation
+def activate(request, uidb64, token):
+    try:
+        print(type(uidb64))
+        print(uidb64)
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        print("UID: " + uid)
+        user = User.objects.get(id=uid)
+        print("UID: " + str(uid))
+        print("USER: ")
+        print(User)
+    except Exception as e:
+        print(e)
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        # return redirect('home')
+        context = {
+            'success': 1,
+        }
+    else:
+        context = {
+            'success': 0,
+        }
+
+    template = loader.get_template('main/email_verification_result.html')
+    return HttpResponse(template.render(context,request))
+
 
 # admin page
 @csrf_exempt
