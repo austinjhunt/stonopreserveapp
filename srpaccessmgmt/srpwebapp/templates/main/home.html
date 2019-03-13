@@ -125,7 +125,7 @@
                 <span>
                     <button id="homebtn" type="button" class="btn btn-secondary headerbtn">
 
-                <i class="fa fa-fw fa-home"></i>&nbsp;HOME
+                <i class="fa fa-fw fa-home"></i>
                     </button>
                 </span>
             </div>
@@ -191,7 +191,6 @@
                             $("#welcomemsg").html('Welcome to the Stono River Preserve, {{ first_name }}!<br/>Swipe between views or use' +
                                 ' the top left dropdown!');
                         }
-
                     </script>
                     <!-- table on top of first page shows lock codes if user is faculty or super user -->
                     {% if current_user.is_staff or current_user.is_superuser %}
