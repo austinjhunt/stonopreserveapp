@@ -553,5 +553,12 @@ and (max-device-width : 480px) {
         margin:1%;
     }
 
+    .bootstrap-datetimepicker-widget{
+        /*right: -20% !important;*/
+        margin:0 auto !important;
+        list-style: none !important;
+        background-color: #fff !important;
+    }
+
 /* Styles */
 }
