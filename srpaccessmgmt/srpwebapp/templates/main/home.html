@@ -9,76 +9,84 @@
 
 <!-- modals -->
 <!-- Edit selected lock code -->
-<div class="modal" id="editlockcodemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="editlockcodemodaltitle">Edit Lock Code</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div id="editlockcodecontent">
+<div class="modal" id="editlockcodemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editlockcodemodaltitle">Edit Lock Code</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="editlockcodecontent">
 
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="savelockcodeeditsbutton" onclick="savelockcodeedits();" type="button"
+                        class="btn btn-primary">Save changes
+                </button>
+            </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button id="savelockcodeeditsbutton" onclick="savelockcodeedits();" type="button" class="btn btn-primary">Save changes</button>
-      </div>
     </div>
-  </div>
 </div>
-
 
 
 <!-- add new gate modal -->
 <!-- Edit selected lock code -->
-<div class="modal" id="addnewgatemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addnewgatemodaltitle">Enter New Gate Info</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div id="addnewgatemodalcontent">
-                <input autofocus type="number" id="newgatenum" class="d-inline-block p-2" placeholder="Gate Number">
-                <input type="number" id="newgatecode" class="d-inline-block p-2" placeholder="Lock Code">
+<div class="modal" id="addnewgatemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addnewgatemodaltitle">Enter New Gate Info</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="addnewgatemodalcontent">
+                    <input autofocus type="number" id="newgatenum" class="d-inline-block p-2" placeholder="Gate Number">
+                    <input type="number" id="newgatecode" class="d-inline-block p-2" placeholder="Lock Code">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="savenewgatebutton" onclick="savenewgate();" type="button" class="btn btn-primary">Create New
+                    Gate
+                </button>
+            </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button id="savenewgatebutton" onclick="savenewgate();" type="button" class="btn btn-primary">Create New Gate</button>
-      </div>
     </div>
-  </div>
 </div>
 
 <!-- Delete selected lock code -->
-<div class="modal" id="deletelockcodemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="deletelockcodemodaltitle">Delete Gate Confirmation</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div id="deletelockcodecontent">
+<div class="modal" id="deletelockcodemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deletelockcodemodaltitle">Delete Gate Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="deletelockcodecontent">
 
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="deletelockcodebutton" onclick="deletelockcode();" type="button" class="btn btn-primary">
+                    Delete Gate
+                </button>
+            </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button id="deletelockcodebutton" onclick="deletelockcode();" type="button" class="btn btn-primary">Delete Gate</button>
-      </div>
     </div>
-  </div>
 </div>
 
 
@@ -88,7 +96,7 @@
     </div>
 </div>
 
-<nav class="navbar navbar-expand navbar-dark bg-dark sticky-top" >
+<nav class="navbar navbar-expand navbar-dark bg-dark sticky-top">
     <!-- Separate ul's for left and right; put the dropdown on left !-->
     <!-- dropdown -->
     <ul class="navbar-nav ml-md-0">
@@ -107,6 +115,8 @@
                     <!-- only for admins -->
                     {% if current_user.is_superuser %}
                     <a class="regular_page_option" onclick="showallusersview();">All User Accounts</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="regular_page_option" onclick="showlistview();">Visit Schedule</a>
                     <div class="dropdown-divider"></div>
                     {% endif %}
                     <!-- for all accounts -->
@@ -135,7 +145,7 @@
                 <span>
                     <button id="arrivebtn" type="button" class="btn btn-info headerbtn " onclick="swapbtn();">
 
-                <i id= "arrivebtnicon" class="fa fa-fw fa-check"></i>Arrived
+                <i id="arrivebtnicon" class="fa fa-fw fa-check"></i>Arrived
                     </button>
                 </span>
             </div>
@@ -210,14 +220,21 @@
                                 <td>{{ lc.lock_code }}</td>
                                 <td>{{ lc.gate_number }}</td>
                                 <td>{% if current_user.is_superuser %}
-                                    <button class="btn btn-info" onclick="showeditlockcodemodal({{lc.id}},{{lc.gate_number}},{{lc.lock_code}});"><i class="fa fa-edit"></i></button>
-                                    <button class="btn btn-danger" onclick="showdeletelockcodemodal({{lc.id}});"><i class="fa fa-trash"></i></button>
-                                    {% endif %}</td>
+                                    <button class="btn btn-info"
+                                            onclick="showeditlockcodemodal({{lc.id}},{{lc.gate_number}},{{lc.lock_code}});">
+                                        <i class="fa fa-edit"></i></button>
+                                    <button class="btn btn-danger" onclick="showdeletelockcodemodal({{lc.id}});"><i
+                                            class="fa fa-trash"></i></button>
+                                    {% endif %}
+                                </td>
                             </tr>
                             {% endfor %}
                             <tr>
-                                <td colspan="3"><button class="btn btn-success" onclick="$('#addnewgatemodal').modal('show');">
-                                    <i class="fa fa-plus"></i> Add New Gate</button></td>
+                                <td colspan="3">
+                                    <button class="btn btn-success" onclick="$('#addnewgatemodal').modal('show');">
+                                        <i class="fa fa-plus"></i> Add New Gate
+                                    </button>
+                                </td>
                             </tr>
                             </tbody>
                         </table>
@@ -238,208 +255,227 @@
             </div>
 
 
-        <!-- owl carousel for swiping between views without loading new pages -->
-        <div id="myCarousel" class="owl-carousel owl-theme">
+            <!-- owl carousel for swiping between views without loading new pages -->
 
-            <!-- announcements view, contains announcements & general info (contacts / location) -->
-            <div id="announcements" class="announcementsview">
-                <div class="newsheader">
-                    <i class="fas fa-fw fa-newspaper"></i> Announcements
-                </div>
-                <hr class="announcementsviewHR"/>
-                <div class="announcementscontent">
-                    <ul>
-                        {% for a in announcements %}
-                        <li class="announcement">{{a}}</li>
-                        <ul>
-                            <li>created on {{a.date_created}} by {{a.username}}</li>
-                        </ul>
-                        {% endfor %}
-                    </ul>
-                </div>
-                <!-- card for important numbers -->
-                <div class="contactssection">
+            <div id="myCarousel" class="owl-carousel owl-theme">
+
+                <!-- announcements view, contains announcements & general info (contacts / location) -->
+                <div id="announcements" class="announcementsview">
+
+                    <div class="text-center mb-2">
+                        <div id="swipinggif">
+                            <img src="{% static 'main/gifs/swiping.gif' %}">
+                        </div>
+                        <button class="d-inline-block btn btn-primary btn-sm"><i id="swipinggificon" class="fa fa-eye"
+                                                                                 onclick="swipingtoggle();"></i>
+                        </button>
+                    </div>
                     <div class="newsheader">
-                        <i class="fas fa-fw fa-phone"></i> Contacts
+                        <i class="fas fa-fw fa-newspaper"></i> Announcements
                     </div>
-                    <div class="card border-dark  text-black bg-info mb-3" style="margin:30px">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item contact">Public Safety: <a href="tel:+1-843-953-5609">843-953-5609</a>
-                            </li>
-                            <li class="list-group-item contact">SRPManager: <a
-                                    href="tel:+1-843-953-5609">843-953-5609</a></li>
+                    <hr class="announcementsviewHR"/>
+                    <div class="announcementscontent">
+                        <ul>
+                            {% for a in announcements %}
+                            <li class="announcement">{{a}}</li>
+                            <ul>
+                                <li>created on {{a.date_created}} by {{a.username}}</li>
+                            </ul>
+                            {% endfor %}
                         </ul>
                     </div>
-                </div>
-                <div class="contactssection">
-                    <hr style="border: 1px solid lightgray; margin:30px;"/>
-                    <div class="newsheader"><i class="fas fa-fw fa-search-location"></i>Where is it?
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5411.115764400425!2d-80.1796682757046!3d32.73817228260197!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88fe8177f5b98e21%3A0x6968cc8e6255522c!2sDixie+Plantation+-+College+of+Charleston!5e0!3m2!1sen!2sus!4v1551041630075"
-                                width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+                    <!-- card for important numbers -->
+                    <div class="contactssection">
+                        <div class="newsheader">
+                            <i class="fas fa-fw fa-phone"></i> Contacts
+                        </div>
+                        <div class="card border-dark  text-black bg-info mb-3" style="margin:30px">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item contact">Public Safety: <a href="tel:+1-843-953-5609">843-953-5609</a>
+                                </li>
+                                <li class="list-group-item contact">SRPManager: <a
+                                        href="tel:+1-843-953-5609">843-953-5609</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="contactssection">
+                        <hr style="border: 1px solid lightgray; margin:30px;"/>
+                        <div class="newsheader"><i class="fas fa-fw fa-search-location"></i>Where is it?
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5411.115764400425!2d-80.1796682757046!3d32.73817228260197!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88fe8177f5b98e21%3A0x6968cc8e6255522c!2sDixie+Plantation+-+College+of+Charleston!5e0!3m2!1sen!2sus!4v1551041630075"
+                                    width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="studentscheduler" class="scheduleviewcontainer">
-                <div class="visible_only_mobile">
-                    <div class="container">
-                        <div class="newsheader">Schedule a visit start time:</div>
-                        <div class='col-md-5'>
-                            <div class="form-group">
-                                <div class='input-group date' id='datetimepicker6'>
-                                    <input id="input_starttime" type='text' class="form-control"/>
-                                    <span class="input-group-addon">
+                <div id="studentscheduler" class="scheduleviewcontainer">
+                    <div class="visible_only_mobile">
+                        <div class="container">
+                            <div class="newsheader">Schedule a visit start time:</div>
+                            <div class='col-md-5'>
+                                <div class="form-group">
+                                    <div class='input-group date' id='datetimepicker6'>
+                                        <input id="input_starttime" type='text' class="form-control"/>
+                                        <span class="input-group-addon">
                     <span class="glyphicon glyphicon-calendar"></span>
                 </span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="newsheader">Schedule a visit end time:</div>
-                        <div class='col-md-5'>
-                            <div class="form-group">
-                                <div class='input-group date' id='datetimepicker7'>
-                                    <input id="input_endtime" type='text' class="form-control"/>
-                                    <span class="input-group-addon">
+                            <div class="newsheader">Schedule a visit end time:</div>
+                            <div class='col-md-5'>
+                                <div class="form-group">
+                                    <div class='input-group date' id='datetimepicker7'>
+                                        <input id="input_endtime" type='text' class="form-control"/>
+                                        <span class="input-group-addon">
                     <span class="glyphicon glyphicon-calendar"></span>
                 </span>
+                                    </div>
                                 </div>
                             </div>
+                            <button class="btn btn-primary lanenarrow" onclick="schedulevisit();">Schedule Visit
+                            </button>
+                            <div id="schedulevisitresult" class="schedulevisitresult"></div>
                         </div>
-                        <button class="btn btn-primary lanenarrow" onclick="schedulevisit();">Schedule Visit</button>
-                        <div id="schedulevisitresult" class="schedulevisitresult"></div>
+                        <script type="text/javascript">
+                            $(function () {
+                                $('#datetimepicker6').datetimepicker();
+                                $('#datetimepicker7').datetimepicker({
+                                    useCurrent: false //Important! See issue #1075
+                                });
+                                $("#datetimepicker6").on("dp.change", function (e) {
+                                    $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
+                                });
+                                $("#datetimepicker7").on("dp.change", function (e) {
+                                    $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+                                });
+                            });
+                        </script>
                     </div>
-                    <script type="text/javascript">
-                        $(function () {
-                            $('#datetimepicker6').datetimepicker();
-                            $('#datetimepicker7').datetimepicker({
-                                useCurrent: false //Important! See issue #1075
-                            });
-                            $("#datetimepicker6").on("dp.change", function (e) {
-                                $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
-                            });
-                            $("#datetimepicker7").on("dp.change", function (e) {
-                                $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
-                            });
-                        });
-                    </script>
+
+                    <!--student schedule ability view-->
+                    <div id="studentScheduleAVisit" class="card mb-3 visible_only_desktop">
+                        <div id="calendar"></div>
+                    </div>
                 </div>
 
-                <!--student schedule ability view-->
-                <div id="studentScheduleAVisit" class="card mb-3 visible_only_desktop">
-                    <div id="calendar"></div>
-                </div>
-            </div>
-
-            <!-- photo gallery -->
-            <div id="gallery" class="announcementsview">
-                <div class="newsheader">
-                    Photo Gallery
-                </div>
-                <div class="tz-gallery">
-                    <div id="mygallery" class="row">
-                        {% for img in imgs %}
-                        <div class="col-sm-12 col-md-4 myimgcontainer">
-                            <a class="lightbox" target="_blank" href="{{img}}">
-                                <img style="border-radius:8px;" src="{{img}}">
-                            </a>
+                <!-- photo gallery -->
+                <div id="gallery" class="announcementsview">
+                    <div class="newsheader">
+                        Photo Gallery
+                    </div>
+                    <div class="tz-gallery">
+                        <div id="mygallery" class="row">
+                            {% for img in imgs %}
+                            <div class="col-sm-12 col-md-4 myimgcontainer">
+                                <a class="lightbox" target="_blank" href="{{img}}">
+                                    <img style="border-radius:8px;" src="{{img}}">
+                                </a>
+                            </div>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
-                    </div>
 
-                </div>
-            </div>
-
-            <!-- schedule list view -->
-            <div><!-- DataTables Example -->
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                            <thead>
-                            <tr>
-                                <th style="text-align:center;">First Name</th>
-                                <th style="text-align:center;">Last Name</th>
-                                <th style="text-align:center;">Visit Date</th>
-                                <th style="text-align:center;">Visit Time Interval</th>
-                            </tr>
-                            </thead>
-                            {% for visit in visit_objects %}
-                            <tr>
-                                <td style="text-align:center;">{{ visit.visitor_first_name}}</td>
-                                <td style="text-align:center;">{{ visit.visitor_last_name}}</td>
-                                <td style="text-align:center;">{{ visit.visit_date}}</td>
-                                <td style="text-align:center;">{{ visit.start_time}} - {{ visit.end_time }}</td>
-                            </tr>
-                            {% endfor %}
-                            <tfoot>
-                            <tr>
-                                <th style="text-align:center;">First Name</th>
-                                <th style="text-align:center;">Last Name</th>
-                                <th style="text-align:center;">Visit Date</th>
-                                <th style="text-align:center;">Visit Time Interval</th>
-                            </tr>
-                            </tfoot>
-                        </table>
                     </div>
                 </div>
-            </div>
 
-            <!-- all users view -->
-            <div><!-- DataTables Example -->
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable2" width="100%" cellspacing="0">
-                            <thead>
-                            <tr>
-                                <th style="text-align:center;">First Name</th>
-                                <th style="text-align:center;">Last Name</th>
-                                <th style="text-align:center;">Account Created</th>
-                                <th style="text-align:center;">Total Visits</th>
-                                <th style="text-align:center;">Options</th>
-                            </tr>
-                            </thead>
-                            {% for user in all_users %}
-                            <tr>
-                                <td style="text-align:center;">{{user.first_name}}</td>
-                                <td style="text-align:center;">{{user.last_name}}</td>
-                                <td style="text-align: center">{{user.date_joined}}</td>
-                                <td style="text-align:center;">{{user.num_visits}}</td>
-                                <td style="text-align:center;">
-                                    <button class="btn btn-danger d-inline-block"><i class="fas fa-fw fa-trash"></i>
-                                    </button>
-                                    <button class="btn btn-info d-inline-block"><i class="fas fa-fw fa-edit"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                            <tfoot>
-                            <tr>
-                                <th style="text-align:center;">First Name</th>
-                                <th style="text-align:center;">Last Name</th>
-                                <th style="text-align:center;">Visit Date</th>
-                                <th style="text-align:center;">Visit Time Interval</th>
-                            </tr>
-                            </tfoot>
-                        </table>
+                <!-- schedule list view -->
+                {% if current_user.is_superuser %}
+                <div class="announcementsview"><!-- DataTables Example -->
+                    <div class="newsheader">
+                        All Scheduled Visits
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th style="text-align:center;">First Name</th>
+                                    <th style="text-align:center;">Last Name</th>
+                                    <th style="text-align:center;">Visit Date</th>
+                                    <th style="text-align:center;">Visit Time Interval</th>
+                                </tr>
+                                </thead>
+                                {% for visit in visit_objects %}
+                                <tr id="{{visit.id}}">
+                                    <td style="text-align:center;">{{ visit.visitor_first_name}}</td>
+                                    <td style="text-align:center;">{{ visit.visitor_last_name}}</td>
+                                    <td style="text-align:center;">{{ visit.visit_date}}</td>
+                                    <td style="text-align:center;">{{ visit.start_time}} - {{ visit.end_time }}</td>
+                                </tr>
+                                {% endfor %}
+                                <tfoot>
+                                <tr>
+                                    <th style="text-align:center;">First Name</th>
+                                    <th style="text-align:center;">Last Name</th>
+                                    <th style="text-align:center;">Visit Date</th>
+                                    <th style="text-align:center;">Visit Time Interval</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                <!-- all users view -->
+                <div class="announcementsview"><!-- DataTables Example -->
+                    <div class="newsheader">
+                        All Users
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+
+                            <table class="table table-bordered" id="dataTable2" width="100%" cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th style="text-align:center;">First Name</th>
+                                    <th style="text-align:center;">Last Name</th>
+                                    <th style="text-align:center;">Account Created</th>
+                                    <th style="text-align:center;">Total Visits</th>
+                                    <th style="text-align:center;">Options</th>
+                                </tr>
+                                </thead>
+                                {% for user in all_users %}
+                                <tr>
+                                    <td style="text-align:center;">{{user.first_name}}</td>
+                                    <td style="text-align:center;">{{user.last_name}}</td>
+                                    <td style="text-align: center">{{user.date_joined}}</td>
+                                    <td style="text-align:center;">{{user.num_visits}}</td>
+                                    <td style="text-align:center;">
+                                        <button class="btn btn-danger d-inline-block"><i class="fas fa-fw fa-trash"></i>
+                                        </button>
+                                        <button class="btn btn-info d-inline-block"><i class="fas fa-fw fa-edit"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                <tfoot>
+                                <tr>
+                                    <th style="text-align:center;">First Name</th>
+                                    <th style="text-align:center;">Last Name</th>
+                                    <th style="text-align:center;">Visit Date</th>
+                                    <th style="text-align:center;">Visit Time Interval</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- /.container-fluid -->
+        <!-- /.container-fluid -->
 
-    <!-- Sticky Footer -->
-    <footer class="sticky-footer customfooter">
-        <div class="container my-auto">
-            <div class="copyright text-center my-auto">
+        <!-- Sticky Footer -->
+        <footer class="sticky-footer customfooter">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
             <span>Developed by <a href="http://huntaj.stu.cofc.edu" target="_blank">Austin Hunt</a>,
               <a href="https://www.linkedin.com/in/daniel-lee-b4003417b/" target="_blank">Daniel Lee</a>, &amp;
               <a href="https://www.linkedin.com/in/alex-thropp-7a4874133/" target="_blank">Alex Thropp</a></span>
+                </div>
             </div>
-        </div>
-    </footer>
+        </footer>
 
-</div>
-<!-- /.content-wrapper -->
+    </div>
+    <!-- /.content-wrapper -->
 
 </div>
 <!-- /#wrapper -->

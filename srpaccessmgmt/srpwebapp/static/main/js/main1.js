@@ -360,3 +360,9 @@ function swapbtn(){
     $("#arrivebtnicon").toggleClass('fa-check fa-sign-out-alt');
 
 }
+
+
+function swipingtoggle(){
+    $('#swipinggif').toggle('slow');
+    $("#swipinggificon").toggleClass('fa-eye fa-question')
+}
