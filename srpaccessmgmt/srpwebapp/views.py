@@ -95,6 +95,8 @@ def index(request):
             gate_to_edit.gate_number = new_gate_num
             gate_to_edit.save()
 
+            # FIXME: send email notifying faculty and superusers (not the one requesting) that gate code has been changed.
+
         if request.is_ajax() and request.POST.get('btnType') == 'delete_lock_code':
             lock_id = request.POST.get('lock_id')
             Gate.objects.filter(id=lock_id).delete()
@@ -107,6 +109,10 @@ def index(request):
                 gate_num, gate_code = int(request.POST.get('new_gate_num')),int(request.POST.get('new_gate_code'))
                 result = 'success'
                 Gate(lock_code=gate_code,gate_number=gate_num).save()
+
+                # FIXME: send email notifying faculty and superusers (not the one requesting) that new gate has been
+                # created with code xxxx ^^
+
             except Exception as e:
                 print(e)
 
