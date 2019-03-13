@@ -320,8 +320,32 @@ function deletelockcode(lockid){
         });
 }
 
-function showaddgatemodal(){
-    $("#addgatemodal").modal('show');
+function savenewgate(){
+    var newgatecode = $("#newgatecode").val();
+    var newgatenum = $("#newgatenum").val();
+    // need sanitization!
+    if (newgatenum.trim() == '' || newgatenum.trim() == ''){
+        alert("Please ensure neither field is empty.");
+    }
+    $.ajax(
+        {
+            type: "POST",
+            data: {
+                /*same backend functionality as before, just for one question rather than entire quiz*/
+                btnType: 'create_new_gate',
+                new_gate_num: newgatenum,
+                new_gate_code: newgatecode,
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success: function (data) {
+
+                $("#addnewgatemodalcontent").html("<h5>Creating gate...</h5>")
+                setTimeout(function(){
+                    window.location.reload();
+                },3000);
+            }
+        });
+
 }
 
 function swapbtn(){
