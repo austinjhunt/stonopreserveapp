@@ -131,7 +131,7 @@ def index(request):
 
         lock_codes = Gate.objects.all() # will only ever be one in table. delete current for gate when new one created
 
-        all_users = [User_Object(_id=u.id, fn=u.first_name, ln=u.last_name,dj=u.date_joined,
+        all_users = [User_Object(_id=u.id, fn=u.first_name, ln=u.last_name,dj=u.date_joined,_email=u.email,
                                  nv=len(Visit.objects.filter(user_id=u.id))) for u in User.objects.all()]
 
         template = loader.get_template('main/home.html')
@@ -350,6 +350,9 @@ def activate(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
+
+        # create a User_On_Property record for this user, set boolean to False
+        User_On_Property(user_id=user.id, on_site=False).save()
         # return redirect('home')
         context = {
             'success': 1,
