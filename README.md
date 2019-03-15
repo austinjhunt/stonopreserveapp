@@ -11,6 +11,13 @@ Please ensure that your virtual environment is not inside the repository when yo
 There is no need to include the massive virtualenv folders inside the repo; instead, we can simply use the requirements.txt
 to maintain the dependencies/necessary installs.
 
+To launch the webserver:
+0) Ensure that Django and all other dependencies are installed
+1) Activate the virtual environment by navigating to "<name-of-virtual-env>/Scripts" and running the activate script
+2) Navigate to the top-level srpaccessmanagement directory
+3) Enter "python manage.py runserver" into the terminal
+
+
 Daniel Lee (Feb 4)
 
 Austin Hunt (Mar 4)
