@@ -14,10 +14,19 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf.urls import url, include
-from django.urls import path
+from . import views
 
 from django.contrib import admin
+from django.urls import include, path
 
+app_name = 'srpwebapp'
 urlpatterns = [
-    url(r'^', include('srpwebapp.urls', namespace='srpwebapp'))
+    url(r'^$', views.index, name='index'),
+    url(r'^404', views.err404, name='404'),
+    url(r'^forgot-password',views.forgot_password,name='forgot_password'),
+    url(r'^login', views.srp_login,name='login_page'),
+    url(r'^register', views.register,name='register_page'),
+    url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        views.activate, name='activate'),
+    path('admin/', admin.site.urls)
 ]
