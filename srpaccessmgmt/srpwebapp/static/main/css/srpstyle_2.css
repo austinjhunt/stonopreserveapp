@@ -515,7 +515,12 @@ and (max-device-width : 480px) {
         display:inline-block !important;
         max-width:48% !important;
     }
-
+    .mygalleryimg{
+        width: 130px;
+        height:130px;
+        object-fit: cover;
+        border-radius:8px;
+    }
     #studentScheduleAVisit{
          /* give room to scroll, scroll disabled in actual calendar */
         left: 0;

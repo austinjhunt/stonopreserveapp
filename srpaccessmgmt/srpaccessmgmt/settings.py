@@ -25,7 +25,7 @@ SECRET_KEY = '$b#-piwqi0+g2u!9zsxc4rz4%j0#&nx78^s*xa!cn$y^2v0&kb'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0']
+ALLOWED_HOSTS = ['0.0.0.0','*']
 
 
 # Application definition
@@ -73,6 +73,18 @@ WSGI_APPLICATION = 'srpaccessmgmt.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'stono',
+        'USER': 'stono',
+        'PASSWORD': 'cofc1770',
+        'HOST': '153.9.205.25',   # Or an IP Address that your DB is hosted on
+        'PORT': '',
+    }
+}
+"""
 
 DATABASES = {
     'default': {
@@ -119,12 +131,8 @@ import os
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 # For email verification:
+EMAIL_HOST = 'relay.cougars.int'
 
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'stonoriveraccessmgmt@gmail.com'
-EMAIL_HOST_PASSWORD = 'stonoONOTS123'
-EMAIL_PORT = 587
 
 STATIC_ROOT = os.path.join(BASE_DIR,'srpwebapp/static/')
 STATIC_URL = '/static/'

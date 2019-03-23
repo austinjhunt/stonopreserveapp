@@ -4,6 +4,11 @@
 
 {% block content %}
 
+<style>
+    body{
+        visibility: hidden;
+    }
+</style>
 <body id="page-top">
 
 
@@ -131,7 +136,7 @@
     <!-- home, emergency, profile -->
     <ul class="navbar-nav ml-auto mr-md-0">
         <li class="nav-item active">
-            <div class="nav-link" href="/">
+            <div class="nav-link" href="{% url 'srpwebapp:index' %}">
                 <span>
                     <button id="homebtn" type="button" class="btn btn-secondary headerbtn">
 
@@ -152,7 +157,7 @@
 
         </li>
         <li class="nav-item active">
-            <div class="nav-link" href="/">
+            <div class="nav-link" href="{% url 'srpwebapp:index' %}">
                 <span>
                     <button id="emergencybtnsidebar" type="button" class="btn btn-danger headerbtn">
                         <i class="fa fa-fw fa-ambulance"></i>&nbsp;EMERGENCY
@@ -160,6 +165,22 @@
                 </span>
             </div>
         </li>
+        <li class="nav-item active dropdown no-arrow mr-2">
+            <div class="nav-link dropdown-toggle" id="userDropdown" role="button" data-toggle="dropdown"
+                 aria-haspopup="true" aria-expanded="false">
+                <span>
+                    <button id="userbtn" type="button" class="btn btn-dark">
+                        <i class="fa fa-user-circle fa-fw"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right mr-2" aria-labelledby="userbtn">
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal" onclick="logout();">Logout</a>
+                    </div>
+                </span>
+            </div>
+
+        </li>
+
+        <!-- old, this one has messed up vertical alignment
         <li class="nav-item dropdown no-arrow mr-2">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
                aria-haspopup="true" aria-expanded="false">
@@ -170,19 +191,9 @@
             <div class="dropdown-menu dropdown-menu-right mr-1" aria-labelledby="userDropdown">
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal" onclick="logout();">Logout</a>
             </div>
-        </li>
+        </li> -->
     </ul>
-    <!-- use js to set button contents to only icons, can't be done with css -->
-    <script>
-        if ($(window).width() < 480) {
-            $("#homebtn").html('<i class="fas fa-fw fa-home"></i>');
-            $("#emergencybtnsidebar").html('<i class="fas fa-fw fa-ambulance"></i>');
-            // welcome msg different for mobile
-            $("#welcomemsg").html('Welcome to the Stono River Preserve, {{ first_name }}!<br/>Swipe between views or use' +
-                ' the top left dropdown!');
-        }
 
-    </script>
 </nav><!-- end navigation bar -->
 
 
@@ -196,12 +207,6 @@
                     <div id="welcomemsg" class="welcomeHeader">Welcome to the Stono River Preserve, {{ first_name }}!
                         <br/>Swipe between views or use the options below!
                     </div>
-                    <script>
-                        if ($(window).width() < 480) {
-                            $("#welcomemsg").html('Welcome to the Stono River Preserve, {{ first_name }}!<br/>Swipe between views or use' +
-                                ' the top left dropdown!');
-                        }
-                    </script>
                     <!-- table on top of first page shows lock codes if user is faculty or super user -->
                     {% if current_user.is_staff or current_user.is_superuser %}
                     <div class="lockcodetablecontainer">
@@ -336,20 +341,6 @@
                             </button>
                             <div id="schedulevisitresult" class="schedulevisitresult"></div>
                         </div>
-                        <script type="text/javascript">
-                            $(function () {
-                                $('#datetimepicker6').datetimepicker();
-                                $('#datetimepicker7').datetimepicker({
-                                    useCurrent: false //Important! See issue #1075
-                                });
-                                $("#datetimepicker6").on("dp.change", function (e) {
-                                    $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
-                                });
-                                $("#datetimepicker7").on("dp.change", function (e) {
-                                    $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
-                                });
-                            });
-                        </script>
                     </div>
 
                     <!--student schedule ability view-->
@@ -368,7 +359,7 @@
                             {% for img in imgs %}
                             <div class="col-sm-12 col-md-4 myimgcontainer">
                                 <a class="lightbox" target="_blank" href="{{img}}">
-                                    <img style="border-radius:8px;" src="{{img}}">
+                                    <img class="mygalleryimg" src="{{img}}">
                                 </a>
                             </div>
                             {% endfor %}
