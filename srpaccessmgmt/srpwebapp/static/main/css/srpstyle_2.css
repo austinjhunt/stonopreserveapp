@@ -435,6 +435,22 @@ li .calendar-li:hover:nth-child(n+8):nth-child(-n+38), li .calendar-li:nth-child
 #editlockcodecontent th{
     border:1px solid black;
 }
+
+
+.swipinggif {
+    width: 13rem;
+}
+
+#myCarousel{
+    border: 4px solid green;
+    border-radius: 8px;
+}
+.mygalleryimg{
+        width: 200px;
+        height:300px;
+        object-fit: cover;
+        border-radius:8px;
+    }
 /* modifications for smartphones*/
 /* Smartphones (portrait and landscape) ----------- */
 @media only screen
@@ -565,10 +581,13 @@ and (max-device-width : 480px) {
         background-color: #fff !important;
     }
 
-    #swipinggif{
+    #swipinggifcontainer{
         width: 30%;
         margin:0 auto;
         display:inline-block;
+    }
+    .swipinggif{
+        /**/
     }
 
 /* Styles */

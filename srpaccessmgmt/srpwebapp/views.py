@@ -121,6 +121,25 @@ def index(request):
             }
             return render_to_json_response(data)
 
+        if request.is_ajax() and request.POST.get('btnType') == 'change_user_status':
+
+            try:
+                to = request.POST.get('to')
+                useronsite = User_On_Property.objects.get(user_id=request.user.id)
+                useronsite.on_site = True if to == 'on' else False
+                useronsite.save()
+                print("Changing user", request.user.first_name,"status to", useronsite.on_site)
+                result = 'success'
+            except Exception as e:
+                print(e)
+                result = 'fail'
+            data = {
+                'result': result
+            }
+            return render_to_json_response(data)
+
+
+
         # get all the announcements from last 30 days
         announcements = [Announcement_Object(_id=a.id,
                                              ann=a.announcement,
