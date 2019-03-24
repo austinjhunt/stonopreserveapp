@@ -177,7 +177,14 @@ function logout(){
                 },
                 success: function (data) {
                     if (data['result'] == 'logout success')
-                        window.location = 'login'; // direct to log in page
+                        // replace end with login , direct to login page
+                        if (/stonoriverapp\/$/.test(window.location)){ // with slash at end
+                            window.location = window.location.href.replace('stonoriverapp/','stonoriverapp/login'); // direct to log in page
+                        }
+                        else if (/stonoriverapp$/.test(window.location)){//no slash at end
+                            window.location = window.location.href.replace('stonoriverapp','stonoriverapp/login');
+                        }
+
                     else
                         alert("Could not log out.");
                 }

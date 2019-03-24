@@ -140,7 +140,6 @@ def index(request):
             'first_name': request.session['first_name'],
             'full_name': request.session['full_name'],
             'imgs': imgfiles,
-            'full_name': request.session['full_name'],
             'visit_objects': visit_objects,
             'announcements': announcements,
             'lock_codes': lock_codes,

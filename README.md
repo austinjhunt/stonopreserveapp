@@ -16,3 +16,8 @@ Daniel Lee (Feb 4)
 Austin Hunt (Mar 4)
 
 Alex Thropp (April 1)
+
+### March 24, 2019: Creating an SSH Tunnel to our shared remote MySQL Database
+https://www.linode.com/docs/databases/mysql/create-an-ssh-tunnel-for-mysql-remote-access/
+
+Instead of Dr. van Delden granting our "stono" user rights to access the "stono" database from any IP address/host, we can use SSH tunnels to connect to the database, essentially mapping the remote MySQL service on 153.9.205.25:3306 to localhost:3306, or 127.0.0.1:3306. If you create this SSH tunnel, then you can connect to the database without having to modify the remote MySQL user privileges. The point: avoid using SQLite!
