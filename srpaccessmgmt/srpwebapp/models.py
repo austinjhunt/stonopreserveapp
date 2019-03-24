@@ -32,5 +32,5 @@ class Photo_Upload_Record(models.Model):
 
 # model to extend User model, keep track of whether each user is on property with toggle var
 class User_On_Property(models.Model):
-    User = models.OneToOneField(User,on_delete=models.CASCADE)
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
     on_site = models.BooleanField(default=False)

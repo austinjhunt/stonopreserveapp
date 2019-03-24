@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button id="savelockcodeeditsbutton" onclick="savelockcodeedits();" type="button"
                         class="btn btn-primary">Save changes
                 </button>
@@ -59,7 +59,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button id="savenewgatebutton" onclick="savenewgate();" type="button" class="btn btn-primary">Create New
                     Gate
                 </button>
@@ -268,8 +268,8 @@
                 <div id="announcements" class="announcementsview">
 
                     <div class="text-center mb-2">
-                        <div id="swipinggif">
-                            <img src="{% static 'main/gifs/swiping.gif' %}">
+                        <div id="swipinggifcontainer">
+                            <img class="swipinggif" src="{% static 'main/gifs/swiping.gif' %}">
                         </div>
                         <button class="d-inline-block btn btn-primary btn-sm"><i id="swipinggificon" class="fa fa-eye"
                                                                                  onclick="swipingtoggle();"></i>

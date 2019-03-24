@@ -382,21 +382,48 @@ function savenewgate(){
 }
 
 function swapbtn(){
+    var to; // use a single ajax request. if to == on, change status to on property. if off, change status to off
+    // property.
 
     if($("#arrivebtn").html().includes("Arrived")){
-        $("#arrivebtn").html($("#arrivebtn").html().replace("Arrived","Leaving"));
+        to = 'on';
     }
     else{
-        $("#arrivebtn").html($("#arrivebtn").html().replace("Leaving", "Arrived"));
+        to = 'off';
     }
-    $("#arrivebtn").toggleClass('btn-info  btn-warning');
-    $("#arrivebtnicon").toggleClass('fa-check fa-sign-out-alt');
+
+    $.ajax(
+        {
+            type: "POST",
+            data: {
+                /*same backend functionality as before, just for one question rather than entire quiz*/
+                btnType: 'change_user_status',
+                to: to,
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success: function (data) {
+                // ajax complete, change button.
+                if (data['result'] == 'success'){
+                    if (to == 'on'){ //arrived on property
+                        $("#arrivebtn").html($("#arrivebtn").html().replace("Arrived", "Leaving"));
+                    }
+                    else{ // leaving property.
+                        $("#arrivebtn").html($("#arrivebtn").html().replace("Leaving", "Arrived"));
+                    }
+                    $("#arrivebtn").toggleClass('btn-info  btn-warning');
+                    $("#arrivebtnicon").toggleClass('fa-check fa-sign-out-alt');
+                }
+                else{ // fail
+                    alert("Could not change your status. Try again soon.")
+                }
+            }
+        });
 
 }
 
 
 function swipingtoggle(){
-    $('#swipinggif').toggle('slow');
+    $('#swipinggifcontainer').toggle('slow');
     $("#swipinggificon").toggleClass('fa-eye fa-question')
 }
 
