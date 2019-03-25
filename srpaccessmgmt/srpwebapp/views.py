@@ -121,6 +121,25 @@ def index(request):
             }
             return render_to_json_response(data)
 
+        if request.is_ajax() and request.POST.get('btnType') == 'change_user_status':
+
+            try:
+                to = request.POST.get('to')
+                useronsite = User_On_Property.objects.get(user_id=request.user.id)
+                useronsite.on_site = True if to == 'on' else False
+                useronsite.save()
+                print("Changing user", request.user.first_name,"status to", useronsite.on_site)
+                result = 'success'
+            except Exception as e:
+                print(e)
+                result = 'fail'
+            data = {
+                'result': result
+            }
+            return render_to_json_response(data)
+
+
+
         # get all the announcements from last 30 days
         announcements = [Announcement_Object(_id=a.id,
                                              ann=a.announcement,
@@ -131,7 +150,7 @@ def index(request):
 
         lock_codes = Gate.objects.all() # will only ever be one in table. delete current for gate when new one created
 
-        all_users = [User_Object(_id=u.id, fn=u.first_name, ln=u.last_name,dj=u.date_joined,
+        all_users = [User_Object(_id=u.id, fn=u.first_name, ln=u.last_name,dj=u.date_joined,_email=u.email,
                                  nv=len(Visit.objects.filter(user_id=u.id))) for u in User.objects.all()]
 
         template = loader.get_template('main/home.html')
@@ -140,7 +159,6 @@ def index(request):
             'first_name': request.session['first_name'],
             'full_name': request.session['full_name'],
             'imgs': imgfiles,
-            'full_name': request.session['full_name'],
             'visit_objects': visit_objects,
             'announcements': announcements,
             'lock_codes': lock_codes,
@@ -190,6 +208,7 @@ def forgot_password(request):
             validate_email(request.POST.get('email_address')) # is this an email address?
             # if so:
             associated_users = User.objects.filter(username=request.POST.get('email_address'))
+
             if associated_users.exists():
                 # should only be one associated user
                 for user in associated_users:
@@ -228,11 +247,7 @@ def forgot_password(request):
 @csrf_exempt
 def srp_login(request):
     if request.is_ajax() and request.POST.get('btnType') == 'login':
-        print("request button type:")
-        print(request.POST.get('btnType'))
         rp = request.POST
-        print("\n\nAll users...")
-        print(User.objects.all())
 
         try:
             result = 'auth fail' # initialize)
@@ -285,8 +300,10 @@ def register(request):
             alreadyexists = User.objects.filter(username=rp.get('email'))
             alreadyexists.delete()
             if len(alreadyexists) == 0: # does not already exist
-                print("No users with this username yet...")
                 # create a new user instance (default User model from auth app
+
+                # Comment out this portion, unusable by server due to smtp port being blocked,
+                # cannot send mail to gmail's smtp server
 
                 newUser = User.objects.create_user(username=rp.get('email'),
                                                    email=rp.get('email'),
@@ -301,21 +318,25 @@ def register(request):
 
                 # Send a verification email to the address they provided.
                 mail_subject = 'Activate your SRP Web App Account'
-
                 uid = urlsafe_base64_encode(force_bytes(newUser.id)).decode()
                 print("Creating UID with base64 encoding....\n")
                 print(uid)
-                message = render_to_string('main/acc_active_email.html', {
+                print("Domain:" + get_current_site(request).domain)
+                msg_html = render_to_string('main/acc_active_email.html', {
                     'user': newUser,
                     'domain': get_current_site(request).domain,
                     'uid': uid,
                     'token': account_activation_token.make_token(newUser),
                 })
-                to_email = rp.get('email')
-                email = EmailMessage(
-                    mail_subject, message, to=[to_email]
+                send_mail(
+                    message=None,
+                    subject='SRP Email Verification',
+                    from_email='srpaccess@cofc.edu',
+                    recipient_list=[rp.get('email')],
+                    html_message=msg_html,
                 )
-                email.send()
+
+
                 result = 'email sent'
             else:
                 result = 'email taken'
@@ -336,20 +357,17 @@ def register(request):
 # function for account activation
 def activate(request, uidb64, token):
     try:
-        print(type(uidb64))
-        print(uidb64)
         uid = force_text(urlsafe_base64_decode(uidb64))
-        print("UID: " + uid)
         user = User.objects.get(id=uid)
-        print("UID: " + str(uid))
-        print("USER: ")
-        print(User)
+
     except Exception as e:
-        print(e)
         user = None
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
+
+        # create a User_On_Property record for this user, set boolean to False
+        User_On_Property(user_id=user.id, on_site=False).save()
         # return redirect('home')
         context = {
             'success': 1,

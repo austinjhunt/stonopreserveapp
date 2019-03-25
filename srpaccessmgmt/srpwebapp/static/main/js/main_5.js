@@ -4,6 +4,11 @@
 $(document).ready(function(){
     $("#my_preloader_container").fadeOut('slow');
 
+    /* Show the HTML page only after the js and css are completely loaded */
+    setTimeout(function(){
+        $("body").css("visibility","visible");
+    }, 1000);
+
     // activate the carousel on document.ready
     $('.owl-carousel').owlCarousel({
             loop: false,
@@ -19,7 +24,29 @@ $(document).ready(function(){
     $("#dataTable").DataTable();
     $("#dataTable2").DataTable();
 
-    if ($(window).width() > 480) {
+    $(function () {
+        $('#datetimepicker6').datetimepicker();
+        $('#datetimepicker7').datetimepicker({
+            useCurrent: false //Important! See issue #1075
+        });
+        $("#datetimepicker6").on("dp.change", function (e) {
+            $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
+        });
+        $("#datetimepicker7").on("dp.change", function (e) {
+            $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+        });
+    });
+
+
+     <!-- use js to set button contents to only icons, can't be done with css -->
+    if ($(window).width() < 480) {
+        $("#homebtn").html('<i class="fas fa-fw fa-home"></i>');
+        $("#emergencybtnsidebar").html('<i class="fas fa-fw fa-ambulance"></i>');
+        // welcome msg different for mobile
+        $("#welcomemsg").html('Welcome to the Stono River Preserve, {{ first_name }}!<br/>Swipe between views or use' +
+            ' the top left dropdown!');
+    }
+    else {
         $('#calendar').fullCalendar({
             height: 650,
             selectable: true, /* allow user to select multiple time slots by clicking and dragging */
@@ -32,11 +59,11 @@ $(document).ready(function(){
         $('#calendar').fullCalendar('changeView', 'agendaDay');
     }
 
-    /* use a more responsive date/time picker for mobile */
-    else if ($(window).width() < 480) {
 
-    }
 });
+
+
+
 function register_new_account(){
     var password = $("#inputPassword").val();
     var email = $("#inputEmail").val();
@@ -84,15 +111,16 @@ function register_new_account(){
                 success: function (data) {
                     $("#my_preloader_container").fadeOut('slow');
                     if (data['result'] == 'email sent'){
+                        //Comment out this portion with the backend's send_mail portion; server's smtp port blocked.
                         $("#emailsentmodal").modal('show'); // auto log in after register
                     }
                     else if (data['result'] == 'email taken'){
-                        alert("This email address is already in use for an existing account.");
+                        $("#emailsentmodalcontent").html('This email address is already in use for an existing' +
+                            ' account.');
+                        $("#emailsentmodal").modal('show');
                     }
                     else{
-                        console.log(data['result']);
-                        alert("Unable to register your account at this time. Please try again soon.");
-
+                        $("#emailsentmodalcontent").html('Unable to register your account at this time. Please try again soon.')
                     }
                 }
             });
@@ -120,8 +148,6 @@ function login(){
     if (email == '' || password == ''){
         alert("Please ensure that both fields are filled in before submitting.");
     }
-    console.log("Email: " + email);
-    console.log("Password: " + password)
     $.ajax(
             {
                 type: "POST",
@@ -132,10 +158,10 @@ function login(){
                     csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
                 },
                 success: function (data) {
-                    if (data['result'] == 'auth success')
-                        window.location = '/'; // log in.
-                    else
+                    if (data['result'] == 'auth fail')
                         alert("Could not authenticate. Please try a different email or password.");
+                    else
+                        window.location = window.location.href.replace('login',''); 
                 }
             });
 
@@ -151,7 +177,14 @@ function logout(){
                 },
                 success: function (data) {
                     if (data['result'] == 'logout success')
-                        window.location = '/login'; // direct to log in page
+                        // replace end with login , direct to login page
+                        if (/stonoriverapp\/$/.test(window.location)){ // with slash at end
+                            window.location = window.location.href.replace('stonoriverapp/','stonoriverapp/login'); // direct to log in page
+                        }
+                        else if (/stonoriverapp$/.test(window.location)){//no slash at end
+                            window.location = window.location.href.replace('stonoriverapp','stonoriverapp/login');
+                        }
+
                     else
                         alert("Could not log out.");
                 }
@@ -181,7 +214,7 @@ function send_pw_reset_email() {
                     $("#emailfailed").fadeIn();
                 }
                 setTimeout(function(){
-                    window.location = '/login';
+                    window.location = 'login';
                 },5000)
 
             }
@@ -349,14 +382,67 @@ function savenewgate(){
 }
 
 function swapbtn(){
+    var to; // use a single ajax request. if to == on, change status to on property. if off, change status to off
+    // property.
 
     if($("#arrivebtn").html().includes("Arrived")){
-        $("#arrivebtn").html($("#arrivebtn").html().replace("Arrived","Leaving"));
+        to = 'on';
     }
     else{
-        $("#arrivebtn").html($("#arrivebtn").html().replace("Leaving", "Arrived"));
+        to = 'off';
     }
-    $("#arrivebtn").toggleClass('btn-info  btn-warning');
-    $("#arrivebtnicon").toggleClass('fa-check fa-sign-out-alt');
 
+    $.ajax(
+        {
+            type: "POST",
+            data: {
+                /*same backend functionality as before, just for one question rather than entire quiz*/
+                btnType: 'change_user_status',
+                to: to,
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success: function (data) {
+                // ajax complete, change button.
+                if (data['result'] == 'success'){
+                    if (to == 'on'){ //arrived on property
+                        $("#arrivebtn").html($("#arrivebtn").html().replace("Arrived", "Leaving"));
+                    }
+                    else{ // leaving property.
+                        $("#arrivebtn").html($("#arrivebtn").html().replace("Leaving", "Arrived"));
+                    }
+                    $("#arrivebtn").toggleClass('btn-info  btn-warning');
+                    $("#arrivebtnicon").toggleClass('fa-check fa-sign-out-alt');
+                }
+                else{ // fail
+                    alert("Could not change your status. Try again soon.")
+                }
+            }
+        });
+
+}
+
+
+function swipingtoggle(){
+    $('#swipinggifcontainer').toggle('slow');
+    $("#swipinggificon").toggleClass('fa-eye fa-question')
+}
+
+function redirectToLoginAfterVerified(){
+     // activate/MjQ/54u-6668beb36bb99077fb10/
+    // if pattern includes activate/MjQ/54u-6668beb36bb99077fb10/
+    if (window.location.href.indexOf('activate')>-1){
+        // then get rid of the ?fbclid=.... part
+        var regexp = /activate.*/gi
+        window.location.href=window.location.href.replace(regexp,'login');
+    }
+
+}
+function redirectToRegisterAfterFailedVerified(){
+     // activate/MjQ/54u-6668beb36bb99077fb10/
+    // if pattern includes activate/MjQ/54u-6668beb36bb99077fb10/
+    if (window.location.href.indexOf('activate')>-1){
+        // then get rid of the ?fbclid=.... part
+        var regexp = /activate.*/gi
+        window.location.href=window.location.href.replace(regexp,'register');
+    }
 }
