@@ -73,14 +73,16 @@ WSGI_APPLICATION = 'srpaccessmgmt.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'stono',
+        'USER': 'stono',
+        'PASSWORD': 'cofc1770',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -119,12 +121,8 @@ import os
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 # For email verification:
+EMAIL_HOST = 'relay.cougars.int'
 
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'stonoriveraccessmgmt@gmail.com'
-EMAIL_HOST_PASSWORD = 'stonoONOTS123'
-EMAIL_PORT = 587
 
 STATIC_ROOT = os.path.join(BASE_DIR,'srpwebapp/static/')
 STATIC_URL = '/static/'

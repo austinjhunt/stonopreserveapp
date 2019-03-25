@@ -435,6 +435,41 @@ li .calendar-li:hover:nth-child(n+8):nth-child(-n+38), li .calendar-li:nth-child
 #editlockcodecontent th{
     border:1px solid black;
 }
+
+
+.swipinggif {
+    width: 13rem;
+}
+
+#myCarousel{
+    border: 4px solid green;
+    border-radius: 8px;
+    padding-top:30px;
+}
+.mygalleryimg{
+        width: 200px;
+        height:300px;
+        object-fit: cover;
+        border-radius:8px;
+    }
+
+/* put dots above for carousel */
+.owl-carousel{
+  position: relative;
+}
+
+.owl-dots, .owl-nav{
+  position: absolute;
+    margin:1px;
+  top:13px;
+  left:25%;
+  right:25%;
+}
+.owl-nav{
+    display:none;
+}
+
+
 /* modifications for smartphones*/
 /* Smartphones (portrait and landscape) ----------- */
 @media only screen
@@ -515,7 +550,12 @@ and (max-device-width : 480px) {
         display:inline-block !important;
         max-width:48% !important;
     }
-
+    .mygalleryimg{
+        width: 130px;
+        height:130px;
+        object-fit: cover;
+        border-radius:8px;
+    }
     #studentScheduleAVisit{
          /* give room to scroll, scroll disabled in actual calendar */
         left: 0;
@@ -551,6 +591,22 @@ and (max-device-width : 480px) {
         text-align:center;
         padding:3%;
         margin:1%;
+    }
+
+    .bootstrap-datetimepicker-widget{
+        /*right: -20% !important;*/
+        margin:0 auto !important;
+        list-style: none !important;
+        background-color: #fff !important;
+    }
+
+    #swipinggifcontainer{
+        width: 30%;
+        margin:0 auto;
+        display:inline-block;
+    }
+    .swipinggif{
+        /**/
     }
 
 /* Styles */
