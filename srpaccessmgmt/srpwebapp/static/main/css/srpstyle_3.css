@@ -444,6 +444,7 @@ li .calendar-li:hover:nth-child(n+8):nth-child(-n+38), li .calendar-li:nth-child
 #myCarousel{
     border: 4px solid green;
     border-radius: 8px;
+    padding-top:30px;
 }
 .mygalleryimg{
         width: 200px;
@@ -451,6 +452,24 @@ li .calendar-li:hover:nth-child(n+8):nth-child(-n+38), li .calendar-li:nth-child
         object-fit: cover;
         border-radius:8px;
     }
+
+/* put dots above for carousel */
+.owl-carousel{
+  position: relative;
+}
+
+.owl-dots, .owl-nav{
+  position: absolute;
+    margin:1px;
+  top:13px;
+  left:25%;
+  right:25%;
+}
+.owl-nav{
+    display:none;
+}
+
+
 /* modifications for smartphones*/
 /* Smartphones (portrait and landscape) ----------- */
 @media only screen

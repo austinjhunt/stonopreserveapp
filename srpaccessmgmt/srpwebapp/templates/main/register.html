@@ -71,7 +71,8 @@
               </div>
               <div class="col-md-6">
                 <div class="form-label-group">
-                  <input type="password" onkeypress="if(this.keyCode == 13){register_new_account()};" id="confirmPassword" class="form-control p-3" placeholder="Confirm password" required="required">
+                  <input type="password" onkeydown="if(event.keyCode==13) register_new_account();"  id="confirmPassword"
+                         class="form-control p-3" placeholder="Confirm password" required="required">
                 </div>
                 <div class="d-block text-center"><label for="confirmPassword">Confirm password</label></div>
               </div>
