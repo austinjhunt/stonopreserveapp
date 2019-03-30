@@ -126,3 +126,17 @@ EMAIL_HOST = 'relay.cougars.int'
 
 STATIC_ROOT = os.path.join(BASE_DIR,'srpwebapp/static/')
 STATIC_URL = '/static/'
+
+# FOR LOCATION SERVICES TO WORK, NEED TO SERVE APPLICATION BEHIND HTTPS
+
+# Ensure that requests over HTTP are redirected to HTTPS.
+SECURE_SSL_REDIRECT = True
+
+# USE SECURE COOKIES: If a browser connects initially via HTTP, which is the default for most browsers, it is possible
+# for existing cookies to be leaked. For this reason, you should set your SESSION_COOKIE_SECURE and CSRF_COOKIE_SECURE
+# settings to True. This instructs the browser to only send these cookies over HTTPS connections.
+# Note that this will mean that sessions will not work over HTTP, and the CSRF protection will
+# prevent any POST data being accepted over HTTP (which will be fine if you are redirecting
+# all HTTP traffic to HTTPS).
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True

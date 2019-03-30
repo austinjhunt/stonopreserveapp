@@ -5,7 +5,7 @@
 {% block content %}
 
 <style>
-    body{
+    body {
         visibility: hidden;
     }
 </style>
@@ -173,7 +173,8 @@
                         <i class="fa fa-user-circle fa-fw"></i>
                     </button>
                     <div class="dropdown-menu dropdown-menu-right mr-2" aria-labelledby="userbtn">
-                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal" onclick="logout();">Logout</a>
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal"
+                           onclick="logout();">Logout</a>
                     </div>
                 </span>
             </div>
@@ -202,69 +203,79 @@
     <div id="content-wrapper">
         <!-- Welcome message -->
         <div class="container-fluid">
-            <div class="jumbotron jumbotron-fluid lanenarrow customheadertron">
-                <div class="container lanenarrow customcontainer" style="padding:20px;">
-                    <div id="welcomemsg" class="welcomeHeader">Welcome to the Stono River Preserve, {{ first_name }}!
-                        <br/>Swipe between views or use the options below!
-                    </div>
-                    <!-- table on top of first page shows lock codes if user is faculty or super user -->
-                    {% if current_user.is_staff or current_user.is_superuser %}
-                    <div class="lockcodetablecontainer">
-                        <table class="lockcodetable">
-                            <thead>
-                            <th colspan="3">Current Lock Codes</th>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>Lock Code</td>
-                                <td>Gate</td>
-                                <td>Updates</td>
-                            </tr>
-                            {% for lc in lock_codes %}
-                            <tr>
-                                <td>{{ lc.lock_code }}</td>
-                                <td>{{ lc.gate_number }}</td>
-                                <td>{% if current_user.is_superuser %}
-                                    <button class="btn btn-info"
-                                            onclick="showeditlockcodemodal({{lc.id}},{{lc.gate_number}},{{lc.lock_code}});">
-                                        <i class="fa fa-edit"></i></button>
-                                    <button class="btn btn-danger" onclick="showdeletelockcodemodal({{lc.id}});"><i
-                                            class="fa fa-trash"></i></button>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                            <tr>
-                                <td colspan="3">
-                                    <button class="btn btn-success" onclick="$('#addnewgatemodal').modal('show');">
-                                        <i class="fa fa-plus"></i> Add New Gate
-                                    </button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    {% endif %}
-                    <hr class="headerHR"/>
-                    <ul class="regular_page_option_container">
-                        <li class="regular_page_option"><a onclick="showannouncementsview()">Announcements</a></li>
-                        <li class="regular_page_option"><a onclick="showscheduleview()">Schedule a Visit</a></li>
-                        <li class="regular_page_option"><a onclick="showphotosview();">Photo Gallery</a></li>
-                        {% if current_user.is_superuser %}
-                        <li class="regular_page_option"><a onclick="showlistview();">Visit Schedule</a></li>
-                        <li class="regular_page_option"><a onclick="showallusersview();">View All Users</a></li>
-                        {% endif %}
-                    </ul>
-                    <hr class="headerHR"/>
-                </div>
-            </div>
 
 
             <!-- owl carousel for swiping between views without loading new pages -->
 
             <div id="myCarousel" class="owl-carousel owl-theme">
-                <!-- announcements view, contains announcements & general info (contacts / location) -->
+                <!-- announcements view, contains announcements & gate lock info  (contacts / location) -->
                 <div id="announcements" class="announcementsview">
+
+                    <!-- place gate lock info  inside first item -->
+                    <!-- begin gate lock info  -->
+                    <div class="jumbotron jumbotron-fluid lanenarrow customheadertron">
+                        <div class="container lanenarrow customcontainer" style="padding:20px;">
+                            <div id="welcomemsg" class="welcomeHeader">Welcome to the Stono River Preserve,
+                                {{ first_name }}!
+                                <br/>Swipe between views or use the options below!
+                            </div>
+                            <!-- table on top of first page shows lock codes if user is faculty or super user -->
+                            {% if current_user.is_staff or current_user.is_superuser %}
+                            <div class="lockcodetablecontainer">
+                                <table class="lockcodetable">
+                                    <thead>
+                                    <th colspan="3">Current Lock Codes</th>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>Lock Code</td>
+                                        <td>Gate</td>
+                                        <td>Updates</td>
+                                    </tr>
+                                    {% for lc in lock_codes %}
+                                    <tr>
+                                        <td>{{ lc.lock_code }}</td>
+                                        <td>{{ lc.gate_number }}</td>
+                                        <td>{% if current_user.is_superuser %}
+                                            <button class="btn btn-info"
+                                                    onclick="showeditlockcodemodal({{lc.id}},{{lc.gate_number}},{{lc.lock_code}});">
+                                                <i class="fa fa-edit"></i></button>
+                                            <button class="btn btn-danger"
+                                                    onclick="showdeletelockcodemodal({{lc.id}});"><i
+                                                    class="fa fa-trash"></i></button>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    <tr>
+                                        <td colspan="3">
+                                            <button class="btn btn-success"
+                                                    onclick="$('#addnewgatemodal').modal('show');">
+                                                <i class="fa fa-plus"></i> Add New Gate
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% endif %}
+                            <hr class="headerHR"/>
+                            <ul class="regular_page_option_container">
+                                <li class="regular_page_option"><a onclick="showannouncementsview()">Announcements</a>
+                                </li>
+                                <li class="regular_page_option"><a onclick="showscheduleview()">Schedule a Visit</a>
+                                </li>
+                                <li class="regular_page_option"><a onclick="showphotosview();">Photo Gallery</a></li>
+                                {% if current_user.is_superuser %}
+                                <li class="regular_page_option"><a onclick="showlistview();">Visit Schedule</a></li>
+                                <li class="regular_page_option"><a onclick="showallusersview();">View All Users</a></li>
+                                {% endif %}
+                            </ul>
+                            <hr class="headerHR"/>
+                        </div>
+                    </div>
+                    <!-- end gate lock info  -->
+
 
                     <div class="text-center mb-2">
                         <div id="swipinggifcontainer">
@@ -312,40 +323,70 @@
                 </div>
 
                 <div id="studentscheduler" class="scheduleviewcontainer">
-                    <div class="visible_only_mobile">
-                        <div class="container">
-                            <div class="newsheader">Schedule a visit start time:</div>
-                            <div class='col-md-5'>
-                                <div class="form-group">
-                                    <div class='input-group date' id='datetimepicker6'>
-                                        <input id="input_starttime" type='text' class="form-control"/>
-                                        <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
-                </span>
-                                    </div>
-                                </div>
+
+                        <div class="container text-center">
+                            <!-- select a visit date -->
+                            <div class="schedule_element_container">
+                                <form>
+                                    <fieldset>
+                                        <h3><label for="input_visitdate">Pick a visit date</label></h3>
+                                        <input
+                                                id="input_visitdate"
+                                                class="datepicker"
+                                                name="date"
+                                                type="text"
+                                                autofocus
+                                                value="14 August, 2014"
+                                                data-value="2014-08-08">
+                                    </fieldset>
+                                </form>
+                                <div id="datecontainer"></div>
                             </div>
-                            <div class="newsheader">Schedule a visit end time:</div>
-                            <div class='col-md-5'>
-                                <div class="form-group">
-                                    <div class='input-group date' id='datetimepicker7'>
-                                        <input id="input_endtime" type='text' class="form-control"/>
-                                        <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
-                </span>
-                                    </div>
-                                </div>
-                            </div>
+
+                             <div class="schedule_element_container">
+                                <!-- select a visit date -->
+                                <form>
+                                    <fieldset>
+                                        <h3><label for="input_starttime">Schedule a start time:</label></h3>
+                                        <input
+                                                id="input_starttime"
+                                                class="timepicker"
+                                                name="start_time"
+                                                type="text"
+                                                autofocus
+                                                value="14 August, 2014"
+                                                data-value="2014-08-08">
+                                    </fieldset>
+                                </form>
+                                <div id="starttimecontainer"></div>
+                             </div>
+
+                             <div class="schedule_element_container">
+                                 <!-- select a visit date -->
+                                <form>
+                                    <fieldset>
+                                        <h3><label for="input_endtime">Schedule an end time:</label></h3>
+                                        <input
+                                                id="input_endtime"
+                                                class="timepicker"
+                                                name="endtime"
+                                                type="text"
+                                                autofocus
+                                                value="14 August, 2014"
+                                                data-value="2014-08-08">
+                                    </fieldset>
+                                </form>
+                                <div id="endtimecontainer"></div>
+                             </div>
+
+
+
+
                             <button class="btn btn-primary lanenarrow" onclick="schedulevisit();">Schedule Visit
                             </button>
                             <div id="schedulevisitresult" class="schedulevisitresult"></div>
                         </div>
-                    </div>
 
-                    <!--student schedule ability view-->
-                    <div id="studentScheduleAVisit" class="card mb-3 visible_only_desktop">
-                        <div id="calendar"></div>
-                    </div>
                 </div>
 
                 <!-- photo gallery -->

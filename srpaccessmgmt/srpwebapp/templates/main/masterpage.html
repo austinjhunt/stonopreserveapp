@@ -19,7 +19,7 @@
     <!-- Custom styles for this template-->
     <link href="{% static 'main/css/sb-admin.css' %}" rel="stylesheet">
 
-    <link href="{% static 'main/css/srpstyle_3.css' %}" rel="stylesheet">
+    <link href="{% static 'main/css/srpstyle_8.css' %}" rel="stylesheet">
     <!-- for tables page -->
     <link href="{% static 'main/vendor/datatables/dataTables.bootstrap4.css' %}" rel="stylesheet">
     <!-- Bootstrap core JavaScript-->
@@ -33,8 +33,6 @@
     <script src="{% static 'main/vendor/datatables/dataTables.bootstrap4.js' %} "></script>
     <link rel="stylesheet" href="{% static 'main/vendor/bower_components/fullcalendar/dist/fullcalendar.css' %}" />
     <script src="{% static 'main/vendor/bower_components/fullcalendar/dist/fullcalendar.js' %}"></script>
-    <!-- Custom scripts for all pages-->
-    <script src="{% static 'main/js/main_5.js' %}"></script>
     <script src="{% static 'main/js/sb-admin.js' %}"></script>
     <!-- owl carousel feature for minimizing page reloads -->
     <link rel="stylesheet" href="{% static 'main/css/owl.carousel.css' %}">
@@ -50,6 +48,25 @@
           rel="stylesheet">
     <link href="{% static 'main/vendor/bootstrap/css/bootstrap-reboot.css' %}" rel="stylesheet">
 
+
+    <!-- pickadate js -->
+    <script src="{% static 'main/js/pickadatejs/legacy.js' %}"></script>
+
+    <script src="{% static 'main/js/pickadatejs/picker.js' %}"></script>
+    <script src="{% static 'main/js/pickadatejs/picker.date.js' %}"></script>
+    <script src="{% static 'main/js/pickadatejs/picker.time.js' %}"></script>
+
+    <!-- pickadate css -->
+    <link rel="stylesheet" href="{% static 'main/css/pickadate_themes/classic.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/pickadate_themes/classic.date.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/pickadate_themes/classic.time.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/pickadate_themes/default.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/pickadate_themes/default.date.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/pickadate_themes/default.time.css' %}">
+    <!--<link rel="stylesheet" href="{% static 'main/css/pickadate_themes/rtl.css' %}">-->
+
+     <!-- include custom script last, depends on above scripts -->
+    <script src="{% static 'main/js/main_11.js' %}"></script>
 </head>
 
 {% block content %}

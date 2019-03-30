@@ -23,6 +23,49 @@ $(document).ready(function(){
 
     $("#dataTable").DataTable();
     $("#dataTable2").DataTable();
+     //new
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+    if(dd<10) {
+        dd='0'+dd;
+    }
+    if(mm<10) {
+        mm='0'+mm;
+    }
+    today = dd+'/'+mm+'/'+yyyy;
+
+    // date datepicker
+    var $input = $( '.datepicker' ).pickadate({
+        formatSubmit: 'mm/dd/yyyy',
+        // min: [2015, 7, 14],
+        container: '#datecontainer',
+        // editable: true,
+        closeOnSelect: true,
+        closeOnClear: false,
+    })
+    var picker = $input.pickadate('picker');
+
+    //start time picker
+    var $input2 = $("#input_starttime").pickatime({
+        container: '#starttimecontainer',
+        // editable: true,
+        closeOnSelect: true,
+        closeOnClear: false,
+    });
+    var picker = $input2.pickatime('picker');
+
+    //end time picker
+    var $input3 = $("#input_endtime").pickatime({
+        container: '#endtimecontainer',
+        // editable: true,
+        closeOnSelect: true,
+        closeOnClear: false,
+    });
+    var picker = $input3.pickatime('picker');
+
+
 
     $(function () {
         $('#datetimepicker6').datetimepicker();
@@ -35,6 +78,7 @@ $(document).ready(function(){
         $("#datetimepicker7").on("dp.change", function (e) {
             $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
         });
+
     });
 
 
@@ -43,7 +87,7 @@ $(document).ready(function(){
         $("#homebtn").html('<i class="fas fa-fw fa-home"></i>');
         $("#emergencybtnsidebar").html('<i class="fas fa-fw fa-ambulance"></i>');
         // welcome msg different for mobile
-        $("#welcomemsg").html('Welcome to the Stono River Preserve, {{ first_name }}!<br/>Swipe between views or use' +
+        $("#welcomemsg").html('Welcome to the Stono River Preserve!<br/>Swipe between views or use' +
             ' the top left dropdown!');
     }
     else {
@@ -58,9 +102,63 @@ $(document).ready(function(){
         });
         $('#calendar').fullCalendar('changeView', 'agendaDay');
     }
-
-
+    /* Geolocation services with Google's API */
+    // check for Geolocation support
+    if (navigator.geolocation) {
+      console.log('Geolocation is supported!');
+    }
+    else {
+      console.log('Geolocation is not supported for this Browser/OS.');
+    }
 });
+
+
+// window onload, happens after document ready
+// Note: GEOLOCATION SERVICE DOES NOT WORK WITH INSECURE CONNECTION. NEED HTTPS.
+
+window.onload = function() {
+    // Use Google's Geolocation API. User consent to being tracked is assumed by their presence on a CofC Foundation
+    // owned property, so for now, no real need for asking for consent to be tracked.
+    // Future implementation idea: use a toggle button in the nav bar to turn GPS tracking on/off.
+
+    // Instead of continuous tracking which would drain user battery, use a periodic "one-shot" method to obtain
+    // user location at 15 minute intervals.
+    var startPos;
+    var geoSuccess = function(position) {
+        startPos = position;
+        document.getElementById('startLat').innerHTML = startPos.coords.latitude;
+        document.getElementById('startLon').innerHTML = startPos.coords.longitude;
+        console.log(startPos.coords.latitude);
+        console.log(startPos.coords.longitude);
+    };
+
+
+    // Unfortunately, not all location lookups are successful. Perhaps a GPS could not be located or
+    // the user has suddenly disabled location lookups. In the event of an error, a second, optional
+    // argument to getCurrentPosition() is called so that you can notify the user inside the callback:
+    var geoError = function(error) {
+        console.log('Error occurred. Error code: ' + error.code);
+
+        // error.code can be:
+        //   0: unknown error
+        //   1: permission denied
+        //   2: position unavailable (error response from location provider)
+        //   3: timed out
+     };
+
+    // pass geoOptions to getCurrentPosition as 3rd argument.
+    var geoOptions = {
+        // 1: For many use cases, you don't need the user's most up-to-date location; you just need a rough estimate.
+        // Use the maximumAge optional property to tell the browser to use a recently obtained geolocation result.
+        maximumAge: 5 * 60 * 1000,
+
+        // 2: Unless you set a timeout, your request for the current position might never return.
+        timeout: 10 * 1000
+    }
+
+    navigator.geolocation.getCurrentPosition(geoSuccess,geoError,geoOptions);
+};
+
 
 
 
@@ -161,7 +259,11 @@ function login(){
                     if (data['result'] == 'auth fail')
                         alert("Could not authenticate. Please try a different email or password.");
                     else
-                        window.location = window.location.href.replace('login',''); 
+                    {
+                        //document.location.href = "/";
+                         window.location = window.location.href.replace('login','').replace('//','');
+                    }
+
                 }
             });
 
@@ -177,16 +279,7 @@ function logout(){
                 },
                 success: function (data) {
                     if (data['result'] == 'logout success')
-                        // replace end with login , direct to login page
-                        if (/stonoriverapp\/$/.test(window.location)){ // with slash at end
-                            window.location = window.location.href.replace('stonoriverapp/','stonoriverapp/login'); // direct to log in page
-                        }
-                        else if (/stonoriverapp$/.test(window.location)){//no slash at end
-                            window.location = window.location.href.replace('stonoriverapp','stonoriverapp/login');
-                        }
-
-                    else
-                        alert("Could not log out.");
+                       location.reload();
                 }
             });
 }
@@ -195,7 +288,7 @@ function logout(){
 
 function send_pw_reset_email() {
 
-    var email_address = $("#inputEmail").val();
+    var email_address = $("#inputEmail").val().trim();
 
     $.ajax(
         {
@@ -255,6 +348,7 @@ function showallusersview(){
 
 
 function schedulevisit(){
+    var visitdate = $("#input_visitdate").val();
     var starttime = $("#input_starttime").val();
     var endtime = $("#input_endtime").val();
     $.ajax(
@@ -265,6 +359,7 @@ function schedulevisit(){
                 btnType: 'schedule_visit',
                 start_time: starttime,
                 end_time: endtime,
+                visit_date: visitdate,
                 csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
             },
             success: function (data) {
