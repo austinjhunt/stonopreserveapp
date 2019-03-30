@@ -69,6 +69,38 @@ def index(request):
             data = {'result':result}
             return render_to_json_response(data)
 
+        if request.is_ajax() and request.POST.get('btnType') == 'update_location':
+            # get latitude and longitude; this will happen every 15 minutes, triggered by JS setInterval function.
+            lat = request.POST.get('latitude')
+            long = request.POST.get('longitude')
+            try: # assuming browser returns these values properly
+                lat = float(lat)
+                long = float(long)
+                print("\n\n\nUpdating location of user",request.user.first_name)
+                print("New Lat:",str(lat))
+                print("New Long:",str(long))
+                # update current user's location with new location values
+                current_user = User_On_Property.objects.get(user_id=request.user.id)
+                current_user.latitude = lat
+                current_user.longitude = long
+                current_user.save()
+                print("Successfully updated location of",request.user.first_name)
+                res = 'success'
+            except Exception as e:
+                print(e)
+                res = 'fail'
+            data = {'res': res}
+            return render_to_json_response(data)
+        if request.is_ajax() and request.GET.get('btnType') == 'get_user_locations':
+            locations = [loc for loc in User_On_Property.objects.filter(on_site=True).values_list('latitude',
+                                                                                                 'longitude')]
+            print("\n\n\nLocations")
+            print(locations)
+            data = {
+                'locations': locations
+            }
+            return render_to_json_response(data)
+
         if request.is_ajax() and request.POST.get('btnType') == 'schedule_visit':
             start_time = request.POST.get('start_time')
             end_time = request.POST.get('end_time')

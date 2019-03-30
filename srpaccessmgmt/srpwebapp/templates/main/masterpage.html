@@ -42,7 +42,7 @@
     <script src="{% static 'main/js/owl.autoplay.js' %}" data-cover></script>
 
     <!-- datetime picker -->
-    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <script src="{% static 'main/vendor/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js' %}"></script>
     <link href="{% static 'main/vendor/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css' %}"
           rel="stylesheet">
@@ -67,6 +67,10 @@
 
      <!-- include custom script last, depends on above scripts -->
     <script src="{% static 'main/js/main_11.js' %}"></script>
+
+    <!-- OpenLayers Map -->
+    <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
+    <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
 </head>
 
 {% block content %}
