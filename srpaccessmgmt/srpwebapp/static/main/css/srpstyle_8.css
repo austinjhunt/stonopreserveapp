@@ -487,6 +487,21 @@ li .calendar-li:hover:nth-child(n+8):nth-child(-n+38), li .calendar-li:nth-child
 }
 
 
+/* Live Map */
+.map {
+    height: 100%;
+    width: 100%;
+    margin: 20px;
+}
+.map_marker{
+    visibility:hidden;
+        width: 20px;
+        height: 20px;
+        border: 1px solid #088;
+        border-radius: 10px;
+        background-color: #0FF;
+        opacity: 0.5;
+}
 /* modifications for smartphones*/
 /* Smartphones (portrait and landscape) ----------- */
 @media only screen

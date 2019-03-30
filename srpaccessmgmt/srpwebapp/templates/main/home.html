@@ -322,70 +322,75 @@
                     </div>
                 </div>
 
+                <div id="livemapview" class="announcementsview">
+
+                    <div id="map_marker" class="map_marker"></div>
+                    <div id="map" class="map"></div>
+
+                </div>
+
                 <div id="studentscheduler" class="scheduleviewcontainer">
 
-                        <div class="container text-center">
-                            <!-- select a visit date -->
-                            <div class="schedule_element_container">
-                                <form>
-                                    <fieldset>
-                                        <h3><label for="input_visitdate">Pick a visit date</label></h3>
-                                        <input
-                                                id="input_visitdate"
-                                                class="datepicker"
-                                                name="date"
-                                                type="text"
-                                                autofocus
-                                                value="14 August, 2014"
-                                                data-value="2014-08-08">
-                                    </fieldset>
-                                </form>
-                                <div id="datecontainer"></div>
-                            </div>
-
-                             <div class="schedule_element_container">
-                                <!-- select a visit date -->
-                                <form>
-                                    <fieldset>
-                                        <h3><label for="input_starttime">Schedule a start time:</label></h3>
-                                        <input
-                                                id="input_starttime"
-                                                class="timepicker"
-                                                name="start_time"
-                                                type="text"
-                                                autofocus
-                                                value="14 August, 2014"
-                                                data-value="2014-08-08">
-                                    </fieldset>
-                                </form>
-                                <div id="starttimecontainer"></div>
-                             </div>
-
-                             <div class="schedule_element_container">
-                                 <!-- select a visit date -->
-                                <form>
-                                    <fieldset>
-                                        <h3><label for="input_endtime">Schedule an end time:</label></h3>
-                                        <input
-                                                id="input_endtime"
-                                                class="timepicker"
-                                                name="endtime"
-                                                type="text"
-                                                autofocus
-                                                value="14 August, 2014"
-                                                data-value="2014-08-08">
-                                    </fieldset>
-                                </form>
-                                <div id="endtimecontainer"></div>
-                             </div>
-
-
-
-
-                            <button class="btn btn-primary lanenarrow" onclick="schedulevisit();">Schedule Visit
-                            </button>
-                            <div id="schedulevisitresult" class="schedulevisitresult"></div>
+                    <div class="container text-center">
+                        <!-- select a visit date -->
+                        <div class="schedule_element_container">
+                            <form>
+                                <fieldset>
+                                    <h3><label for="input_visitdate">Pick a visit date</label></h3>
+                                    <input
+                                            id="input_visitdate"
+                                            class="datepicker"
+                                            name="date"
+                                            type="text"
+                                            autofocus
+                                            value="14 August, 2014"
+                                            data-value="2014-08-08">
+                                </fieldset>
+                            </form>
+                            <div id="datecontainer"></div>
                         </div>
+
+                        <div class="schedule_element_container">
+                            <!-- select a visit date -->
+                            <form>
+                                <fieldset>
+                                    <h3><label for="input_starttime">Schedule a start time:</label></h3>
+                                    <input
+                                            id="input_starttime"
+                                            class="timepicker"
+                                            name="start_time"
+                                            type="text"
+                                            autofocus
+                                            value="14 August, 2014"
+                                            data-value="2014-08-08">
+                                </fieldset>
+                            </form>
+                            <div id="starttimecontainer"></div>
+                        </div>
+
+                        <div class="schedule_element_container">
+                            <!-- select a visit date -->
+                            <form>
+                                <fieldset>
+                                    <h3><label for="input_endtime">Schedule an end time:</label></h3>
+                                    <input
+                                            id="input_endtime"
+                                            class="timepicker"
+                                            name="endtime"
+                                            type="text"
+                                            autofocus
+                                            value="14 August, 2014"
+                                            data-value="2014-08-08">
+                                </fieldset>
+                            </form>
+                            <div id="endtimecontainer"></div>
+                        </div>
+
+
+                        <button class="btn btn-primary lanenarrow" onclick="schedulevisit();">Schedule Visit
+                        </button>
+                        <div id="schedulevisitresult" class="schedulevisitresult"></div>
+                    </div>
 
                 </div>
 

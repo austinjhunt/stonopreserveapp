@@ -110,6 +110,55 @@ $(document).ready(function(){
     else {
       console.log('Geolocation is not supported for this Browser/OS.');
     }
+
+    var coordPairs = [];
+    function init(){
+        /* Live Map */
+        var map = new ol.Map({
+                                target: 'map',
+                                layers: [
+                                    new ol.layer.Tile({
+                                        source: new ol.source.OSM()
+                                    }),
+
+                                ],
+                                view: new ol.View({
+                                    center: ol.proj.fromLonLat([32.784240499999996, -79.9395]),
+                                    zoom: 2
+                                })
+                            });
+        updateLocations(map);
+    }
+
+    init();
+    function updateLocations(map){
+        // get the long/lat of all active users from backend
+        $.ajax({
+                type: "GET",
+                data: {
+                    btnType: 'get_user_locations',
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                },
+                success: function (data) {
+                    var coordPairs = data['locations']; // [[lat,long],[lat,long]....]
+                    /* create markers for each pair */
+                    var newMarker = document.getElementById('map_marker').cloneNode();
+                    newMarker.style.visibility = 'visible';
+                    for (var i = 0; i < coordPairs.length; i++) {
+                        var pos = ol.proj.fromLonLat(coordPairs[i]);
+                        var marker = new ol.Overlay({
+                            position: pos,
+                            element: newMarker,
+                            stopEvent: false
+                        });
+                        console.log("adding marker for location");
+                        console.log(coordPairs[i]);
+                        map.addOverlay(marker);
+                    }
+                },
+            });
+    }
+
 });
 
 
@@ -126,10 +175,22 @@ window.onload = function() {
     var startPos;
     var geoSuccess = function(position) {
         startPos = position;
-        document.getElementById('startLat').innerHTML = startPos.coords.latitude;
-        document.getElementById('startLon').innerHTML = startPos.coords.longitude;
         console.log(startPos.coords.latitude);
         console.log(startPos.coords.longitude);
+        // pass these values to backend with ajax, update lat/long in the User_On_Property table
+        $.ajax(
+            {
+                type: "POST",
+                data: {
+                    btnType: 'update_location',
+                    latitude: startPos.coords.latitude,
+                    longitude: startPos.coords.longitude,
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                },
+                success: function (data) {
+                    console.log(data); // don't do anything, want this to be a background process
+                }
+            });
     };
 
 
@@ -156,7 +217,14 @@ window.onload = function() {
         timeout: 10 * 1000
     }
 
-    navigator.geolocation.getCurrentPosition(geoSuccess,geoError,geoOptions);
+    navigator.geolocation.getCurrentPosition(geoSuccess,geoError,geoOptions); // init
+    setInterval(function(){
+         navigator.geolocation.getCurrentPosition(geoSuccess,geoError,geoOptions);
+    },15 * 60 * 1000); // update location every 15 minutes
+
+
+
+
 };
 
 
