@@ -92,8 +92,11 @@ def index(request):
             data = {'res': res}
             return render_to_json_response(data)
         if request.is_ajax() and request.GET.get('btnType') == 'get_user_locations':
-            locations = [loc for loc in User_On_Property.objects.filter(on_site=True).values_list('latitude',
-                                                                                                 'longitude')]
+            locations = [[obj.longitude,obj.latitude] for obj in User_On_Property.objects.filter(on_site=True,
+                                                                        longitude__gte=-80.4,
+                                                                        longitude__lte=-79.8,
+                                                                        latitude__gte=32.65,
+                                                                        latitude__lte=32.8)]
             print("\n\n\nLocations")
             print(locations)
             data = {

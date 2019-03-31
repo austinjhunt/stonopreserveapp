@@ -489,9 +489,12 @@ li .calendar-li:hover:nth-child(n+8):nth-child(-n+38), li .calendar-li:nth-child
 
 /* Live Map */
 .map {
-    height: 100%;
-    width: 100%;
-    margin: 20px;
+    width: 90%;
+    border:1px solid black;
+    border-radius: 8px;
+    margin: 0 auto;
+    height: calc(100vh - 52px); /* 100% of the viewport height - navbar height */
+
 }
 .map_marker{
     visibility:hidden;

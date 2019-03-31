@@ -112,8 +112,12 @@
                     <i class="fa fa-fw fa-bars"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <!-- only for students -->
-                    {% if not current_user.is_staff and not current_user.is_superuser %}
+                    <!-- For everyone -->
+                    <a class="regular_page_option" onclick="showannouncementsview();">General</a>
+                    <div class="dropdown-divider"></div>
+
+                    <!-- only for students and staff -->
+                    {% if not current_user.is_superuser %}
                     <a class="regular_page_option" onclick="showscheduleview();">Schedule a Visit</a>
                     <div class="dropdown-divider"></div>
                     {% endif %}
@@ -125,9 +129,10 @@
                     <div class="dropdown-divider"></div>
                     {% endif %}
                     <!-- for all accounts -->
-                    <a class="regular_page_option" onclick="showannouncementsview();">General</a>
-                    <div class="dropdown-divider"></div>
                     <a class="regular_page_option" onclick="showphotosview();">Photo Gallery</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="regular_page_option" onclick="showlivemapview();">Live Map</a>
+
                 </div>
             </div>
         </li>
@@ -261,7 +266,7 @@
                             {% endif %}
                             <hr class="headerHR"/>
                             <ul class="regular_page_option_container">
-                                <li class="regular_page_option"><a onclick="showannouncementsview()">Announcements</a>
+                                <li class="regular_page_option"><a onclick="showannouncementsview()">General</a>
                                 </li>
                                 <li class="regular_page_option"><a onclick="showscheduleview()">Schedule a Visit</a>
                                 </li>
@@ -270,6 +275,7 @@
                                 <li class="regular_page_option"><a onclick="showlistview();">Visit Schedule</a></li>
                                 <li class="regular_page_option"><a onclick="showallusersview();">View All Users</a></li>
                                 {% endif %}
+                                 <li class="regular_page_option"><a onclick="showlivemapview();">Live Map</a></li>
                             </ul>
                             <hr class="headerHR"/>
                         </div>
@@ -322,13 +328,7 @@
                     </div>
                 </div>
 
-                <div id="livemapview" class="announcementsview">
-
-                    <div id="map_marker" class="map_marker"></div>
-                    <div id="map" class="map"></div>
-
-                </div>
-
+                <!-- student/faculty visit scheduler -->
                 <div id="studentscheduler" class="scheduleviewcontainer">
 
                     <div class="container text-center">
@@ -415,88 +415,95 @@
 
                 <!-- schedule list view -->
                 {% if current_user.is_superuser %}
-                <div class="announcementsview"><!-- DataTables Example -->
-                    <div class="newsheader">
-                        All Scheduled Visits
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <thead>
-                                <tr>
-                                    <th style="text-align:center;">First Name</th>
-                                    <th style="text-align:center;">Last Name</th>
-                                    <th style="text-align:center;">Visit Date</th>
-                                    <th style="text-align:center;">Visit Time Interval</th>
-                                </tr>
-                                </thead>
-                                {% for visit in visit_objects %}
-                                <tr id="{{visit.id}}">
-                                    <td style="text-align:center;">{{ visit.visitor_first_name}}</td>
-                                    <td style="text-align:center;">{{ visit.visitor_last_name}}</td>
-                                    <td style="text-align:center;">{{ visit.visit_date}}</td>
-                                    <td style="text-align:center;">{{ visit.start_time}} - {{ visit.end_time }}</td>
-                                </tr>
-                                {% endfor %}
-                                <tfoot>
-                                <tr>
-                                    <th style="text-align:center;">First Name</th>
-                                    <th style="text-align:center;">Last Name</th>
-                                    <th style="text-align:center;">Visit Date</th>
-                                    <th style="text-align:center;">Visit Time Interval</th>
-                                </tr>
-                                </tfoot>
-                            </table>
+                    <div class="announcementsview"><!-- DataTables Example -->
+                        <div class="newsheader">
+                            All Scheduled Visits
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                    <tr>
+                                        <th style="text-align:center;">First Name</th>
+                                        <th style="text-align:center;">Last Name</th>
+                                        <th style="text-align:center;">Visit Date</th>
+                                        <th style="text-align:center;">Visit Time Interval</th>
+                                    </tr>
+                                    </thead>
+                                    {% for visit in visit_objects %}
+                                    <tr id="{{visit.id}}">
+                                        <td style="text-align:center;">{{ visit.visitor_first_name}}</td>
+                                        <td style="text-align:center;">{{ visit.visitor_last_name}}</td>
+                                        <td style="text-align:center;">{{ visit.visit_date}}</td>
+                                        <td style="text-align:center;">{{ visit.start_time}} - {{ visit.end_time }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                    <tfoot>
+                                    <tr>
+                                        <th style="text-align:center;">First Name</th>
+                                        <th style="text-align:center;">Last Name</th>
+                                        <th style="text-align:center;">Visit Date</th>
+                                        <th style="text-align:center;">Visit Time Interval</th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!-- all users view -->
-                <div class="announcementsview"><!-- DataTables Example -->
-                    <div class="newsheader">
-                        All Users
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
 
-                            <table class="table table-bordered" id="dataTable2" width="100%" cellspacing="0">
-                                <thead>
-                                <tr>
-                                    <th style="text-align:center;">First Name</th>
-                                    <th style="text-align:center;">Last Name</th>
-                                    <th style="text-align:center;">Email</th>
-                                    <th style="text-align:center;">Account Created</th>
-                                    <th style="text-align:center;">Total Visits</th>
-                                    <th style="text-align:center;">Options</th>
-                                </tr>
-                                </thead>
-                                {% for user in all_users %}
-                                <tr>
-                                    <td style="text-align:center;">{{user.first_name}}</td>
-                                    <td style="text-align:center;">{{user.last_name}}</td>
-                                    <td style="text-align:center;">{{user.email}}</td>
-                                    <td style="text-align: center">{{user.date_joined}}</td>
-                                    <td style="text-align:center;">{{user.num_visits}}</td>
-                                    <td style="text-align:center;">
-                                        <button class="btn btn-danger d-inline-block"><i class="fas fa-fw fa-trash"></i>
-                                        </button>
-                                        <button class="btn btn-info d-inline-block"><i class="fas fa-fw fa-edit"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                                <tfoot>
-                                <tr>
-                                    <th style="text-align:center;">First Name</th>
-                                    <th style="text-align:center;">Last Name</th>
-                                    <th style="text-align:center;">Visit Date</th>
-                                    <th style="text-align:center;">Visit Time Interval</th>
-                                </tr>
-                                </tfoot>
-                            </table>
+                    <!-- all users view -->
+                    <div class="announcementsview"><!-- DataTables Example -->
+                        <div class="newsheader">
+                            All Users
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+
+                                <table class="table table-bordered" id="dataTable2" width="100%" cellspacing="0">
+                                    <thead>
+                                    <tr>
+                                        <th style="text-align:center;">First Name</th>
+                                        <th style="text-align:center;">Last Name</th>
+                                        <th style="text-align:center;">Email</th>
+                                        <th style="text-align:center;">Account Created</th>
+                                        <th style="text-align:center;">Total Visits</th>
+                                        <th style="text-align:center;">Options</th>
+                                    </tr>
+                                    </thead>
+                                    {% for user in all_users %}
+                                    <tr>
+                                        <td style="text-align:center;">{{user.first_name}}</td>
+                                        <td style="text-align:center;">{{user.last_name}}</td>
+                                        <td style="text-align:center;">{{user.email}}</td>
+                                        <td style="text-align: center">{{user.date_joined}}</td>
+                                        <td style="text-align:center;">{{user.num_visits}}</td>
+                                        <td style="text-align:center;">
+                                            <button class="btn btn-danger d-inline-block"><i class="fas fa-fw fa-trash"></i>
+                                            </button>
+                                            <button class="btn btn-info d-inline-block"><i class="fas fa-fw fa-edit"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    <tfoot>
+                                    <tr>
+                                        <th style="text-align:center;">First Name</th>
+                                        <th style="text-align:center;">Last Name</th>
+                                        <th style="text-align:center;">Visit Date</th>
+                                        <th style="text-align:center;">Visit Time Interval</th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
                 {% endif %}
+                <!-- Live Map view --> 
+                <div id="livemapview" class="announcementsview">
+                    <div class="newsheader">Live Map</div>
+                    <div id="map" class="map"></div>
+
+                </div>
             </div>
         </div>
         <!-- /.container-fluid -->
