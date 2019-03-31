@@ -505,6 +505,38 @@ li .calendar-li:hover:nth-child(n+8):nth-child(-n+38), li .calendar-li:nth-child
         background-color: #0FF;
         opacity: 0.5;
 }
+
+/* users on site table for live map */
+#users_on_site_table{
+    border: 1px solid black;
+    border-radius: 4px;
+    margin: 0 auto;
+}
+#users_on_site_table td{
+    text-align:center;
+    padding:10px;
+    font-size:17px;
+}
+#users_on_site_table td button{
+    padding:5px;
+    font-size:17px;
+}
+#users_on_site_table_container{
+    text-align:center;
+    padding: 20px;
+    width:80%;
+    margin:0 auto;
+}
+#users_on_site_table_header{
+    font-family: "Lane - Narrow";
+    font-weight:bold;
+    font-size:2rem;
+    padding:15px;
+    text-align:center;
+    margin:8px;
+}
+
+
 /* modifications for smartphones*/
 /* Smartphones (portrait and landscape) ----------- */
 @media only screen

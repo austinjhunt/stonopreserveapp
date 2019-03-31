@@ -92,15 +92,24 @@ def index(request):
             data = {'res': res}
             return render_to_json_response(data)
         if request.is_ajax() and request.GET.get('btnType') == 'get_user_locations':
-            locations = [[obj.longitude,obj.latitude] for obj in User_On_Property.objects.filter(on_site=True,
-                                                                        longitude__gte=-80.4,
-                                                                        longitude__lte=-79.8,
-                                                                        latitude__gte=32.65,
-                                                                        latitude__lte=32.8)]
-            print("\n\n\nLocations")
+            user_on_property_objects = User_On_Property.objects.filter(on_site=True,
+                                                        longitude__gte=-80.4,
+                                                        longitude__lte=-79.8,
+                                                        latitude__gte=32.65,
+                                                        latitude__lte=32.8)
+            # build locations dict structured as {userid: [long, lat]...}
+            locations = {obj.user_id:[obj.longitude,obj.latitude] for obj in user_on_property_objects}
+            print("\n\n\nLocations:")
             print(locations)
+            # send a list of the respective users back as well; add list of users below map, so that clicking a
+            # user centers map on their location
+
+            users_on_site = [User_Object(_id=u.id,fn=u.first_name,ln=u.last_name,_email=u.email).toJSON()
+                             for u in User.objects.filter(id__in=list(locations.keys()))]
+            print(users_on_site)
             data = {
-                'locations': locations
+                'users_on_site': users_on_site,
+                'locations':locations
             }
             return render_to_json_response(data)
 
@@ -293,6 +302,8 @@ def forgot_password(request):
 # login page
 @csrf_exempt
 def srp_login(request):
+    if request.user.is_authenticated:
+        return HttpResponseRedirect('/stonoriverapp')
     if request.is_ajax() and request.POST.get('btnType') == 'login':
         rp = request.POST
         try:

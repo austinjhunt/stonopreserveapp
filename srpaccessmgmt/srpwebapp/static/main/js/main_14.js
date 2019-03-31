@@ -1,6 +1,15 @@
 /* Function called on click of "Register" button on register.html template */
 
 "use strict";
+
+
+// Global variables view (governs zoom/center, map (high-level container for all other layers),
+// coordPairs (dict for maintaining locations of users {userid: [long,lat]..}), mapVectorLayer (a layer that
+// contains the mapVectorSource), mapVectorSource (the lower level container for all of the position icons where
+// position icons will need to be updated periodically); use mapVectorSource so that you can use getFeatureById()
+var map,view,coordPairs, mapVectorLayer,mapVectorSource;
+
+
 $(document).ready(function () {
     $("#my_preloader_container").fadeOut('slow');
 
@@ -111,11 +120,6 @@ $(document).ready(function () {
     }
 
 
-    // Global variables view (governs zoom/center, map (high-level container for all other layers),
-    // coordPairs (list for maintaining locations of users), mapVectorLayer (a layer that contains the position icons,
-    // where positionicons will need to be updated periodically)
-    var map,view,coordPairs, mapVectorLayer;
-
     // Create a live map. Initialize user locations to empty list.
     function init() {
         /* Live Map */
@@ -157,18 +161,17 @@ $(document).ready(function () {
                 csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
             },
             success: function (data) {
-                // Update global locations list with updated locations.
+                // Update global locations dictionary with updated locations.
                 var coordPairs = data['locations'];
-                console.log(coordPairs);
                 var posFeatures = [];
-                var firstloc = ol.proj.fromLonLat(coordPairs[0]);
+                //var firstloc = ol.proj.fromLonLat(coordPairs[0]);
                 /* for each pair of coordinates retrieved from backend */
-                for (var i = 0; i < coordPairs.length; i++) {
-                    var coordinates = ol.proj.fromLonLat(coordPairs[i]); // [long,lat]
-                    console.log("Coordinates (" + i + "):");
-                    console.log(coordinates);
+                for (var userID in coordPairs) {
+                    var coordinates = ol.proj.fromLonLat(coordPairs[userID]); // [long,lat]
                     /* Create a position feature for each location */
                     var positionFeature = new ol.Feature();
+                    // for the id of the location marker, use the id of the user
+                    positionFeature.setId(userID);
                     positionFeature.setStyle(new ol.style.Style({
                         image: new ol.style.Circle({
                             radius: 6,
@@ -184,32 +187,61 @@ $(document).ready(function () {
 
                     /* set position feature's location using coordinates if they exist; else set position to null */
                     positionFeature.setGeometry(coordinates != null ? new ol.geom.Point(coordinates) : null);
-                    console.log("New position feature...");
-                    console.log(positionFeature.getGeometry());
                     /* add this position feature to the posFeatures list */
                     posFeatures.push(positionFeature);
                 }
+                // center the view on one of the users (logically, the last one in the previous loop)
+                var centerloc = ol.proj.fromLonLat(coordPairs[userID]);
                 // Update the vector layer defined globally with these new positions.
-                mapVectorLayer.setSource(
-                    new ol.source.Vector({
+                mapVectorSource = new ol.source.Vector({
                         features: posFeatures
-                    })
+                    });
+                mapVectorLayer.setSource(
+                    mapVectorSource
                 );
                 // set the center to one of the locations retrieved
-                map.getView().setCenter(firstloc);
+                map.getView().setCenter(centerloc);
+
+                // now update the table with active users
+                var users_on_site = data['users_on_site'];
+                $("#users_on_site_table").empty();
+                console.log("Users on site:");
+                console.log(users_on_site);
+                for (var i = 0 ; i < users_on_site.length; i ++){
+                    var user = JSON.parse(users_on_site[i]);
+                    // add a new row
+                    console.log(user);
+                    $("#users_on_site_table").append("" +
+                        "<tr><td>" + user.first_name + " " + user.last_name + "</td>" +
+                        "<td><button class='btn btn-lg btn-info' onclick='locateUser(" + user.id + ");'>Find" +
+                        " User</button></td></tr>");
+                }
             },
         });
     }
+
+
+
     // setInterval doesn't make initial call, first call of setInterval will be after the first 15 minutes, so make
     // initial call manually.
     updatelocations(map);
     // call update locations every 15 minutes.
     setInterval(function(){
         updatelocations(map)
-    }, 15 * 60 * 1000);
+    }, 1 * 60 * 1000);
 
 
 });
+
+
+// function for locating user
+    function locateUser(userid){
+        // set since each position feature has the id of some user in that table, set the center of the view to the
+        // coordinates of the appropriate position feature
+        var posFeatureToLocate = mapVectorSource.getFeatureById(userid);
+        var coordsToCenter = posFeatureToLocate.getGeometry().getCoordinates();
+        map.getView().setCenter(coordsToCenter);
+    }
 
 
 // window onload, happens after document ready
@@ -373,7 +405,8 @@ function login() {
                     alert("Could not authenticate. Please try a different email or password.");
                 else {
                     //document.location.href = "/";
-                    window.location = window.location.href.replace('login', '').replace('//', '');
+                    //window.location.href = window.location.href.replace('login', '').replace('//','');
+                    location.reload();
                 }
 
             }
