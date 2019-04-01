@@ -7,7 +7,9 @@
 // coordPairs (dict for maintaining locations of users {userid: [long,lat]..}), mapVectorLayer (a layer that
 // contains the mapVectorSource), mapVectorSource (the lower level container for all of the position icons where
 // position icons will need to be updated periodically); use mapVectorSource so that you can use getFeatureById()
-var map,view,coordPairs, mapVectorLayer,mapVectorSource;
+var map, view, coordPairs, mapVectorLayer, mapVectorSource;
+
+var updatelocations;
 
 
 $(document).ready(function () {
@@ -148,10 +150,11 @@ $(document).ready(function () {
         }
 
     }
+
     // call the init() function on page load.
     init();
 
-    function updatelocations(map){
+    updatelocations = function (map) {
 
         // get the long/lat of all active users from backend
         $.ajax({
@@ -164,73 +167,82 @@ $(document).ready(function () {
                 // Update global locations dictionary with updated locations.
                 var coordPairs = data['locations'];
                 var posFeatures = [];
-                console.log("Coord pairs");
-                console.log(coordPairs);
-                //var firstloc = ol.proj.fromLonLat(coordPairs[0]);
-                /* for each pair of coordinates retrieved from backend */
-                var lastuid;
-                for (var userID in coordPairs) {
-                    var coordinates = ol.proj.fromLonLat(coordPairs[userID]); // [long,lat]
-                    /* Create a position feature for each location */
-                    var positionFeature = new ol.Feature();
-                    // for the id of the location marker, use the id of the user
-                    positionFeature.setId(userID);
-                    positionFeature.setStyle(new ol.style.Style({
-                        image: new ol.style.Circle({
-                            radius: 6,
-                            fill: new ol.style.Fill({
-                                color: '#3399CC'
-                            }),
-                            stroke: new ol.style.Stroke({
-                                color: '#fff',
-                                width: 2
-                            })
-                        }),
-                    }));
+                if (Object.keys(coordPairs).length == 0) {
+                    $("#map").fadeOut();
+                    $("#users_on_site_table").empty();
+                    $("#users_on_site_table_container").fadeOut();
+                    $("#nousersonsiteheader").fadeIn();
 
-                    /* set position feature's location using coordinates if they exist; else set position to null */
-                    positionFeature.setGeometry(coordinates != null ? new ol.geom.Point(coordinates) : null);
-                    /* add this position feature to the posFeatures list */
-                    posFeatures.push(positionFeature);
-                    lastuid = userID;
+
+
                 }
-                // center the view on one of the users (logically, the last one in the previous loop)
-                var centerloc = ol.proj.fromLonLat(coordPairs[lastuid]);
-                // Update the vector layer defined globally with these new positions.
-                mapVectorSource = new ol.source.Vector({
+                else {
+                    $("#users_on_site_table_container").fadeIn();
+                    $("#map").fadeIn();
+                    $("#nousersonsiteheader").fadeOut();
+
+                    //var firstloc = ol.proj.fromLonLat(coordPairs[0]);
+                    /* for each pair of coordinates retrieved from backend */
+                    var lastuid;
+                    for (var userID in coordPairs) {
+                        var coordinates = ol.proj.fromLonLat(coordPairs[userID]); // [long,lat]
+                        /* Create a position feature for each location */
+                        var positionFeature = new ol.Feature();
+                        // for the id of the location marker, use the id of the user
+                        positionFeature.setId(userID);
+                        positionFeature.setStyle(new ol.style.Style({
+                            image: new ol.style.Circle({
+                                radius: 6,
+                                fill: new ol.style.Fill({
+                                    color: '#3399CC'
+                                }),
+                                stroke: new ol.style.Stroke({
+                                    color: '#fff',
+                                    width: 2
+                                })
+                            }),
+                        }));
+
+                        /* set position feature's location using coordinates if they exist; else set position to null */
+                        positionFeature.setGeometry(coordinates != null ? new ol.geom.Point(coordinates) : null);
+                        /* add this position feature to the posFeatures list */
+                        posFeatures.push(positionFeature);
+                        lastuid = userID;
+                    }
+                    // center the view on one of the users (logically, the last one in the previous loop)
+                    var centerloc = ol.proj.fromLonLat(coordPairs[lastuid]);
+                    // Update the vector layer defined globally with these new positions.
+                    mapVectorSource = new ol.source.Vector({
                         features: posFeatures
                     });
-                mapVectorLayer.setSource(
-                    mapVectorSource
-                );
-                // set the center to one of the locations retrieved
-                map.getView().setCenter(centerloc);
+                    mapVectorLayer.setSource(
+                        mapVectorSource
+                    );
+                    // set the center to one of the locations retrieved
+                    map.getView().setCenter(centerloc);
 
-                // now update the table with active users
-                var users_on_site = data['users_on_site'];
-                $("#users_on_site_table").empty();
-                console.log("Users on site:");
-                console.log(users_on_site);
-                for (var i = 0 ; i < users_on_site.length; i ++){
-                    var user = JSON.parse(users_on_site[i]);
-                    // add a new row
-                    console.log(user);
-                    $("#users_on_site_table").append("" +
-                        "<tr><td>" + user.first_name + " " + user.last_name + "</td>" +
-                        "<td><button class='btn btn-lg btn-info' onclick='locateUser(" + user.id + ");'>Find" +
-                        " User</button></td></tr>");
+                    // now update the table with active users
+                    var users_on_site = data['users_on_site'];
+                    $("#users_on_site_table").empty();
+                    for (var i = 0; i < users_on_site.length; i++) {
+                        var user = JSON.parse(users_on_site[i]);
+                        // add a new row
+                        $("#users_on_site_table").append("" +
+                            "<tr><td>" + user.first_name + " " + user.last_name + "</td>" +
+                            "<td><button class='btn btn-lg btn-info' onclick='locateUser(" + user.id + ");'>Find" +
+                            " User</button></td></tr>");
+                    }
                 }
             },
         });
     }
 
 
-
     // setInterval doesn't make initial call, first call of setInterval will be after the first 15 minutes, so make
     // initial call manually.
     updatelocations(map);
     // call update locations every 15 minutes.
-    setInterval(function(){
+    setInterval(function () {
         updatelocations(map)
     }, 1 * 60 * 1000);
 
@@ -239,13 +251,13 @@ $(document).ready(function () {
 
 
 // function for locating user
-    function locateUser(userid){
-        // set since each position feature has the id of some user in that table, set the center of the view to the
-        // coordinates of the appropriate position feature
-        var posFeatureToLocate = mapVectorSource.getFeatureById(userid);
-        var coordsToCenter = posFeatureToLocate.getGeometry().getCoordinates();
-        map.getView().setCenter(coordsToCenter);
-    }
+function locateUser(userid) {
+    // set since each position feature has the id of some user in that table, set the center of the view to the
+    // coordinates of the appropriate position feature
+    var posFeatureToLocate = mapVectorSource.getFeatureById(userid);
+    var coordsToCenter = posFeatureToLocate.getGeometry().getCoordinates();
+    map.getView().setCenter(coordsToCenter);
+}
 
 
 // window onload, happens after document ready
@@ -261,8 +273,6 @@ window.onload = function () {
     var startPos;
     var geoSuccess = function (position) {
         startPos = position;
-        console.log(startPos.coords.latitude);
-        console.log(startPos.coords.longitude);
         // pass these values to backend with ajax, update lat/long in the User_On_Property table
         $.ajax(
             {
@@ -492,10 +502,12 @@ function showphotosview() {
 function showlistview() { // for superuser
     $('#myCarousel').trigger('to.owl.carousel', 3);
 }
+
 function showallusersview() {
     $('#myCarousel').trigger('to.owl.carousel', 4);
 }
-function showlivemapview(){
+
+function showlivemapview() {
     $("#myCarousel").trigger('to.owl.carousel', 5);
 }
 
@@ -549,9 +561,6 @@ function showeditlockcodemodal(lockid, gate, lockcode) {
 function savelockcodeedits(lockid) {
     var newlockcode = $("#lockcodeinput_" + lockid).val();
     var newgatenum = $("#gatenuminput_" + lockid).val();
-    console.log("new stuff");
-    console.log(newlockcode);
-    console.log(newgatenum);
     $.ajax(
         {
             type: "POST",
@@ -633,10 +642,9 @@ function savenewgate() {
 
 }
 
-function swapbtn() {
+function toggleuserstatus() {
     var to; // use a single ajax request. if to == on, change status to on property. if off, change status to off
     // property.
-
     if ($("#arrivebtn").html().includes("Arrived")) {
         to = 'on';
     }
@@ -656,21 +664,34 @@ function swapbtn() {
             success: function (data) {
                 // ajax complete, change button.
                 if (data['result'] == 'success') {
-                    if (to == 'on') { //arrived on property
-                        $("#arrivebtn").html($("#arrivebtn").html().replace("Arrived", "Leaving"));
-                    }
-                    else { // leaving property.
-                        $("#arrivebtn").html($("#arrivebtn").html().replace("Leaving", "Arrived"));
-                    }
-                    $("#arrivebtn").toggleClass('btn-info  btn-warning');
-                    $("#arrivebtnicon").toggleClass('fa-check fa-sign-out-alt');
+                    // pass in updatelocations(map) as the callback function to the success function defined
+                    // below to execute it only after updating the database.
+                    toggleuserstatus_success(to, function () {
+                        updatelocations(map);
+                    });
                 }
                 else { // fail
                     alert("Could not change your status. Try again soon.")
                 }
             }
         });
+}
 
+// use a callback function. prevent updatelocations(map) from executing BEFORE the user status has changed in the
+// database.
+function toggleuserstatus_success(to, callback) {
+    // Do stuff before callback.
+    if (to == 'on') { //arrived on property
+        $("#arrivebtn").html($("#arrivebtn").html().replace("Arrived", "Leaving"));
+    }
+    else { // leaving property.
+        $("#arrivebtn").html($("#arrivebtn").html().replace("Leaving", "Arrived"));
+    }
+    $("#arrivebtn").toggleClass('btn-info  btn-warning');
+    $("#arrivebtnicon").toggleClass('fa-check fa-sign-out-alt');
+
+    // Execute callback.
+    callback();
 }
 
 

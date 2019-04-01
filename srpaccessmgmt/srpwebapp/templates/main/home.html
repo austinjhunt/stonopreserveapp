@@ -153,7 +153,7 @@
         <li class="nav-item active">
             <div class="nav-link">
                 <span>
-                    <button id="arrivebtn" type="button" class="btn btn-info headerbtn " onclick="swapbtn();">
+                    <button id="arrivebtn" type="button" class="btn btn-info headerbtn " onclick="toggleuserstatus();">
 
                 <i id="arrivebtnicon" class="fa fa-fw fa-check"></i>Arrived
                     </button>
@@ -502,7 +502,7 @@
                 <div id="livemapview" class="announcementsview">
                     <div class="newsheader">Live Map</div>
                     <div id="map" class="map"></div>
-
+                    <div id="nousersonsiteheader">There are currently no users on the property.</div>
                     <div id="users_on_site_table_container">
                         <div id="users_on_site_table_header">Users on Site</div>
                         <table id="users_on_site_table">
