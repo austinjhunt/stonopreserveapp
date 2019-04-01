@@ -536,6 +536,16 @@ li .calendar-li:hover:nth-child(n+8):nth-child(-n+38), li .calendar-li:nth-child
     margin:8px;
 }
 
+#nousersonsiteheader{
+    font-weight:bold;
+    font-size:30px;
+    width:70%;
+    border:1px solid black;
+    border-radius: 10px;
+    margin:0 auto;
+    padding: 10px;
+    display:none;
+}
 
 /* modifications for smartphones*/
 /* Smartphones (portrait and landscape) ----------- */

@@ -97,20 +97,16 @@ def index(request):
                                                         longitude__lte=-79.8,
                                                         latitude__gte=32.65,
                                                         latitude__lte=32.8)
-            #FIXME: Handle case where no one is on site. Also, when someone clicks "Arrived" or "Leaving", call
-            # update locations on front end!
-            print("objs")
-            print(user_on_property_objects)
+
             # build locations dict structured as {userid: [long, lat]...}
             locations = {obj.user_id:[obj.longitude,obj.latitude] for obj in user_on_property_objects}
-            print("\n\n\nLocations:")
-            print(locations)
+
             # send a list of the respective users back as well; add list of users below map, so that clicking a
             # user centers map on their location
 
             users_on_site = [User_Object(_id=u.id,fn=u.first_name,ln=u.last_name,_email=u.email).toJSON()
                              for u in User.objects.filter(id__in=list(locations.keys()))]
-            print(users_on_site)
+
             data = {
                 'users_on_site': users_on_site,
                 'locations':locations
