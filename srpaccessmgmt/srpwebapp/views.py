@@ -97,6 +97,10 @@ def index(request):
                                                         longitude__lte=-79.8,
                                                         latitude__gte=32.65,
                                                         latitude__lte=32.8)
+            #FIXME: Handle case where no one is on site. Also, when someone clicks "Arrived" or "Leaving", call
+            # update locations on front end!
+            print("objs")
+            print(user_on_property_objects)
             # build locations dict structured as {userid: [long, lat]...}
             locations = {obj.user_id:[obj.longitude,obj.latitude] for obj in user_on_property_objects}
             print("\n\n\nLocations:")
