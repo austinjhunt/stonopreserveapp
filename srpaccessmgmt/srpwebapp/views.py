@@ -69,16 +69,65 @@ def index(request):
             data = {'result':result}
             return render_to_json_response(data)
 
+        if request.is_ajax() and request.POST.get('btnType') == 'update_location':
+            # get latitude and longitude; this will happen every 15 minutes, triggered by JS setInterval function.
+            lat = request.POST.get('latitude')
+            long = request.POST.get('longitude')
+            try: # assuming browser returns these values properly
+                lat = float(lat)
+                long = float(long)
+                print("\n\n\nUpdating location of user",request.user.first_name)
+                print("New Lat:",str(lat))
+                print("New Long:",str(long))
+                # update current user's location with new location values
+                current_user = User_On_Property.objects.get(user_id=request.user.id)
+                current_user.latitude = lat
+                current_user.longitude = long
+                current_user.save()
+                print("Successfully updated location of",request.user.first_name)
+                res = 'success'
+            except Exception as e:
+                print(e)
+                res = 'fail'
+            data = {'res': res}
+            return render_to_json_response(data)
+        if request.is_ajax() and request.GET.get('btnType') == 'get_user_locations':
+            user_on_property_objects = User_On_Property.objects.filter(on_site=True,
+                                                        longitude__gte=-80.4,
+                                                        longitude__lte=-79.8,
+                                                        latitude__gte=32.65,
+                                                        latitude__lte=32.8)
+
+            # build locations dict structured as {userid: [long, lat]...}
+            locations = {obj.user_id:[obj.longitude,obj.latitude] for obj in user_on_property_objects}
+
+            # send a list of the respective users back as well; add list of users below map, so that clicking a
+            # user centers map on their location
+
+            users_on_site = [User_Object(_id=u.id,fn=u.first_name,ln=u.last_name,_email=u.email).toJSON()
+                             for u in User.objects.filter(id__in=list(locations.keys()))]
+
+            data = {
+                'users_on_site': users_on_site,
+                'locations':locations
+            }
+            return render_to_json_response(data)
+
         if request.is_ajax() and request.POST.get('btnType') == 'schedule_visit':
             start_time = request.POST.get('start_time')
             end_time = request.POST.get('end_time')
+            visit_date = request.POST.get('visit_date')
+            print("Start time:",start_time)
+            print("end time:",end_time)
+            print("Visit date:",visit_date)
 
-            start_time = datetime.datetime.strptime(start_time, '%m/%d/%Y %I:%M %p').replace(tzinfo=datetime.timezone.utc)
-            scheduleddate = start_time.date()
+            scheduleddate= datetime.datetime.strptime(visit_date,"%d %B, %Y")
+
+            start_time = datetime.datetime.strptime(start_time, '%I:%M %p').replace(tzinfo=datetime.timezone.utc)
             start_time = start_time.time()
-            print(start_time)
-            end_time = datetime.datetime.strptime(end_time, '%m/%d/%Y %I:%M %p').replace(tzinfo=datetime.timezone.utc).time()
-            print(end_time)
+            print("New start time:" , start_time)
+            end_time = datetime.datetime.strptime(end_time, '%I:%M %p').replace(tzinfo=datetime.timezone.utc).time()
+            print("New end time:",end_time)
 
             Visit(scheduled_date=scheduleddate, scheduled_start_time=start_time,scheduled_end_time=end_time,user_id=request.user.id,
                   datetime_visit_was_scheduled=datetime.datetime.now().replace(tzinfo=datetime.timezone.utc)).save()
@@ -154,6 +203,8 @@ def index(request):
                                  nv=len(Visit.objects.filter(user_id=u.id))) for u in User.objects.all()]
 
         template = loader.get_template('main/home.html')
+
+        print("Your first name is", request.session['first_name'])
         context = {
             'current_user': request.user, # use this on front end for toggling visibilities of elements
             'first_name': request.session['first_name'],
@@ -168,8 +219,13 @@ def index(request):
         return HttpResponse(template.render(context, request))
 
     else: # not authenticated, direct to login page
-        return srp_login(request) # use the function to
-        context = {'':''}
+        uri = request.build_absolute_uri()
+        if "http://127.0.0.1:8000/" in uri:
+            return HttpResponseRedirect('/login/')
+        elif "153.9.205.25" in uri:
+            return HttpResponseRedirect('http://153.9.205.25/stonoriverapp/login/')
+
+
 
 
 # 404 page
@@ -208,14 +264,13 @@ def forgot_password(request):
             validate_email(request.POST.get('email_address')) # is this an email address?
             # if so:
             associated_users = User.objects.filter(username=request.POST.get('email_address'))
-
             if associated_users.exists():
                 # should only be one associated user
                 for user in associated_users:
                     c = {
                         'email': user.username,
                         'domain': request.META['HTTP_HOST'],
-                        'site_name': 'PolyPy',
+                        'site_name': 'SRP Access Management',
                         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                         'user': user,
                         'token': default_token_generator.make_token(user),
@@ -224,7 +279,7 @@ def forgot_password(request):
                 email_template_name = 'registration/password_reset_email.html'
                 # copied from django/contrib/admin/templates/registration/password_reset_email.html to templates directory
                 email = loader.render_to_string(email_template_name, c)
-                send_mail("PolyPy Password Reset", email, 'error@amhajja.com', [user.email], fail_silently=False)
+                send_mail("SRP Password Reset", email, 'srpaccess@cofc.edu', [user.email], fail_silently=False)
                 data = {
                     'result': 'it worked'
                 }
@@ -243,12 +298,14 @@ def forgot_password(request):
     }
     return HttpResponse(template.render(context, request))
 
+
 # login page
 @csrf_exempt
 def srp_login(request):
+    if request.user.is_authenticated:
+        return HttpResponseRedirect('/stonoriverapp')
     if request.is_ajax() and request.POST.get('btnType') == 'login':
         rp = request.POST
-
         try:
             result = 'auth fail' # initialize)
             user = authenticate(username=rp.get('email'), password=rp.get('password'))
@@ -258,6 +315,8 @@ def srp_login(request):
                 request.session['user_id'] = str(user.id)
                 request.session['user_email'] = user.username
                 request.session['first_name'] = user.first_name
+                print("Logging in...")
+                print("Your first name is", request.session['first_name'])
                 request.session['full_name'] = user.first_name + ' ' + user.last_name
         except Exception as e:
             print(e)

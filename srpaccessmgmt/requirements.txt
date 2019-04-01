@@ -11,3 +11,6 @@ gunicorn==19.9.0
 six==1.12.0
 pymssql==2.1.4
 uwsgi
+django-extensions==2.1.6
+pyOpenSSL==19.0.0
+Werkzeug==0.15.1
