@@ -4,54 +4,94 @@
 
 {% block content %}
 
+<style>
+    body {
+        visibility: hidden;
+    }
+</style>
 <body id="page-top">
 
 
 <!-- modals -->
 <!-- Edit selected lock code -->
-<div class="modal" id="editlockcodemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="editlockcodemodaltitle">Edit Lock Code</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div id="editlockcodecontent">
+<div class="modal" id="editlockcodemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editlockcodemodaltitle">Edit Lock Code</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="editlockcodecontent">
 
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button id="savelockcodeeditsbutton" onclick="savelockcodeedits();" type="button"
+                        class="btn btn-primary">Save changes
+                </button>
+            </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button id="savelockcodeeditsbutton" onclick="savelockcodeedits();" type="button" class="btn btn-primary">Save changes</button>
-      </div>
     </div>
-  </div>
+</div>
+
+
+<!-- add new gate modal -->
+<!-- Edit selected lock code -->
+<div class="modal" id="addnewgatemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addnewgatemodaltitle">Enter New Gate Info</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="addnewgatemodalcontent">
+                    <input autofocus type="number" id="newgatenum" class="d-inline-block p-2" placeholder="Gate Number">
+                    <input type="number" id="newgatecode" class="d-inline-block p-2" placeholder="Lock Code">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button id="savenewgatebutton" onclick="savenewgate();" type="button" class="btn btn-primary">Create New
+                    Gate
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Delete selected lock code -->
-<div class="modal" id="deletelockcodemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="deletelockcodemodaltitle">Delete Gate Confirmation</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div id="deletelockcodecontent">
+<div class="modal" id="deletelockcodemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deletelockcodemodaltitle">Delete Gate Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="deletelockcodecontent">
 
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="deletelockcodebutton" onclick="deletelockcode();" type="button" class="btn btn-primary">
+                    Delete Gate
+                </button>
+            </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button id="deletelockcodebutton" onclick="deletelockcode();" type="button" class="btn btn-primary">Delete Gate</button>
-      </div>
     </div>
-  </div>
 </div>
 
 
@@ -61,7 +101,7 @@
     </div>
 </div>
 
-<nav class="navbar navbar-expand navbar-dark bg-dark sticky-top" >
+<nav class="navbar navbar-expand navbar-dark bg-dark sticky-top">
     <!-- Separate ul's for left and right; put the dropdown on left !-->
     <!-- dropdown -->
     <ul class="navbar-nav ml-md-0">
@@ -72,8 +112,12 @@
                     <i class="fa fa-fw fa-bars"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <!-- only for students -->
-                    {% if not current_user.is_staff and not current_user.is_superuser %}
+                    <!-- For everyone -->
+                    <a class="regular_page_option" onclick="showannouncementsview();">General</a>
+                    <div class="dropdown-divider"></div>
+
+                    <!-- only for students and staff -->
+                    {% if not current_user.is_superuser %}
                     <a class="regular_page_option" onclick="showscheduleview();">Schedule a Visit</a>
                     <div class="dropdown-divider"></div>
                     {% endif %}
@@ -81,11 +125,14 @@
                     {% if current_user.is_superuser %}
                     <a class="regular_page_option" onclick="showallusersview();">All User Accounts</a>
                     <div class="dropdown-divider"></div>
+                    <a class="regular_page_option" onclick="showlistview();">Visit Schedule</a>
+                    <div class="dropdown-divider"></div>
                     {% endif %}
                     <!-- for all accounts -->
-                    <a class="regular_page_option" onclick="showannouncementsview();">General</a>
-                    <div class="dropdown-divider"></div>
                     <a class="regular_page_option" onclick="showphotosview();">Photo Gallery</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="regular_page_option" onclick="showlivemapview();">Live Map</a>
+
                 </div>
             </div>
         </li>
@@ -94,11 +141,11 @@
     <!-- home, emergency, profile -->
     <ul class="navbar-nav ml-auto mr-md-0">
         <li class="nav-item active">
-            <div class="nav-link" href="/">
+            <div class="nav-link" href="{% url 'srpwebapp:index' %}">
                 <span>
                     <button id="homebtn" type="button" class="btn btn-secondary headerbtn">
 
-                <i class="fa fa-fw fa-home"></i>&nbsp;HOME
+                <i class="fa fa-fw fa-home"></i>
                     </button>
                 </span>
             </div>
@@ -106,16 +153,16 @@
         <li class="nav-item active">
             <div class="nav-link">
                 <span>
-                    <button id="arrivebtn" type="button" class="btn btn-info headerbtn " onclick="swapbtn();">
+                    <button id="arrivebtn" type="button" class="btn btn-info headerbtn " onclick="toggleuserstatus();">
 
-                <i id= "arrivebtnicon" class="fa fa-fw fa-check"></i>Arrived
+                <i id="arrivebtnicon" class="fa fa-fw fa-check"></i>Arrived
                     </button>
                 </span>
             </div>
 
         </li>
         <li class="nav-item active">
-            <div class="nav-link" href="/">
+            <div class="nav-link" href="{% url 'srpwebapp:index' %}">
                 <span>
                     <button id="emergencybtnsidebar" type="button" class="btn btn-danger headerbtn">
                         <i class="fa fa-fw fa-ambulance"></i>&nbsp;EMERGENCY
@@ -123,6 +170,23 @@
                 </span>
             </div>
         </li>
+        <li class="nav-item active dropdown no-arrow mr-2">
+            <div class="nav-link dropdown-toggle" id="userDropdown" role="button" data-toggle="dropdown"
+                 aria-haspopup="true" aria-expanded="false">
+                <span>
+                    <button id="userbtn" type="button" class="btn btn-dark">
+                        <i class="fa fa-user-circle fa-fw"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right mr-2" aria-labelledby="userbtn">
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal"
+                           onclick="logout();">Logout</a>
+                    </div>
+                </span>
+            </div>
+
+        </li>
+
+        <!-- old, this one has messed up vertical alignment
         <li class="nav-item dropdown no-arrow mr-2">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
                aria-haspopup="true" aria-expanded="false">
@@ -133,19 +197,9 @@
             <div class="dropdown-menu dropdown-menu-right mr-1" aria-labelledby="userDropdown">
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal" onclick="logout();">Logout</a>
             </div>
-        </li>
+        </li> -->
     </ul>
-    <!-- use js to set button contents to only icons, can't be done with css -->
-    <script>
-        if ($(window).width() < 480) {
-            $("#homebtn").html('<i class="fas fa-fw fa-home"></i>');
-            $("#emergencybtnsidebar").html('<i class="fas fa-fw fa-ambulance"></i>');
-            // welcome msg different for mobile
-            $("#welcomemsg").html('Welcome to the Stono River Preserve, {{ first_name }}!<br/>Swipe between views or use' +
-                ' the top left dropdown!');
-        }
 
-    </script>
 </nav><!-- end navigation bar -->
 
 
@@ -154,266 +208,327 @@
     <div id="content-wrapper">
         <!-- Welcome message -->
         <div class="container-fluid">
-            <div class="jumbotron jumbotron-fluid lanenarrow customheadertron">
-                <div class="container lanenarrow customcontainer" style="padding:20px;">
-                    <div id="welcomemsg" class="welcomeHeader">Welcome to the Stono River Preserve, {{ first_name }}!
-                        <br/>Swipe between views or use the options below!
+
+
+            <!-- owl carousel for swiping between views without loading new pages -->
+
+            <div id="myCarousel" class="owl-carousel owl-theme">
+                <!-- announcements view, contains announcements & gate lock info  (contacts / location) -->
+                <div id="announcements" class="announcementsview">
+
+                    <!-- place gate lock info  inside first item -->
+                    <!-- begin gate lock info  -->
+                    <div class="jumbotron jumbotron-fluid lanenarrow customheadertron">
+                        <div class="container lanenarrow customcontainer" style="padding:20px;">
+                            <div id="welcomemsg" class="welcomeHeader">Welcome to the Stono River Preserve,
+                                {{ first_name }}!
+                                <br/>Swipe between views or use the options below!
+                            </div>
+                            <!-- table on top of first page shows lock codes if user is faculty or super user -->
+                            {% if current_user.is_staff or current_user.is_superuser %}
+                            <div class="lockcodetablecontainer">
+                                <table class="lockcodetable">
+                                    <thead>
+                                    <th colspan="3">Current Lock Codes</th>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>Lock Code</td>
+                                        <td>Gate</td>
+                                        <td>Updates</td>
+                                    </tr>
+                                    {% for lc in lock_codes %}
+                                    <tr>
+                                        <td>{{ lc.lock_code }}</td>
+                                        <td>{{ lc.gate_number }}</td>
+                                        <td>{% if current_user.is_superuser %}
+                                            <button class="btn btn-info"
+                                                    onclick="showeditlockcodemodal({{lc.id}},{{lc.gate_number}},{{lc.lock_code}});">
+                                                <i class="fa fa-edit"></i></button>
+                                            <button class="btn btn-danger"
+                                                    onclick="showdeletelockcodemodal({{lc.id}});"><i
+                                                    class="fa fa-trash"></i></button>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    <tr>
+                                        <td colspan="3">
+                                            <button class="btn btn-success"
+                                                    onclick="$('#addnewgatemodal').modal('show');">
+                                                <i class="fa fa-plus"></i> Add New Gate
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% endif %}
+                            <hr class="headerHR"/>
+                            <ul class="regular_page_option_container">
+                                <li class="regular_page_option"><a onclick="showannouncementsview()">General</a>
+                                </li>
+                                <li class="regular_page_option"><a onclick="showscheduleview()">Schedule a Visit</a>
+                                </li>
+                                <li class="regular_page_option"><a onclick="showphotosview();">Photo Gallery</a></li>
+                                {% if current_user.is_superuser %}
+                                <li class="regular_page_option"><a onclick="showlistview();">Visit Schedule</a></li>
+                                <li class="regular_page_option"><a onclick="showallusersview();">View All Users</a></li>
+                                {% endif %}
+                                 <li class="regular_page_option"><a onclick="showlivemapview();">Live Map</a></li>
+                            </ul>
+                            <hr class="headerHR"/>
+                        </div>
                     </div>
-                    <script>
-                        if ($(window).width() < 480) {
-                            $("#welcomemsg").html('Welcome to the Stono River Preserve, {{ first_name }}!<br/>Swipe between views or use' +
-                                ' the top left dropdown!');
-                        }
+                    <!-- end gate lock info  -->
 
-                    </script>
-                    <!-- table on top of first page shows lock codes if user is faculty or super user -->
-                    {% if current_user.is_faculty or current_user.is_superuser %}
-                    <div class="lockcodetablecontainer">
-                        <table class="lockcodetable">
-                            <thead>
-                            <th colspan="3">Current Lock Codes</th>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>Lock Code</td>
-                                <td>Gate</td>
-                                <td>Updates</td>
-                            </tr>
-                            {% for lc in lock_codes %}
-                            <tr>
-                                <td>{{ lc.lock_code }}</td>
-                                <td>{{ lc.gate_number }}</td>
-                                <td>{% if current_user.is_superuser %}
-                                    <button class="btn btn-info" onclick="showeditlockcodemodal({{lc.id}},{{lc.gate_number}},{{lc.lock_code}});"><i class="fa fa-edit"></i></button>
-                                    <button class="btn btn-danger" onclick="showdeletelockcodemodal({{lc.id}});"><i class="fa fa-trash"></i></button>
-                                    {% endif %}</td>
-                            </tr>
-                            {% endfor %}
-                            <tr>
-                                <td colspan="3"><button class="btn btn-success" onclick="showaddgatemodal();">
-                                    <i class="fa fa-plus"></i> Add New Gate</button></td>
-                            </tr>
-                            </tbody>
-                        </table>
+
+                    <div class="text-center mb-2">
+                        <div id="swipinggifcontainer">
+                            <img class="swipinggif" src="{% static 'main/gifs/swiping.gif' %}">
+                        </div>
+                        <button class="d-inline-block btn btn-primary btn-sm"><i id="swipinggificon" class="fa fa-eye"
+                                                                                 onclick="swipingtoggle();"></i>
+                        </button>
                     </div>
-                    {% endif %}
-                    <hr class="headerHR"/>
-                    <ul class="regular_page_option_container">
-                        <li class="regular_page_option"><a onclick="showannouncementsview()">Announcements</a></li>
-                        <li class="regular_page_option"><a onclick="showscheduleview()">Schedule a Visit</a></li>
-                        <li class="regular_page_option"><a onclick="showphotosview();">Photo Gallery</a></li>
-                        {% if current_user.is_superuser %}
-                        <li class="regular_page_option"><a onclick="showlistview();">Visit Schedule</a></li>
-                        <li class="regular_page_option"><a onclick="showallusersview();">View All Users</a></li>
-                        {% endif %}
-                    </ul>
-                    <hr class="headerHR"/>
-                </div>
-            </div>
-
-
-        <!-- owl carousel for swiping between views without loading new pages -->
-        <div id="myCarousel" class="owl-carousel owl-theme">
-
-            <!-- announcements view, contains announcements & general info (contacts / location) -->
-            <div id="announcements" class="announcementsview">
-                <div class="newsheader">
-                    <i class="fas fa-fw fa-newspaper"></i> Announcements
-                </div>
-                <hr class="announcementsviewHR"/>
-                <div class="announcementscontent">
-                    <ul>
-                        {% for a in announcements %}
-                        <li class="announcement">{{a}}</li>
-                        <ul>
-                            <li>created on {{a.date_created}} by {{a.username}}</li>
-                        </ul>
-                        {% endfor %}
-                    </ul>
-                </div>
-                <!-- card for important numbers -->
-                <div class="contactssection">
                     <div class="newsheader">
-                        <i class="fas fa-fw fa-phone"></i> Contacts
+                        <i class="fas fa-fw fa-newspaper"></i> Announcements
                     </div>
-                    <div class="card border-dark  text-black bg-info mb-3" style="margin:30px">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item contact">Public Safety: <a href="tel:+1-843-953-5609">843-953-5609</a>
-                            </li>
-                            <li class="list-group-item contact">SRPManager: <a
-                                    href="tel:+1-843-953-5609">843-953-5609</a></li>
+                    <hr class="announcementsviewHR"/>
+                    <div class="announcementscontent">
+                        <ul>
+                            {% for a in announcements %}
+                            <li class="announcement">{{a}}</li>
+                            <ul>
+                                <li>created on {{a.date_created}} by {{a.username}}</li>
+                            </ul>
+                            {% endfor %}
                         </ul>
                     </div>
-                </div>
-                <div class="contactssection">
-                    <hr style="border: 1px solid lightgray; margin:30px;"/>
-                    <div class="newsheader"><i class="fas fa-fw fa-search-location"></i>Where is it?
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5411.115764400425!2d-80.1796682757046!3d32.73817228260197!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88fe8177f5b98e21%3A0x6968cc8e6255522c!2sDixie+Plantation+-+College+of+Charleston!5e0!3m2!1sen!2sus!4v1551041630075"
-                                width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+                    <!-- card for important numbers -->
+                    <div class="contactssection">
+                        <div class="newsheader">
+                            <i class="fas fa-fw fa-phone"></i> Contacts
+                        </div>
+                        <div class="card border-dark  text-black bg-info mb-3" style="margin:30px">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item contact">Public Safety: <a href="tel:+1-843-953-5609">843-953-5609</a>
+                                </li>
+                                <li class="list-group-item contact">SRPManager: <a
+                                        href="tel:+1-843-953-5609">843-953-5609</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="contactssection">
+                        <hr style="border: 1px solid lightgray; margin:30px;"/>
+                        <div class="newsheader"><i class="fas fa-fw fa-search-location"></i>Where is it?
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5411.115764400425!2d-80.1796682757046!3d32.73817228260197!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88fe8177f5b98e21%3A0x6968cc8e6255522c!2sDixie+Plantation+-+College+of+Charleston!5e0!3m2!1sen!2sus!4v1551041630075"
+                                    width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="studentscheduler" class="scheduleviewcontainer">
-                <div class="visible_only_mobile">
-                    <div class="container">
-                        <div class="newsheader">Schedule a visit start time:</div>
-                        <div class='col-md-5'>
-                            <div class="form-group">
-                                <div class='input-group date' id='datetimepicker6'>
-                                    <input id="input_starttime" type='text' class="form-control"/>
-                                    <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
-                </span>
-                                </div>
-                            </div>
+                <!-- student/faculty visit scheduler -->
+                <div id="studentscheduler" class="scheduleviewcontainer">
+
+                    <div class="container text-center">
+                        <!-- select a visit date -->
+                        <div class="schedule_element_container">
+                            <form>
+                                <fieldset>
+                                    <h3><label for="input_visitdate">Pick a visit date</label></h3>
+                                    <input
+                                            id="input_visitdate"
+                                            class="datepicker"
+                                            name="date"
+                                            type="text"
+                                            autofocus
+                                            value="14 August, 2014"
+                                            data-value="2014-08-08">
+                                </fieldset>
+                            </form>
+                            <div id="datecontainer"></div>
                         </div>
-                        <div class="newsheader">Schedule a visit end time:</div>
-                        <div class='col-md-5'>
-                            <div class="form-group">
-                                <div class='input-group date' id='datetimepicker7'>
-                                    <input id="input_endtime" type='text' class="form-control"/>
-                                    <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
-                </span>
-                                </div>
-                            </div>
+
+                        <div class="schedule_element_container">
+                            <!-- select a visit date -->
+                            <form>
+                                <fieldset>
+                                    <h3><label for="input_starttime">Schedule a start time:</label></h3>
+                                    <input
+                                            id="input_starttime"
+                                            class="timepicker"
+                                            name="start_time"
+                                            type="text"
+                                            autofocus
+                                            value="14 August, 2014"
+                                            data-value="2014-08-08">
+                                </fieldset>
+                            </form>
+                            <div id="starttimecontainer"></div>
                         </div>
-                        <button class="btn btn-primary lanenarrow" onclick="schedulevisit();">Schedule Visit</button>
+
+                        <div class="schedule_element_container">
+                            <!-- select a visit date -->
+                            <form>
+                                <fieldset>
+                                    <h3><label for="input_endtime">Schedule an end time:</label></h3>
+                                    <input
+                                            id="input_endtime"
+                                            class="timepicker"
+                                            name="endtime"
+                                            type="text"
+                                            autofocus
+                                            value="14 August, 2014"
+                                            data-value="2014-08-08">
+                                </fieldset>
+                            </form>
+                            <div id="endtimecontainer"></div>
+                        </div>
+
+
+                        <button class="btn btn-primary lanenarrow" onclick="schedulevisit();">Schedule Visit
+                        </button>
                         <div id="schedulevisitresult" class="schedulevisitresult"></div>
                     </div>
-                    <script type="text/javascript">
-                        $(function () {
-                            $('#datetimepicker6').datetimepicker();
-                            $('#datetimepicker7').datetimepicker({
-                                useCurrent: false //Important! See issue #1075
-                            });
-                            $("#datetimepicker6").on("dp.change", function (e) {
-                                $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
-                            });
-                            $("#datetimepicker7").on("dp.change", function (e) {
-                                $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
-                            });
-                        });
-                    </script>
+
                 </div>
 
-                <!--student schedule ability view-->
-                <div id="studentScheduleAVisit" class="card mb-3 visible_only_desktop">
-                    <div id="calendar"></div>
-                </div>
-            </div>
-
-            <!-- photo gallery -->
-            <div id="gallery" class="announcementsview">
-                <div class="newsheader">
-                    Photo Gallery
-                </div>
-                <div class="tz-gallery">
-                    <div id="mygallery" class="row">
-                        {% for img in imgs %}
-                        <div class="col-sm-12 col-md-4 myimgcontainer">
-                            <a class="lightbox" target="_blank" href="{{img}}">
-                                <img style="border-radius:8px;" src="{{img}}">
-                            </a>
+                <!-- photo gallery -->
+                <div id="gallery" class="announcementsview">
+                    <div class="newsheader">
+                        Photo Gallery
+                    </div>
+                    <div class="tz-gallery">
+                        <div id="mygallery" class="row">
+                            {% for img in imgs %}
+                            <div class="col-sm-12 col-md-4 myimgcontainer">
+                                <a class="lightbox" target="_blank" href="{{img}}">
+                                    <img class="mygalleryimg" src="{{img}}">
+                                </a>
+                            </div>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
+
+                    </div>
+                </div>
+
+                <!-- schedule list view -->
+                {% if current_user.is_superuser %}
+                    <div class="announcementsview"><!-- DataTables Example -->
+                        <div class="newsheader">
+                            All Scheduled Visits
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                    <tr>
+                                        <th style="text-align:center;">First Name</th>
+                                        <th style="text-align:center;">Last Name</th>
+                                        <th style="text-align:center;">Visit Date</th>
+                                        <th style="text-align:center;">Visit Time Interval</th>
+                                    </tr>
+                                    </thead>
+                                    {% for visit in visit_objects %}
+                                    <tr id="{{visit.id}}">
+                                        <td style="text-align:center;">{{ visit.visitor_first_name}}</td>
+                                        <td style="text-align:center;">{{ visit.visitor_last_name}}</td>
+                                        <td style="text-align:center;">{{ visit.visit_date}}</td>
+                                        <td style="text-align:center;">{{ visit.start_time}} - {{ visit.end_time }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                    <tfoot>
+                                    <tr>
+                                        <th style="text-align:center;">First Name</th>
+                                        <th style="text-align:center;">Last Name</th>
+                                        <th style="text-align:center;">Visit Date</th>
+                                        <th style="text-align:center;">Visit Time Interval</th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
                     </div>
 
-                </div>
-            </div>
+                    <!-- all users view -->
+                    <div class="announcementsview"><!-- DataTables Example -->
+                        <div class="newsheader">
+                            All Users
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
 
-            <!-- schedule list view -->
-            <div><!-- DataTables Example -->
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                            <thead>
-                            <tr>
-                                <th style="text-align:center;">First Name</th>
-                                <th style="text-align:center;">Last Name</th>
-                                <th style="text-align:center;">Visit Date</th>
-                                <th style="text-align:center;">Visit Time Interval</th>
-                            </tr>
-                            </thead>
-                            {% for visit in visit_objects %}
-                            <tr>
-                                <td style="text-align:center;">{{ visit.visitor_first_name}}</td>
-                                <td style="text-align:center;">{{ visit.visitor_last_name}}</td>
-                                <td style="text-align:center;">{{ visit.visit_date}}</td>
-                                <td style="text-align:center;">{{ visit.start_time}} - {{ visit.end_time }}</td>
-                            </tr>
-                            {% endfor %}
-                            <tfoot>
-                            <tr>
-                                <th style="text-align:center;">First Name</th>
-                                <th style="text-align:center;">Last Name</th>
-                                <th style="text-align:center;">Visit Date</th>
-                                <th style="text-align:center;">Visit Time Interval</th>
-                            </tr>
-                            </tfoot>
+                                <table class="table table-bordered" id="dataTable2" width="100%" cellspacing="0">
+                                    <thead>
+                                    <tr>
+                                        <th style="text-align:center;">First Name</th>
+                                        <th style="text-align:center;">Last Name</th>
+                                        <th style="text-align:center;">Email</th>
+                                        <th style="text-align:center;">Account Created</th>
+                                        <th style="text-align:center;">Total Visits</th>
+                                        <th style="text-align:center;">Options</th>
+                                    </tr>
+                                    </thead>
+                                    {% for user in all_users %}
+                                    <tr>
+                                        <td style="text-align:center;">{{user.first_name}}</td>
+                                        <td style="text-align:center;">{{user.last_name}}</td>
+                                        <td style="text-align:center;">{{user.email}}</td>
+                                        <td style="text-align: center">{{user.date_joined}}</td>
+                                        <td style="text-align:center;">{{user.num_visits}}</td>
+                                        <td style="text-align:center;">
+                                            <button class="btn btn-danger d-inline-block"><i class="fas fa-fw fa-trash"></i>
+                                            </button>
+                                            <button class="btn btn-info d-inline-block"><i class="fas fa-fw fa-edit"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    <tfoot>
+                                    <tr>
+                                        <th style="text-align:center;">First Name</th>
+                                        <th style="text-align:center;">Last Name</th>
+                                        <th style="text-align:center;">Visit Date</th>
+                                        <th style="text-align:center;">Visit Time Interval</th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <!-- Live Map view -->
+                <div id="livemapview" class="announcementsview">
+                    <div class="newsheader">Live Map</div>
+                    <div id="map" class="map"></div>
+                    <div id="nousersonsiteheader">There are currently no users on the property.</div>
+                    <div id="users_on_site_table_container">
+                        <div id="users_on_site_table_header">Users on Site</div>
+                        <table id="users_on_site_table">
+
                         </table>
                     </div>
-                </div>
-            </div>
 
-            <!-- all users view -->
-            <div><!-- DataTables Example -->
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable2" width="100%" cellspacing="0">
-                            <thead>
-                            <tr>
-                                <th style="text-align:center;">First Name</th>
-                                <th style="text-align:center;">Last Name</th>
-                                <th style="text-align:center;">Account Created</th>
-                                <th style="text-align:center;">Total Visits</th>
-                                <th style="text-align:center;">Options</th>
-                            </tr>
-                            </thead>
-                            {% for user in all_users %}
-                            <tr>
-                                <td style="text-align:center;">{{user.first_name}}</td>
-                                <td style="text-align:center;">{{user.last_name}}</td>
-                                <td style="text-align: center">{{user.date_joined}}</td>
-                                <td style="text-align:center;">{{user.num_visits}}</td>
-                                <td style="text-align:center;">
-                                    <button class="btn btn-danger d-inline-block"><i class="fas fa-fw fa-trash"></i>
-                                    </button>
-                                    <button class="btn btn-info d-inline-block"><i class="fas fa-fw fa-edit"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                            <tfoot>
-                            <tr>
-                                <th style="text-align:center;">First Name</th>
-                                <th style="text-align:center;">Last Name</th>
-                                <th style="text-align:center;">Visit Date</th>
-                                <th style="text-align:center;">Visit Time Interval</th>
-                            </tr>
-                            </tfoot>
-                        </table>
-                    </div>
                 </div>
+
             </div>
         </div>
-    </div>
-    <!-- /.container-fluid -->
+        <!-- /.container-fluid -->
 
-    <!-- Sticky Footer -->
-    <footer class="sticky-footer customfooter">
-        <div class="container my-auto">
-            <div class="copyright text-center my-auto">
+        <!-- Sticky Footer -->
+        <footer class="sticky-footer customfooter">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
             <span>Developed by <a href="http://huntaj.stu.cofc.edu" target="_blank">Austin Hunt</a>,
               <a href="https://www.linkedin.com/in/daniel-lee-b4003417b/" target="_blank">Daniel Lee</a>, &amp;
               <a href="https://www.linkedin.com/in/alex-thropp-7a4874133/" target="_blank">Alex Thropp</a></span>
+                </div>
             </div>
-        </div>
-    </footer>
+        </footer>
 
-</div>
-<!-- /.content-wrapper -->
+    </div>
+    <!-- /.content-wrapper -->
 
 </div>
 <!-- /#wrapper -->

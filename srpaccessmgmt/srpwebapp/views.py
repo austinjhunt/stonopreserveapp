@@ -69,16 +69,65 @@ def index(request):
             data = {'result':result}
             return render_to_json_response(data)
 
+        if request.is_ajax() and request.POST.get('btnType') == 'update_location':
+            # get latitude and longitude; this will happen every 15 minutes, triggered by JS setInterval function.
+            lat = request.POST.get('latitude')
+            long = request.POST.get('longitude')
+            try: # assuming browser returns these values properly
+                lat = float(lat)
+                long = float(long)
+                print("\n\n\nUpdating location of user",request.user.first_name)
+                print("New Lat:",str(lat))
+                print("New Long:",str(long))
+                # update current user's location with new location values
+                current_user = User_On_Property.objects.get(user_id=request.user.id)
+                current_user.latitude = lat
+                current_user.longitude = long
+                current_user.save()
+                print("Successfully updated location of",request.user.first_name)
+                res = 'success'
+            except Exception as e:
+                print(e)
+                res = 'fail'
+            data = {'res': res}
+            return render_to_json_response(data)
+        if request.is_ajax() and request.GET.get('btnType') == 'get_user_locations':
+            user_on_property_objects = User_On_Property.objects.filter(on_site=True,
+                                                        longitude__gte=-80.4,
+                                                        longitude__lte=-79.8,
+                                                        latitude__gte=32.65,
+                                                        latitude__lte=32.8)
+
+            # build locations dict structured as {userid: [long, lat]...}
+            locations = {obj.user_id:[obj.longitude,obj.latitude] for obj in user_on_property_objects}
+
+            # send a list of the respective users back as well; add list of users below map, so that clicking a
+            # user centers map on their location
+
+            users_on_site = [User_Object(_id=u.id,fn=u.first_name,ln=u.last_name,_email=u.email).toJSON()
+                             for u in User.objects.filter(id__in=list(locations.keys()))]
+
+            data = {
+                'users_on_site': users_on_site,
+                'locations':locations
+            }
+            return render_to_json_response(data)
+
         if request.is_ajax() and request.POST.get('btnType') == 'schedule_visit':
             start_time = request.POST.get('start_time')
             end_time = request.POST.get('end_time')
+            visit_date = request.POST.get('visit_date')
+            print("Start time:",start_time)
+            print("end time:",end_time)
+            print("Visit date:",visit_date)
 
-            start_time = datetime.datetime.strptime(start_time, '%m/%d/%Y %I:%M %p').replace(tzinfo=datetime.timezone.utc)
-            scheduleddate = start_time.date()
+            scheduleddate= datetime.datetime.strptime(visit_date,"%d %B, %Y")
+
+            start_time = datetime.datetime.strptime(start_time, '%I:%M %p').replace(tzinfo=datetime.timezone.utc)
             start_time = start_time.time()
-            print(start_time)
-            end_time = datetime.datetime.strptime(end_time, '%m/%d/%Y %I:%M %p').replace(tzinfo=datetime.timezone.utc).time()
-            print(end_time)
+            print("New start time:" , start_time)
+            end_time = datetime.datetime.strptime(end_time, '%I:%M %p').replace(tzinfo=datetime.timezone.utc).time()
+            print("New end time:",end_time)
 
             Visit(scheduled_date=scheduleddate, scheduled_start_time=start_time,scheduled_end_time=end_time,user_id=request.user.id,
                   datetime_visit_was_scheduled=datetime.datetime.now().replace(tzinfo=datetime.timezone.utc)).save()
@@ -95,11 +144,49 @@ def index(request):
             gate_to_edit.gate_number = new_gate_num
             gate_to_edit.save()
 
+            # FIXME: send email notifying faculty and superusers (not the one requesting) that gate code has been changed.
+
         if request.is_ajax() and request.POST.get('btnType') == 'delete_lock_code':
             lock_id = request.POST.get('lock_id')
             Gate.objects.filter(id=lock_id).delete()
             data = {'res': 'success'}
             return render_to_json_response(data)
+
+        if request.is_ajax() and request.POST.get('btnType') == 'create_new_gate':
+            result = 'fail'
+            try:
+                gate_num, gate_code = int(request.POST.get('new_gate_num')),int(request.POST.get('new_gate_code'))
+                result = 'success'
+                Gate(lock_code=gate_code,gate_number=gate_num).save()
+
+                # FIXME: send email notifying faculty and superusers (not the one requesting) that new gate has been
+                # created with code xxxx ^^
+
+            except Exception as e:
+                print(e)
+
+            data = {
+                'result': result
+            }
+            return render_to_json_response(data)
+
+        if request.is_ajax() and request.POST.get('btnType') == 'change_user_status':
+
+            try:
+                to = request.POST.get('to')
+                useronsite = User_On_Property.objects.get(user_id=request.user.id)
+                useronsite.on_site = True if to == 'on' else False
+                useronsite.save()
+                print("Changing user", request.user.first_name,"status to", useronsite.on_site)
+                result = 'success'
+            except Exception as e:
+                print(e)
+                result = 'fail'
+            data = {
+                'result': result
+            }
+            return render_to_json_response(data)
+
 
 
         # get all the announcements from last 30 days
@@ -112,16 +199,17 @@ def index(request):
 
         lock_codes = Gate.objects.all() # will only ever be one in table. delete current for gate when new one created
 
-        all_users = [User_Object(_id=u.id, fn=u.first_name, ln=u.last_name,dj=u.date_joined,
+        all_users = [User_Object(_id=u.id, fn=u.first_name, ln=u.last_name,dj=u.date_joined,_email=u.email,
                                  nv=len(Visit.objects.filter(user_id=u.id))) for u in User.objects.all()]
 
         template = loader.get_template('main/home.html')
+
+        print("Your first name is", request.session['first_name'])
         context = {
             'current_user': request.user, # use this on front end for toggling visibilities of elements
             'first_name': request.session['first_name'],
             'full_name': request.session['full_name'],
             'imgs': imgfiles,
-            'full_name': request.session['full_name'],
             'visit_objects': visit_objects,
             'announcements': announcements,
             'lock_codes': lock_codes,
@@ -131,8 +219,13 @@ def index(request):
         return HttpResponse(template.render(context, request))
 
     else: # not authenticated, direct to login page
-        return srp_login(request) # use the function to
-        context = {'':''}
+        uri = request.build_absolute_uri()
+        if "http://127.0.0.1:8000/" in uri:
+            return HttpResponseRedirect('/login/')
+        elif "153.9.205.25" in uri:
+            return HttpResponseRedirect('http://153.9.205.25/stonoriverapp/login/')
+
+
 
 
 # 404 page
@@ -177,7 +270,7 @@ def forgot_password(request):
                     c = {
                         'email': user.username,
                         'domain': request.META['HTTP_HOST'],
-                        'site_name': 'PolyPy',
+                        'site_name': 'SRP Access Management',
                         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                         'user': user,
                         'token': default_token_generator.make_token(user),
@@ -186,7 +279,7 @@ def forgot_password(request):
                 email_template_name = 'registration/password_reset_email.html'
                 # copied from django/contrib/admin/templates/registration/password_reset_email.html to templates directory
                 email = loader.render_to_string(email_template_name, c)
-                send_mail("PolyPy Password Reset", email, 'error@amhajja.com', [user.email], fail_silently=False)
+                send_mail("SRP Password Reset", email, 'srpaccess@cofc.edu', [user.email], fail_silently=False)
                 data = {
                     'result': 'it worked'
                 }
@@ -205,16 +298,14 @@ def forgot_password(request):
     }
     return HttpResponse(template.render(context, request))
 
+
 # login page
 @csrf_exempt
 def srp_login(request):
+    if request.user.is_authenticated:
+        return HttpResponseRedirect('/stonoriverapp')
     if request.is_ajax() and request.POST.get('btnType') == 'login':
-        print("request button type:")
-        print(request.POST.get('btnType'))
         rp = request.POST
-        print("\n\nAll users...")
-        print(User.objects.all())
-
         try:
             result = 'auth fail' # initialize)
             user = authenticate(username=rp.get('email'), password=rp.get('password'))
@@ -224,6 +315,8 @@ def srp_login(request):
                 request.session['user_id'] = str(user.id)
                 request.session['user_email'] = user.username
                 request.session['first_name'] = user.first_name
+                print("Logging in...")
+                print("Your first name is", request.session['first_name'])
                 request.session['full_name'] = user.first_name + ' ' + user.last_name
         except Exception as e:
             print(e)
@@ -266,8 +359,10 @@ def register(request):
             alreadyexists = User.objects.filter(username=rp.get('email'))
             alreadyexists.delete()
             if len(alreadyexists) == 0: # does not already exist
-                print("No users with this username yet...")
                 # create a new user instance (default User model from auth app
+
+                # Comment out this portion, unusable by server due to smtp port being blocked,
+                # cannot send mail to gmail's smtp server
 
                 newUser = User.objects.create_user(username=rp.get('email'),
                                                    email=rp.get('email'),
@@ -282,21 +377,25 @@ def register(request):
 
                 # Send a verification email to the address they provided.
                 mail_subject = 'Activate your SRP Web App Account'
-
                 uid = urlsafe_base64_encode(force_bytes(newUser.id)).decode()
                 print("Creating UID with base64 encoding....\n")
                 print(uid)
-                message = render_to_string('main/acc_active_email.html', {
+                print("Domain:" + get_current_site(request).domain)
+                msg_html = render_to_string('main/acc_active_email.html', {
                     'user': newUser,
                     'domain': get_current_site(request).domain,
                     'uid': uid,
                     'token': account_activation_token.make_token(newUser),
                 })
-                to_email = rp.get('email')
-                email = EmailMessage(
-                    mail_subject, message, to=[to_email]
+                send_mail(
+                    message=None,
+                    subject='SRP Email Verification',
+                    from_email='srpaccess@cofc.edu',
+                    recipient_list=[rp.get('email')],
+                    html_message=msg_html,
                 )
-                email.send()
+
+
                 result = 'email sent'
             else:
                 result = 'email taken'
@@ -317,20 +416,17 @@ def register(request):
 # function for account activation
 def activate(request, uidb64, token):
     try:
-        print(type(uidb64))
-        print(uidb64)
         uid = force_text(urlsafe_base64_decode(uidb64))
-        print("UID: " + uid)
         user = User.objects.get(id=uid)
-        print("UID: " + str(uid))
-        print("USER: ")
-        print(User)
+
     except Exception as e:
-        print(e)
         user = None
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
+
+        # create a User_On_Property record for this user, set boolean to False
+        User_On_Property(user_id=user.id, on_site=False).save()
         # return redirect('home')
         context = {
             'success': 1,

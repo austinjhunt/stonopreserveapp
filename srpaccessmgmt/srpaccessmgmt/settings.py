@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'srpwebapp',
 ]
 
@@ -73,14 +74,16 @@ WSGI_APPLICATION = 'srpaccessmgmt.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'stono',
+        'USER': 'stono',
+        'PASSWORD': 'cofc1770',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -119,12 +122,22 @@ import os
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 # For email verification:
+EMAIL_HOST = 'relay.cougars.int'
 
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'stonoriveraccessmgmt@gmail.com'
-EMAIL_HOST_PASSWORD = 'stonoONOTS123'
-EMAIL_PORT = 587
 
 STATIC_ROOT = os.path.join(BASE_DIR,'srpwebapp/static/')
 STATIC_URL = '/static/'
+
+# FOR LOCATION SERVICES TO WORK, NEED TO SERVE APPLICATION BEHIND HTTPS
+
+# Ensure that requests over HTTP are redirected to HTTPS.
+SECURE_SSL_REDIRECT = True
+
+# USE SECURE COOKIES: If a browser connects initially via HTTP, which is the default for most browsers, it is possible
+# for existing cookies to be leaked. For this reason, you should set your SESSION_COOKIE_SECURE and CSRF_COOKIE_SECURE
+# settings to True. This instructs the browser to only send these cookies over HTTPS connections.
+# Note that this will mean that sessions will not work over HTTP, and the CSRF protection will
+# prevent any POST data being accepted over HTTP (which will be fine if you are redirecting
+# all HTTP traffic to HTTPS).
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True

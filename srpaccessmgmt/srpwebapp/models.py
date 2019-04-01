@@ -29,3 +29,10 @@ class Announcement(models.Model):
 class Photo_Upload_Record(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     img_filename = models.CharField(max_length=50)
+
+# model to extend User model, keep track of whether each user is on property with toggle var
+class User_On_Property(models.Model):
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    on_site = models.BooleanField(default=False)
+    latitude = models.FloatField(default=0)
+    longitude = models.FloatField(default=0)

@@ -1,24 +1,3 @@
-<!--<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
-
-  <title>SB Admin - Login</title> -->
-
-  <!-- Custom fonts for this template-->
-  <!--<link href="{% static 'main/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">-->
-
-  <!-- Custom styles for this template-->
-  <!--<link href="css/sb-admin.css" rel="stylesheet">
-
-</head>-->
-
 {% extends 'main/masterpage.html' %}
 
 {% load staticfiles %}
@@ -40,15 +19,16 @@
           </div>
           <div class="form-group">
             <div class="form-label-group">
-              <input type="password"  onkeypress="if(this.keyCode == 13){login()};" id="inputPassword" class="form-control p-3" placeholder="Password" required="required">
+              <input type="password"  onkeydown="if(event.keyCode==13) login();"  id="inputPassword"
+                     class="form-control p-3" placeholder="Password" required="required">
             </div>
             <div class="d-block text-center"><label for="inputPassword">Password</label></div>
           </div>
           <a class="btn btn-primary btn-block" onclick="login();">Login</a>
         </form>
         <div class="text-center">
-          <a class="d-block small mt-3" href="\register">Register an Account</a>
-          <a class="d-block small" href="\forgot-password">Forgot Password?</a>
+          <a class="d-block small mt-3" href="{% url 'srpwebapp:register_page' %}">Register an Account</a>
+          <a class="d-block small" href="{% url 'srpwebapp:forgot_password' %}">Forgot Password?</a>
         </div>
       </div>
     </div>

@@ -389,6 +389,7 @@ li .calendar-li:hover:nth-child(n+8):nth-child(-n+38), li .calendar-li:nth-child
 .fc-day:hover{background:lightblue !important;cursor: pointer !important;}
 .fc-slats tr:hover{background:lightblue !important;cursor: pointer !important;}
 
+
 .visible_only_mobile{
     display:none;
 }
@@ -435,123 +436,316 @@ li .calendar-li:hover:nth-child(n+8):nth-child(-n+38), li .calendar-li:nth-child
 #editlockcodecontent th{
     border:1px solid black;
 }
+
+
+.swipinggif {
+    width: 13rem;
+}
+
+#myCarousel{
+    border: 4px solid green;
+    border-radius: 8px;
+    padding-top:30px;
+}
+.mygalleryimg{
+        width: 200px;
+        height:300px;
+        object-fit: cover;
+        border-radius:8px;
+    }
+
+/* put dots above for carousel */
+.owl-carousel{
+  position: relative;
+}
+
+.owl-dots, .owl-nav{
+  position: absolute;
+    margin:1px;
+  top:13px;
+  left:25%;
+  right:25%;
+}
+.owl-nav{
+    display:none;
+}
+
+.schedule_element_container {
+    background-color: #eeeeee;
+    border-bottom: 3px solid black;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 20px;
+}
+.schedule_element_container input{
+    font-size: 50px;
+    border-bottom: 2px solid black;
+    padding: 7px;
+}
+#datecontainer, #starttimecontainer, #endtimecontainer, .picker__holder{
+    margin:0 auto;
+}
+
+
+/* Live Map */
+.map {
+    width: 90%;
+    border:1px solid black;
+    border-radius: 8px;
+    margin: 0 auto;
+    height: calc(100vh - 52px); /* 100% of the viewport height - navbar height */
+
+}
+.map_marker{
+    visibility:hidden;
+        width: 20px;
+        height: 20px;
+        border: 1px solid #088;
+        border-radius: 10px;
+        background-color: #0FF;
+        opacity: 0.5;
+}
+
+/* users on site table for live map */
+#users_on_site_table{
+    border: 1px solid black;
+    border-radius: 4px;
+    margin: 0 auto;
+}
+#users_on_site_table td{
+    text-align:center;
+    padding:10px;
+    font-size:17px;
+}
+#users_on_site_table td button{
+    padding:5px;
+    font-size:17px;
+}
+#users_on_site_table_container{
+    text-align:center;
+    padding: 20px;
+    width:80%;
+    margin:0 auto;
+}
+#users_on_site_table_header{
+    font-family: "Lane - Narrow";
+    font-weight:bold;
+    font-size:2rem;
+    padding:15px;
+    text-align:center;
+    margin:8px;
+}
+
+#nousersonsiteheader{
+    font-weight:bold;
+    font-size:30px;
+    width:70%;
+    border:1px solid black;
+    border-radius: 10px;
+    margin:0 auto;
+    padding: 10px;
+    display:none;
+}
+
 /* modifications for smartphones*/
 /* Smartphones (portrait and landscape) ----------- */
 @media only screen
 and (max-device-width : 480px) {
-    .headerHR{
-        display:none;
+    .headerHR {
+        display: none;
     }
-    #headeroptionsdropdown{
-        display:inline-block;
+
+    #headeroptionsdropdown {
+        display: inline-block;
     }
-    .regular_page_option_container{
-        display:none;
+
+    .regular_page_option_container {
+        display: none;
     }
-    .regular_page_option{
+
+    .regular_page_option {
         display: block !important;
-        margin-left:10%;
-        font-size:0.9rem;
+        margin-left: 10%;
+        font-size: 0.9rem;
 
     }
-    .newsheader{
-        font-size:1.5rem !important;
+
+    .newsheader {
+        font-size: 1.5rem !important;
     }
-    .welcomeHeader{
-        font-size:1rem; !important;
-        font-weight:bold;
+
+    .welcomeHeader {
+        font-size: 1rem;
+    !important;
+        font-weight: bold;
     }
-    .headerbtn{
-        font-size:1.3rem !important;
+
+    .headerbtn {
+        font-size: 1.3rem !important;
     }
-    .customheadertron{
+
+    .customheadertron {
         padding: 8px !important;
-        height:auto !important;
-        border:0.5px solid !important;
-        border-radius:4px !important;
-    }
-    .customcontainer{
-        padding:2px !important;
-        height:auto !important;
-    }
-    .nav-link{
-        padding:2px !important;
+        height: auto !important;
+        border: 0.5px solid !important;
+        border-radius: 4px !important;
     }
 
-    .announcementscontent{
-    margin:5px;
-    padding:5px;
-    font-size:1.2rem;
-    font-family: "Lane - Narrow";
+    .customcontainer {
+        padding: 2px !important;
+        height: auto !important;
+    }
+
+    .nav-link {
+        padding: 2px !important;
+    }
+
+    .announcementscontent {
+        margin: 5px;
+        padding: 5px;
+        font-size: 1.2rem;
+        font-family: "Lane - Narrow";
 
     }
-    .announcementscontent ul{
-        font-size:inherit !important;
+
+    .announcementscontent ul {
+        font-size: inherit !important;
         font-family: inherit !important;
     }
-    .announcementscontent ul li{
-        float:left;
+
+    .announcementscontent ul li {
+        float: left;
     }
 
-    .lockcodetablecontainer{
-        font-size:1rem !important;
+    .lockcodetablecontainer {
+        font-size: 1rem !important;
     }
 
-    #mygallery{
-        border-radius:8px;
-        margin:2px !important;
+    #mygallery {
+        border-radius: 8px;
+        margin: 2px !important;
 
     }
 
-    .tz-gallery{
+    .tz-gallery {
         padding: 2px !important;
         margin: 2px;
     }
-    .tz-gallery a,img {
-        max-width:100%;
-        padding:1px;
-    }
-    .myimgcontainer{
-        display:inline-block !important;
-        max-width:48% !important;
+
+    .tz-gallery a, img {
+        max-width: 100%;
+        padding: 1px;
     }
 
-    #studentScheduleAVisit{
-         /* give room to scroll, scroll disabled in actual calendar */
+    .myimgcontainer {
+        display: inline-block !important;
+        max-width: 48% !important;
+    }
+
+    .mygalleryimg {
+        width: 130px;
+        height: 130px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    #studentScheduleAVisit {
+        /* give room to scroll, scroll disabled in actual calendar */
         left: 0;
         width: 90% !important;
     }
-    .visible_only_mobile{
-        display:block;
+
+    .visible_only_mobile {
+        display: block;
     }
-    .scheduleviewcontainer{
-        padding:8px;
-        margin:2px;
-        text-align:center;
+
+    .scheduleviewcontainer {
+        padding: 8px;
+        margin: 2px;
+        text-align: center;
         margin-bottom: 10px;
     }
-    .infront{
+
+    .infront {
         z-index: 10000 !important;
     }
 
-    .dpickerinputcontainer{
-        display:block !important;
-        margin:2% !important;
+    .dpickerinputcontainer {
+        display: block !important;
+        margin: 2% !important;
         width: 100% !important;
     }
-    .visible_only_desktop{
-        display:none !important;
-    }
-    #date_picker{
-        display:none;
-    }
-    .schedulevisitresult{
-        font-family: "Lane - Narrow";
-        font-weight:bold;
-        text-align:center;
-        padding:3%;
-        margin:1%;
+
+    .visible_only_desktop {
+        display: none !important;
     }
 
-/* Styles */
+    #date_picker {
+        display: none;
+    }
+
+    .schedulevisitresult {
+        font-family: "Lane - Narrow";
+        font-weight: bold;
+        text-align: center;
+        padding: 3%;
+        margin: 1%;
+    }
+
+    .bootstrap-datetimepicker-widget {
+        /*right: -20% !important;*/
+        margin: 0 auto !important;
+        list-style: none !important;
+        background-color: #fff !important;
+    }
+
+    #swipinggifcontainer {
+        width: 30%;
+        margin: 0 auto;
+        display: inline-block;
+    }
+
+    .swipinggif {
+        /**/
+    }
+
+    /* Styles */
+}
+
+/* PREVENT AUTO ZOOMING, SUPER AGGRAVATING */
+/*** Styles added to fix the issue with zoom in on iphone ***/
+/* iPhone < 5: */
+@media screen and (device-aspect-ratio: 2/3) {
+    select, textarea, input[type="text"], input[type="password"],
+    input[type="datetime"], input[type="datetime-local"],
+    input[type="date"], input[type="month"], input[type="time"],
+    input[type="week"], input[type="number"], input[type="email"],
+    input[type="url"]{ font-size: 16px !important; }
+}
+
+/* iPhone 5, 5C, 5S, iPod Touch 5g */
+@media screen and (device-aspect-ratio: 40/71) {
+    select, textarea, input[type="text"], input[type="password"],
+    input[type="datetime"], input[type="datetime-local"],
+    input[type="date"], input[type="month"], input[type="time"],
+    input[type="week"], input[type="number"], input[type="email"],
+    input[type="url"]{ font-size: 16px !important; }
+}
+
+/* iPhone 6, iPhone 6s, iPhone 7 portrait/landscape */
+@media screen and (device-aspect-ratio: 375/667) {
+    select, textarea, input[type="text"], input[type="password"],
+    input[type="datetime"], input[type="datetime-local"],
+    input[type="date"], input[type="month"], input[type="time"],
+    input[type="week"], input[type="number"], input[type="email"],
+    input[type="url"]{ font-size: 16px !important; }
+}
+
+/* iPhone 6 Plus, iPhone 6s Plus, iPhone 7 Plus portrait/landscape */
+@media screen and (device-aspect-ratio: 9/16) {
+    select, textarea, input[type="text"], input[type="password"],
+    input[type="datetime"], input[type="datetime-local"],
+    input[type="date"], input[type="month"], input[type="time"],
+    input[type="week"], input[type="number"], input[type="email"],
+    input[type="url"]{ font-size: 16px !important; }
 }
