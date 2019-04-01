@@ -46,7 +46,7 @@ class Announcement_Object:
 
 # class to store users along with their total number of visits
 class User_Object:
-    def __init__(self,_id,fn,ln,dj,nv,_email):
+    def __init__(self,_id=0,fn='',ln='',dj='',nv='',_email=''):
         self.id=_id
         self.first_name = fn
         self.last_name = ln

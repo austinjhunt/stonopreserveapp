@@ -34,3 +34,5 @@ class Photo_Upload_Record(models.Model):
 class User_On_Property(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
     on_site = models.BooleanField(default=False)
+    latitude = models.FloatField(default=0)
+    longitude = models.FloatField(default=0)
