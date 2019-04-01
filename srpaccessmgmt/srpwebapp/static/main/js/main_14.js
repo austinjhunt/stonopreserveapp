@@ -164,8 +164,11 @@ $(document).ready(function () {
                 // Update global locations dictionary with updated locations.
                 var coordPairs = data['locations'];
                 var posFeatures = [];
+                console.log("Coord pairs");
+                console.log(coordPairs);
                 //var firstloc = ol.proj.fromLonLat(coordPairs[0]);
                 /* for each pair of coordinates retrieved from backend */
+                var lastuid;
                 for (var userID in coordPairs) {
                     var coordinates = ol.proj.fromLonLat(coordPairs[userID]); // [long,lat]
                     /* Create a position feature for each location */
@@ -189,9 +192,10 @@ $(document).ready(function () {
                     positionFeature.setGeometry(coordinates != null ? new ol.geom.Point(coordinates) : null);
                     /* add this position feature to the posFeatures list */
                     posFeatures.push(positionFeature);
+                    lastuid = userID;
                 }
                 // center the view on one of the users (logically, the last one in the previous loop)
-                var centerloc = ol.proj.fromLonLat(coordPairs[userID]);
+                var centerloc = ol.proj.fromLonLat(coordPairs[lastuid]);
                 // Update the vector layer defined globally with these new positions.
                 mapVectorSource = new ol.source.Vector({
                         features: posFeatures
