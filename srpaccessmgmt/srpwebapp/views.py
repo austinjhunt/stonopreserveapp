@@ -46,7 +46,7 @@ def render_to_json_response(context, **response_kwargs):
 @csrf_exempt
 def index(request):
     if request.user.is_authenticated:
-
+        print("authenticated...")
         # get all visits, then visitors return to front end for display in table
         all_scheduled_visits = Visit.objects.all()
 
@@ -205,6 +205,7 @@ def index(request):
         template = loader.get_template('main/home.html')
 
         print("Your first name is", request.session['first_name'])
+
         context = {
             'current_user': request.user, # use this on front end for toggling visibilities of elements
             'first_name': request.session['first_name'],
@@ -216,12 +217,17 @@ def index(request):
             'all_users': all_users,
 
         }
+        print("return home page...")
         return HttpResponse(template.render(context, request))
 
     else: # not authenticated, direct to login page
         uri = request.build_absolute_uri()
-        if "http://127.0.0.1:8000/" in uri:
+        print("\n\n\n",uri)
+        print("not authenticated...")
+        if "127.0.0.1:8000" in uri:
+            print("return login")
             return HttpResponseRedirect('/login/')
+
         elif "153.9.205.25" in uri:
             return HttpResponseRedirect('http://153.9.205.25/stonoriverapp/login/')
 
@@ -303,7 +309,13 @@ def forgot_password(request):
 @csrf_exempt
 def srp_login(request):
     if request.user.is_authenticated:
-        return HttpResponseRedirect('/stonoriverapp')
+        # this only works on server...
+        uri = request.build_absolute_uri()
+        if "127.0.0.1:8000" in uri:
+            return HttpResponseRedirect('/')
+
+        elif "153.9.205.25" in uri:
+            return HttpResponseRedirect('/stonoriverapp')
     if request.is_ajax() and request.POST.get('btnType') == 'login':
         rp = request.POST
         try:
