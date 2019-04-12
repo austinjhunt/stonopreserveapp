@@ -720,3 +720,7 @@ function redirectToRegisterAfterFailedVerified() {
         window.location.href = window.location.href.replace(regexp, 'register');
     }
 }
+
+function nav_home(){
+    showannouncementsview();
+}
