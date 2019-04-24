@@ -174,7 +174,6 @@ $(document).ready(function () {
                     $("#nousersonsiteheader").fadeIn();
 
 
-
                 }
                 else {
                     $("#users_on_site_table_container").fadeIn();
@@ -405,6 +404,7 @@ function login() {
     if (email == '' || password == '') {
         alert("Please ensure that both fields are filled in before submitting.");
     }
+    $("#my_preloader_container").fadeIn('slow');
     $.ajax(
         {
             type: "POST",
@@ -452,7 +452,7 @@ function send_pw_reset_email() {
         {
             type: "POST",
             data: {
-                /*same backend functionality as before, just for one question rather than entire quiz*/
+
                 btnType: 'password_reset_request',
                 email_address: email_address,
                 csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
@@ -520,7 +520,7 @@ function schedulevisit() {
         {
             type: "POST",
             data: {
-                /*same backend functionality as before, just for one question rather than entire quiz*/
+
                 btnType: 'schedule_visit',
                 start_time: starttime,
                 end_time: endtime,
@@ -561,11 +561,12 @@ function showeditlockcodemodal(lockid, gate, lockcode) {
 function savelockcodeedits(lockid) {
     var newlockcode = $("#lockcodeinput_" + lockid).val();
     var newgatenum = $("#gatenuminput_" + lockid).val();
+    $("#my_preloader_container").fadeIn();
     $.ajax(
         {
             type: "POST",
             data: {
-                /*same backend functionality as before, just for one question rather than entire quiz*/
+
                 btnType: 'edit_lock_code',
                 lock_id: lockid,
                 new_lock_code: newlockcode,
@@ -595,11 +596,12 @@ function showdeletelockcodemodal(lockid) {
 }
 
 function deletelockcode(lockid) {
+    $("#my_preloader_container").fadeIn();
     $.ajax(
         {
             type: "POST",
             data: {
-                /*same backend functionality as before, just for one question rather than entire quiz*/
+
                 btnType: 'delete_lock_code',
                 lock_id: lockid,
                 csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
@@ -615,6 +617,7 @@ function deletelockcode(lockid) {
 }
 
 function savenewgate() {
+    $("#my_preloader_container").fadeIn();
     var newgatecode = $("#newgatecode").val();
     var newgatenum = $("#newgatenum").val();
     // need sanitization!
@@ -625,7 +628,7 @@ function savenewgate() {
         {
             type: "POST",
             data: {
-                /*same backend functionality as before, just for one question rather than entire quiz*/
+
                 btnType: 'create_new_gate',
                 new_gate_num: newgatenum,
                 new_gate_code: newgatecode,
@@ -656,7 +659,7 @@ function toggleuserstatus() {
         {
             type: "POST",
             data: {
-                /*same backend functionality as before, just for one question rather than entire quiz*/
+
                 btnType: 'change_user_status',
                 to: to,
                 csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
@@ -721,6 +724,143 @@ function redirectToRegisterAfterFailedVerified() {
     }
 }
 
-function nav_home(){
+function nav_home() {
     showannouncementsview();
+}
+
+function triggerslideshow() {
+    $(".sscontainer").toggle();
+    $(".tz-gallery").toggle();
+
+    var slideIndex = 1;
+    showSlides(slideIndex);
+
+    // Next/previous controls
+    function plusSlides(n) {
+        showSlides(slideIndex += n);
+    }
+
+    // Thumbnail image controls
+    function currentSlide(n) {
+        showSlides(slideIndex = n);
+    }
+
+    function showSlides(n) {
+        var i;
+        var slides = document.getElementsByClassName("ssmySlides");
+        var dots = document.getElementsByClassName("ssdemo");
+        var captionText = document.getElementById("sscaption");
+        if (n > slides.length) {
+            slideIndex = 1
+        }
+        if (n < 1) {
+            slideIndex = slides.length
+        }
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
+        }
+        slides[slideIndex - 1].style.display = "block";
+        dots[slideIndex - 1].className += " active";
+        captionText.innerHTML = dots[slideIndex - 1].alt;
+    }
+}
+
+function deleteuser(userid) {
+
+    $.ajax(
+        {
+            type: "POST",
+            data: {
+
+                btnType: 'delete_user',
+                userid: userid,
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success: function (data) {
+                // ajax complete, change button.
+                if (data['result'] == 'cantdeleteself') {
+                    $("#cantdeleteself").modal('show');
+                    setTimeout(function () {
+                        $("#cantdeleteself").modal('hide');
+                    }, 2500)
+                }
+                else { // fail
+                    location.reload();
+                }
+            }
+        });
+}
+
+function add_announcement() {
+    $("#my_preloader_container").fadeIn();
+    $.ajax(
+        {
+            type: "POST",
+            data: {
+
+                btnType: 'add_announcement',
+                announcement_body: $("#announcement_body").val(),
+                announcement_title: $("#announcement_title").val(),
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success: function (data) {
+                // ajax complete, change button.
+                if (data['result'] == 'success') {
+                    location.reload();
+                }
+                else { // fail
+                    $("#my_preloader_container").fadeOut();
+                    alert("Failed to create announcement. Please try again later.")
+                }
+            }
+        });
+}
+
+function delete_announcement(a_id) {
+    $("#my_preloader_container").fadeIn();
+    $.ajax(
+        {
+            type: "POST",
+            data: {
+                btnType: 'delete_announcement',
+                a_id: a_id,
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success: function (data) {
+                // ajax complete, change button.
+                if (data['result'] == 'success') {
+                    location.reload();
+                }
+                else { // fail
+                    $("#my_preloader_container").fadeOut();
+                    alert("Failed to delete announcement. Please try again later.")
+                }
+            }
+        });
+}
+
+function delete_photo(imgpath,imgid){
+    $.ajax(
+        {
+            type: "POST",
+            data: {
+                btnType: 'delete_photo',
+                imgpath: imgpath,
+                imgid: imgid,
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success: function (data) {
+                // ajax complete, change button.
+                if (data['result'] == 'success') {
+                    location.reload();
+                }
+                else { // fail
+                    $("#my_preloader_container").fadeOut();
+                    alert("Failed to delete photo. Please try again later.")
+                }
+            }
+        });
 }

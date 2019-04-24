@@ -38,11 +38,13 @@ class Visit_Object:
 
 # class to store announcement with name of user who created it
 class Announcement_Object:
-    def __init__(self,_id,ann,user,date_created):
+    def __init__(self,_id,ann,_title,_uname,date_created,time_created):
         self.id=_id
         self.announcement = ann
-        self.user_name = user.first_name + ' ' + user.last_name
+        self.title = _title
+        self.username = _uname
         self.date_created = date_created
+        self.time_created = time_created
 
 # class to store users along with their total number of visits
 class User_Object:
@@ -55,5 +57,18 @@ class User_Object:
         self.email = _email
 
     # toJson method that converts data to json object for front end JS parsing
+    def toJSON(self):
+        return json.dumps(self, default=lambda o: json_default(o), sort_keys=True, indent=4)
+
+class Image_Object:
+    def __init__(self,_caption, _id, _uploader_id, _datetime,_imgpath):
+        self.uploader_name = User.objects.get(id=_uploader_id).first_name + ' ' + User.objects.get(
+            id=_uploader_id).last_name
+        self.upload_datetime = _datetime
+        self.img_path = _imgpath
+        self.id = _id
+        self.caption = _caption
+        # toJson method that converts data to json object for front end JS parsing
+
     def toJSON(self):
         return json.dumps(self, default=lambda o: json_default(o), sort_keys=True, indent=4)
