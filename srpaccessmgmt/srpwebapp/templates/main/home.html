@@ -520,6 +520,9 @@
                     <div class="tz-gallery">
                         <div id="mygallery" class="row">
                             {% for img in imgs %}
+                            <script>
+                                console.log({{img.id}});
+                            </script>
                             <div class="col-sm-12 col-md-4 myimgcontainer">
                                 <div class="custom_photo_button">
                                     <button

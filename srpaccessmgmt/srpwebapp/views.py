@@ -48,7 +48,6 @@ def render_to_json_response(context, **response_kwargs):
 @csrf_exempt
 def index(request):
     if request.user.is_authenticated:
-        print("authenticated...")
         # get all visits, then visitors return to front end for display in table
         all_scheduled_visits = Visit.objects.all()
 
@@ -63,9 +62,7 @@ def index(request):
         imgfiles = []
         for img in Uploaded_Image.objects.all():
             # don't try to append if not a file
-            print("Path:" + img.img_path)
             if os.path.isfile("srpwebapp/" + img.img_path):
-                print("Appending to img list!")
                 # if exists, no exception, add to imgfiles
                 imgfiles.append(Image_Object(_id=img.id,_datetime=img.upload_datetime,_uploader_id=img.uploader_id,
                                  _imgpath=img.img_path,_caption=img.caption))
@@ -81,6 +78,18 @@ def index(request):
                 print(e)
                 result = 'logout fail'
             data = {'result':result}
+            return render_to_json_response(data)
+
+        if request.is_ajax() and request.GET.get('btnType') == 'check_user_status_init':
+            statusrecord = User_On_Property.objects.get(user_id=request.user.id)
+            print("\n\nget request \n\n")
+            status = 'off'
+            if statusrecord.on_site:
+                print("User on property")
+                status = 'on'
+            data = {
+                'status': status
+            }
             return render_to_json_response(data)
 
         if request.is_ajax() and request.POST.get('btnType') == 'update_location':
@@ -131,17 +140,13 @@ def index(request):
             start_time = request.POST.get('start_time')
             end_time = request.POST.get('end_time')
             visit_date = request.POST.get('visit_date')
-            print("Start time:",start_time)
-            print("end time:",end_time)
-            print("Visit date:",visit_date)
 
             scheduleddate= datetime.datetime.strptime(visit_date,"%d %B, %Y")
 
             start_time = datetime.datetime.strptime(start_time, '%I:%M %p').replace(tzinfo=datetime.timezone.utc)
             start_time = start_time.time()
-            print("New start time:" , start_time)
             end_time = datetime.datetime.strptime(end_time, '%I:%M %p').replace(tzinfo=datetime.timezone.utc).time()
-            print("New end time:",end_time)
+
 
             Visit(scheduled_date=scheduleddate, scheduled_start_time=start_time,scheduled_end_time=end_time,user_id=request.user.id,
                   datetime_visit_was_scheduled=datetime.datetime.now().replace(tzinfo=datetime.timezone.utc)).save()

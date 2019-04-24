@@ -13,7 +13,32 @@ var updatelocations;
 
 
 $(document).ready(function () {
-    $("#my_preloader_container").fadeOut('slow');
+    /* when a user is on the property, their button at the top says "Leaving".
+    If they reload the page, and they have not "left", we don't want the button status to
+    go back to the default "Arrived." so send a quick request to check if their location is listed
+    as active in database. if so, toggle button status to "leaving" state. use ajax, don't reload page.
+     */
+    $.ajax(
+    {
+        type: "GET",
+        data: {
+            btnType: 'check_user_status_init',
+            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+        },
+        success: function (data) {
+            if (data['status'] == 'on'){
+                //toggle button to the orange leaving state
+                $("#arrivebtn").html($("#arrivebtn").html().replace("Arrived", "Leaving"));
+                $("#arrivebtn").toggleClass('btn-info  btn-warning');
+                $("#arrivebtnicon").toggleClass('fa-check fa-sign-out-alt');
+
+            }
+
+                $("#my_preloader_container").fadeOut('slow');
+
+            // else don't do anything
+        }
+    });
 
     /* Show the HTML page only after the js and css are completely loaded */
     setTimeout(function () {
