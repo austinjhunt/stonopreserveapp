@@ -169,6 +169,19 @@
     </div>
 </div>
 
+<!-- photo preview modal -->
+<div class="modal" id="photopreviewmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div id="photo_preview_container">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <div id="my_preloader_container">
     <div style="position:absolute; top: 30%;text-align:center; left:30%; right:30%;">
@@ -514,7 +527,9 @@
                                         <i class="fa fa-trash"></i>
                                     </button>
                                 </div>
-                                <a target="_blank" href="{{img.img_path}}" class="lightbox">
+                                <a target="_blank"
+                                   onclick="show_img_preview_modal('{{img.img_path}}','{{img.uploader_name }}',
+                                   '{{img.upload_datetime }}','{{img.caption}}')" class="lightbox">
                                     <img class="mygalleryimg" src="{{img.img_path}}">
                                     <div class="custom_photo_overlay">
                                         <div class="custom_photo_text">

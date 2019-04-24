@@ -842,7 +842,8 @@ function delete_announcement(a_id) {
         });
 }
 
-function delete_photo(imgpath,imgid){
+function delete_photo(imgpath, imgid) {
+    $("#my_preloader_container").fadeIn();
     $.ajax(
         {
             type: "POST",
@@ -863,4 +864,14 @@ function delete_photo(imgpath,imgid){
                 }
             }
         });
+}
+
+function show_img_preview_modal(imgpath, uploadername, upload_datetime, caption) {
+    $("#photo_preview_container").html('<button id="photopreviewexitbtn"' +
+        ' onclick="$(\'#photopreviewmodal\').modal(\'hide\');" class="btn btn-primary btn-danger"><i' +
+        ' class="fa fa-window-close"></i></button><img class="previewphoto" src="' + imgpath + '">' +
+        '<div class="photopreviewtext">Uploaded by ' + uploadername + ' on ' + upload_datetime + '<hr' +
+        ' style="border:1px solid white; margin:5px auto;"/><br/>' + caption + '</div>');
+    $("#photopreviewmodal").modal('show');
+
 }
