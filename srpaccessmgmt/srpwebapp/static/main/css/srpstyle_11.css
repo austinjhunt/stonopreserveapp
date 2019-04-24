@@ -908,6 +908,29 @@ li .calendar-li:hover:nth-child(n+8):nth-child(-n+38), li .calendar-li:nth-child
     float:right;
 }
 
+
+#add_user_modal input{
+    display:block;
+    padding:10px;
+    font-size:2.5rem;
+    margin: 10px auto;
+    background-color: rgba(224,255,255,0.9);
+    width:100%;
+
+}
+#is_superuser_container input,label{
+    display:inline-block;
+    margin:10px;
+    width:fit-content;
+    font-size:2.5rem;
+}
+#is_staff_container input,label{
+    font-size:2.5rem;
+    width:fit-content;
+    margin:10px;
+    display:inline-block;
+}
+
 /* modifications for smartphones*/
 /* Smartphones (portrait and landscape) ----------- */
 @media only screen

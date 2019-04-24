@@ -48,15 +48,19 @@ def render_to_json_response(context, **response_kwargs):
 @csrf_exempt
 def index(request):
     if request.user.is_authenticated:
-        # get all visits, then visitors return to front end for display in table
-        all_scheduled_visits = Visit.objects.all()
-
         # create json serializable objects that store the visitor name as well as visit information
         visit_objects = []
+        if request.user.is_superuser: # if superuser, show ALL scheduled visits
+            # get all visits, then visitors return to front end for display in table
+            all_scheduled_visits = Visit.objects.all()
+
+        else: # otherwise, just show personal scheduled visits
+            all_scheduled_visits = Visit.objects.filter(user_id=request.user.id)
+
         for sv in all_scheduled_visits:
             visitor = User.objects.get(id=sv.user_id)
-            visit_objects.append(Visit_Object(sv.id, sv.scheduled_start_time, sv.scheduled_end_time,sv.scheduled_date,
-                                              visitor.first_name,visitor.last_name))
+            visit_objects.append(Visit_Object(sv.id, sv.scheduled_start_time, sv.scheduled_end_time, sv.scheduled_date,
+                                              visitor.first_name, visitor.last_name))
 
         # send images list
         imgfiles = []
@@ -91,6 +95,29 @@ def index(request):
                 'status': status
             }
             return render_to_json_response(data)
+
+        if request.is_ajax() and request.POST.get('btnType') == 'super_create_user':
+            res = ''
+            try:
+                fn = request.POST.get('firstname')
+                ln = request.POST.get('lastname')
+                email = request.POST.get('email')
+                passwd = request.POST.get('pass')
+                issuper = request.POST.get('issuper')
+                isstaff = request.POST.get('isstaff')
+                newUser = User.objects.create_user(username=email,email=email,
+                                                   password=passwd,first_name=fn,last_name=ln,
+                                                   is_superuser=issuper,is_staff=isstaff,
+                                                   is_active=True)
+                newUser.save()
+                res = 'success'
+            except:
+                res = 'fail'
+            data = {'result': res}
+            return render_to_json_response(data)
+
+
+
 
         if request.is_ajax() and request.POST.get('btnType') == 'update_location':
             # get latitude and longitude; this will happen every 15 minutes, triggered by JS setInterval function.

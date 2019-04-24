@@ -794,7 +794,7 @@ function triggerslideshow() {
 }
 
 function deleteuser(userid) {
-
+    $("#my_preloader_container").fadeIn();
     $.ajax(
         {
             type: "POST",
@@ -900,3 +900,5 @@ function show_img_preview_modal(imgpath, uploadername, upload_datetime, caption)
     $("#photopreviewmodal").modal('show');
 
 }
+
+
