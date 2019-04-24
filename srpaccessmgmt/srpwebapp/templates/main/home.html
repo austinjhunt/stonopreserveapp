@@ -40,6 +40,56 @@
 </div>
 
 
+<!-- Call public safety? modal -->
+<div class="modal" id="callpublicsafety" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="text-align:center;">
+                <h3 class="modal-title" style="margin:0 auto;" id="callpublicsafetymodaltitle">CALL PUBLIC SAFETY?</h3>
+            </div>
+            <div class="modal-body" style="text-align:center;">
+                <button class="btn btn-lg btn-success"><a style="color:white;" href="tel:8439535609">YES</a></button>
+                <button class="btn btn-lg btn-danger" onclick="$('#callpublicsafety').modal('hide');">NO</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- new announcement modal -->
+<div class="modal" id="announcement_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="text-align:center;">
+                <h3>Make an announcement</h3>
+            </div>
+            <div class="modal-body" style="text-align:center;">
+                <div
+                        style="text-align:center;"><input id="announcement_title" placeholder="Announcement Title"/></div>
+                <textarea rows="8" id="announcement_body"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button style="margin:10px auto;" class="btn btn-lg btn-primary" onclick="add_announcement();">Create
+                    Announcement</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cannot delete yourself modal -->
+
+<div class="modal" id="cantdeleteself" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="text-align:center;">
+                <h3 class="modal-title" style="margin:0 auto;">You cannot delete your own account.</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- add new gate modal -->
 <!-- Edit selected lock code -->
 <div class="modal" id="addnewgatemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -90,6 +140,31 @@
                     Delete Gate
                 </button>
             </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- add new gate modal -->
+<!-- Edit selected lock code -->
+<div class="modal" id="uploadphotomodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="post" enctype="multipart/form-data">
+                <div style="text-align:center;width:100%; padding:4px;margin:10px;">
+                    <input type="file" style="margin:0 auto;" name="photo_file">
+                    <input style="margin:18px auto; width:80%; height:100px;"id="caption"
+                           name="caption"placeholder="Caption">
+                </div>
+                <div style="text-align:center;width:100%; padding:4px;margin:10px;">
+                    <button class="btn btn-lg btn-success"
+                        onclick="$('#my_preloader_container').fadeIn();location.reload();"
+                        type="submit">
+                    <i class="fa fa-upload"></i>
+                </button>
+                </div>
+              </form>
         </div>
     </div>
 </div>
@@ -164,7 +239,9 @@
         <li class="nav-item active">
             <div class="nav-link" href="{% url 'srpwebapp:index' %}">
                 <span>
-                    <button id="emergencybtnsidebar" type="button" class="btn btn-danger headerbtn">
+                    <button id="emergencybtnsidebar" type="button"
+                            onclick="$('#callpublicsafety').modal('show');" class="btn
+                            btn-danger headerbtn">
                         <i class="fa fa-fw fa-ambulance"></i>&nbsp;EMERGENCY
                     </button>
                 </span>
@@ -284,7 +361,7 @@
                                 <li class="regular_page_option"><a onclick="showlistview();">Visit Schedule</a></li>
                                 <li class="regular_page_option"><a onclick="showallusersview();">View All Users</a></li>
                                 {% endif %}
-                                 <li class="regular_page_option"><a onclick="showlivemapview();">Live Map</a></li>
+                                <li class="regular_page_option"><a onclick="showlivemapview();">Live Map</a></li>
                             </ul>
                             <hr class="headerHR"/>
                         </div>
@@ -302,17 +379,36 @@
                     </div>
                     <div class="newsheader">
                         <i class="fas fa-fw fa-newspaper"></i> Announcements
+                        <!-- only allow supers to create announcements -->
+                        {% if current_user.is_superuser %}
+                            <button class="m-5 d-inline-block btn btn-lg btn-success"
+                                    onclick="$('#announcement_modal').modal('show');">
+                                <i class="fa fa-plus"></i> Add an Announcement
+                            </button>
+                        {% endif %}
                     </div>
                     <hr class="announcementsviewHR"/>
                     <div class="announcementscontent">
-                        <ul>
-                            {% for a in announcements %}
-                            <li class="announcement">{{a}}</li>
-                            <ul>
-                                <li>created on {{a.date_created}} by {{a.username}}</li>
-                            </ul>
-                            {% endfor %}
-                        </ul>
+
+                        {% for a in announcements %}
+                        <div class="announcementcontainer">
+                            <div class="announcement_titlebutton_container">
+                                <div class="announcementtitle">{{a.title}} (posted by {{a.username}} on {{a.date_created}}
+                                    at {{a.time_created}})</div>
+                                <!-- only allow supers to delete -->
+                                {% if current_user.is_superuser %}
+                                    <button
+                                            onclick="delete_announcement({{a.id}});"class="deleteannouncementbutton btn btn-lg
+                                            btn-primary btn-danger">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                {% endif %}
+                            </div>
+                            <div class="announcementtext">
+                                {{a.announcement}}
+                            </div>
+                        </div>
+                        {% endfor %}
                     </div>
                     <!-- card for important numbers -->
                     <div class="contactssection">
@@ -412,100 +508,121 @@
                         <div id="mygallery" class="row">
                             {% for img in imgs %}
                             <div class="col-sm-12 col-md-4 myimgcontainer">
-                                <a class="lightbox" target="_blank" href="{{img}}">
-                                    <img class="mygalleryimg" src="{{img}}">
+                                <div class="custom_photo_button">
+                                    <button
+                                            onclick="delete_photo('{{img.img_path}}',{{img.id}})"class="btn btn-lg btn-danger">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </div>
+                                <a target="_blank" href="{{img.img_path}}" class="lightbox">
+                                    <img class="mygalleryimg" src="{{img.img_path}}">
+                                    <div class="custom_photo_overlay">
+                                        <div class="custom_photo_text">
+                                            Uploaded by {{img.uploader_name }} on {{ img.upload_datetime }}
+                                            <hr style="border:1px solid white; margin:5px auto;"/>
+                                            {{img.caption}}
+                                        </div>
+                                    </div>
                                 </a>
                             </div>
                             {% endfor %}
                         </div>
-
                     </div>
+                    <div class="text-center">
+                        <button onclick="$('#uploadphotomodal').modal('show')" class="uploadphotobtn btn btn-lg
+                                btn-success">
+                            Upload a Photo
+                        </button>
+                    </div>
+
+
                 </div>
+
 
                 <!-- schedule list view -->
                 {% if current_user.is_superuser %}
-                    <div class="announcementsview"><!-- DataTables Example -->
-                        <div class="newsheader">
-                            All Scheduled Visits
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                    <tr>
-                                        <th style="text-align:center;">First Name</th>
-                                        <th style="text-align:center;">Last Name</th>
-                                        <th style="text-align:center;">Visit Date</th>
-                                        <th style="text-align:center;">Visit Time Interval</th>
-                                    </tr>
-                                    </thead>
-                                    {% for visit in visit_objects %}
-                                    <tr id="{{visit.id}}">
-                                        <td style="text-align:center;">{{ visit.visitor_first_name}}</td>
-                                        <td style="text-align:center;">{{ visit.visitor_last_name}}</td>
-                                        <td style="text-align:center;">{{ visit.visit_date}}</td>
-                                        <td style="text-align:center;">{{ visit.start_time}} - {{ visit.end_time }}</td>
-                                    </tr>
-                                    {% endfor %}
-                                    <tfoot>
-                                    <tr>
-                                        <th style="text-align:center;">First Name</th>
-                                        <th style="text-align:center;">Last Name</th>
-                                        <th style="text-align:center;">Visit Date</th>
-                                        <th style="text-align:center;">Visit Time Interval</th>
-                                    </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
+                <div class="announcementsview"><!-- DataTables Example -->
+                    <div class="newsheader">
+                        All Scheduled Visits
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th style="text-align:center;">First Name</th>
+                                    <th style="text-align:center;">Last Name</th>
+                                    <th style="text-align:center;">Visit Date</th>
+                                    <th style="text-align:center;">Visit Time Interval</th>
+                                </tr>
+                                </thead>
+                                {% for visit in visit_objects %}
+                                <tr id="{{visit.id}}">
+                                    <td style="text-align:center;">{{ visit.visitor_first_name}}</td>
+                                    <td style="text-align:center;">{{ visit.visitor_last_name}}</td>
+                                    <td style="text-align:center;">{{ visit.visit_date}}</td>
+                                    <td style="text-align:center;">{{ visit.start_time}} - {{ visit.end_time }}</td>
+                                </tr>
+                                {% endfor %}
+                                <tfoot>
+                                <tr>
+                                    <th style="text-align:center;">First Name</th>
+                                    <th style="text-align:center;">Last Name</th>
+                                    <th style="text-align:center;">Visit Date</th>
+                                    <th style="text-align:center;">Visit Time Interval</th>
+                                </tr>
+                                </tfoot>
+                            </table>
                         </div>
                     </div>
+                </div>
 
-                    <!-- all users view -->
-                    <div class="announcementsview"><!-- DataTables Example -->
-                        <div class="newsheader">
-                            All Users
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
+                <!-- all users view -->
+                <div class="announcementsview"><!-- DataTables Example -->
+                    <div class="newsheader">
+                        All Users
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
 
-                                <table class="table table-bordered" id="dataTable2" width="100%" cellspacing="0">
-                                    <thead>
-                                    <tr>
-                                        <th style="text-align:center;">First Name</th>
-                                        <th style="text-align:center;">Last Name</th>
-                                        <th style="text-align:center;">Email</th>
-                                        <th style="text-align:center;">Account Created</th>
-                                        <th style="text-align:center;">Total Visits</th>
-                                        <th style="text-align:center;">Options</th>
-                                    </tr>
-                                    </thead>
-                                    {% for user in all_users %}
-                                    <tr>
-                                        <td style="text-align:center;">{{user.first_name}}</td>
-                                        <td style="text-align:center;">{{user.last_name}}</td>
-                                        <td style="text-align:center;">{{user.email}}</td>
-                                        <td style="text-align: center">{{user.date_joined}}</td>
-                                        <td style="text-align:center;">{{user.num_visits}}</td>
-                                        <td style="text-align:center;">
-                                            <button class="btn btn-danger d-inline-block"><i class="fas fa-fw fa-trash"></i>
-                                            </button>
-                                            <button class="btn btn-info d-inline-block"><i class="fas fa-fw fa-edit"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                    <tfoot>
-                                    <tr>
-                                        <th style="text-align:center;">First Name</th>
-                                        <th style="text-align:center;">Last Name</th>
-                                        <th style="text-align:center;">Visit Date</th>
-                                        <th style="text-align:center;">Visit Time Interval</th>
-                                    </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
+                            <table class="table table-bordered" id="dataTable2" width="100%" cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th style="text-align:center;">First Name</th>
+                                    <th style="text-align:center;">Last Name</th>
+                                    <th style="text-align:center;">Email</th>
+                                    <th style="text-align:center;">Account Created</th>
+                                    <th style="text-align:center;">Total Visits</th>
+                                    <th style="text-align:center;">Options</th>
+                                </tr>
+                                </thead>
+                                {% for user in all_users %}
+                                <tr>
+                                    <td style="text-align:center;">{{user.first_name}}</td>
+                                    <td style="text-align:center;">{{user.last_name}}</td>
+                                    <td style="text-align:center;">{{user.email}}</td>
+                                    <td style="text-align: center">{{user.date_joined}}</td>
+                                    <td style="text-align:center;">{{user.num_visits}}</td>
+                                    <td style="text-align:center;">
+                                        <button onclick="deleteuser({{user.id}});"
+                                                class="btn btn-danger d-inline-block"><i
+                                                class="fas fa-fw fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                <tfoot>
+                                <tr>
+                                    <th style="text-align:center;">First Name</th>
+                                    <th style="text-align:center;">Last Name</th>
+                                    <th style="text-align:center;">Visit Date</th>
+                                    <th style="text-align:center;">Visit Time Interval</th>
+                                </tr>
+                                </tfoot>
+                            </table>
                         </div>
                     </div>
+                </div>
                 {% endif %}
                 <!-- Live Map view -->
                 <div id="livemapview" class="announcementsview">

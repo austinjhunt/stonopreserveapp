@@ -22,13 +22,10 @@ class Gate(models.Model):
 
 
 class Announcement(models.Model):
-    date_created = models.DateTimeField() # when was it made?
+    datetime_created = models.DateTimeField() # when was it made?
     user = models.ForeignKey(User,on_delete=models.CASCADE) #who made it?
     announcement = models.TextField() # what is the announcement?
-
-class Photo_Upload_Record(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
-    img_filename = models.CharField(max_length=50)
+    title = models.CharField(max_length=50,default='')
 
 # model to extend User model, keep track of whether each user is on property with toggle var
 class User_On_Property(models.Model):
@@ -36,3 +33,10 @@ class User_On_Property(models.Model):
     on_site = models.BooleanField(default=False)
     latitude = models.FloatField(default=0)
     longitude = models.FloatField(default=0)
+
+# model to store uploaded image filenames, the name of the uploader, and the datetime of upload
+class Uploaded_Image(models.Model):
+    uploader = models.ForeignKey(User,on_delete=models.CASCADE, null=True)
+    upload_datetime = models.DateTimeField()
+    img_path = models.CharField(max_length=60)
+    caption = models.TextField(default='')
