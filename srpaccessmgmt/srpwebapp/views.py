@@ -63,10 +63,14 @@ def index(request):
         imgfiles = []
         for img in Uploaded_Image.objects.all():
             # don't try to append if not a file
+            print("Path:" + img.img_path)
             if os.path.isfile("srpwebapp/" + img.img_path):
+                print("Appending to img list!")
                 # if exists, no exception, add to imgfiles
                 imgfiles.append(Image_Object(_id=img.id,_datetime=img.upload_datetime,_uploader_id=img.uploader_id,
                                  _imgpath=img.img_path,_caption=img.caption))
+            else:
+                print("path does not exist yet.")
 
 
         if request.is_ajax() and request.POST.get('btnType') == 'logout':
