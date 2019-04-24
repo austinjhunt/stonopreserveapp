@@ -3,6 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.template import RequestContext, loader
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.contrib.auth import logout
+from django.core.files.storage import FileSystemStorage
 # default user table
 
 # for forgot password feature
@@ -29,6 +30,7 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 from django.contrib.sites.shortcuts import get_current_site
 import base64
+import time
 
 from .views_classes import *
 from django.conf import settings
@@ -46,7 +48,7 @@ def render_to_json_response(context, **response_kwargs):
 @csrf_exempt
 def index(request):
     if request.user.is_authenticated:
-
+        print("authenticated...")
         # get all visits, then visitors return to front end for display in table
         all_scheduled_visits = Visit.objects.all()
 
@@ -57,8 +59,16 @@ def index(request):
             visit_objects.append(Visit_Object(sv.id, sv.scheduled_start_time, sv.scheduled_end_time,sv.scheduled_date,
                                               visitor.first_name,visitor.last_name))
 
+        # send images list
+        imgfiles = []
+        for img in Uploaded_Image.objects.all():
+            # don't try to append if not a file
+            if os.path.isfile("srpwebapp/" + img.img_path):
+                # if exists, no exception, add to imgfiles
+                imgfiles.append(Image_Object(_id=img.id,_datetime=img.upload_datetime,_uploader_id=img.uploader_id,
+                                 _imgpath=img.img_path,_caption=img.caption))
 
-        imgfiles = [settings.STATIC_URL + "main/img/" + el for el in os.listdir(settings.STATIC_ROOT + "main/img")]
+
         if request.is_ajax() and request.POST.get('btnType') == 'logout':
             try:
                 logout(request)
@@ -187,15 +197,92 @@ def index(request):
             }
             return render_to_json_response(data)
 
+        if request.is_ajax() and request.POST.get('btnType') == 'delete_user':
+            uid = request.POST.get('userid')
+            res = ''
+            if int(uid) == request.user.id:
+                res = 'cantdeleteself'
+            else:
+                User.objects.get(id=uid).delete()
+                res = 'success'
+            data = {
+                'result': res
+            }
+            return render_to_json_response(data)
+        # photo upload
+        try:
+            if request.method == "POST" and request.FILES['photo_file']:
+                fs = FileSystemStorage(location='srpwebapp/static/main/img')
+                fname = fs.save(request.FILES['photo_file'].name, request.FILES['photo_file'])
+                # create record in database
+                imgpath = '/static/main/img/' + fname
+                Uploaded_Image(uploader_id=request.user.id,
+                              upload_datetime=datetime.datetime.now(),
+                              img_path=imgpath,
+                               caption=request.POST['caption']).save()
+                # don't immediately reload page, otherwise new image won't show
+        except Exception as e:
+            print(e)
+        # photo delete
+        if request.is_ajax() and request.POST.get('btnType') == 'delete_photo':
+            imgid = request.POST.get('imgid')
+            imgpath = request.POST.get('imgpath')
+            res = ''
+            try:
+                # delete db record
+                Uploaded_Image.objects.get(id=imgid).delete()
+                # delete actual file
+                os.remove('srpwebapp' + imgpath)
+                res = 'success'
+            except Exception as e:
+                print(e)
+                res = 'fail'
+            data = {'result': res}
+            return render_to_json_response(data)
+
+        if request.is_ajax() and request.POST.get('btnType') == 'add_announcement':
+            res = ''
+            try:
+                announcement_title = request.POST.get('announcement_title')
+                annoucement_body = request.POST.get('announcement_body')
+                # create the announcement record
+                Announcement(datetime_created=datetime.datetime.now(),user_id=request.user.id,
+                             announcement=annoucement_body,title=announcement_title).save()
+                res = 'success'
+            except:
+                res = 'fail'
+            data = {'result': res}
+            return render_to_json_response(data)
+
+        if request.is_ajax() and request.POST.get('btnType') == 'delete_announcement':
+            res = ''
+            try:
+                Announcement.objects.get(id=request.POST.get('a_id')).delete()
+                res = 'success'
+            except:
+                res = 'fail'
+            data = {'result': res}
+            return render_to_json_response(data)
+
 
 
         # get all the announcements from last 30 days
-        announcements = [Announcement_Object(_id=a.id,
-                                             ann=a.announcement,
-                                             user=request.user,
-                                             date_created=a.date_created)
-                         for a in Announcement.objects.filter(date_created__lte=datetime.datetime.today(),
-                                     date_created__gt=datetime.datetime.today() - datetime.timedelta(days=30))]
+        announcements = []
+        for a in Announcement.objects.filter(datetime_created__lte=datetime.datetime.today(),
+                                             datetime_created__gt=datetime.datetime.today() - datetime.timedelta(
+                                                 days=30)):
+            username = a.user.first_name + ' ' + a.user.last_name
+
+            # the database is 4 hours ahead, so adjust the datetime.
+            dt = a.datetime_created - datetime.timedelta(hours=4)
+            # create a json serializable object
+            announcements.append(Announcement_Object(_id=a.id,
+                                                     ann=a.announcement,
+                                                     _title=a.title,
+                                                     _uname=username,
+                                                     date_created=dt.date(),
+                                                     time_created=dt.time()))
+
 
         lock_codes = Gate.objects.all() # will only ever be one in table. delete current for gate when new one created
 
@@ -205,6 +292,7 @@ def index(request):
         template = loader.get_template('main/home.html')
 
         print("Your first name is", request.session['first_name'])
+
         context = {
             'current_user': request.user, # use this on front end for toggling visibilities of elements
             'first_name': request.session['first_name'],
@@ -216,14 +304,20 @@ def index(request):
             'all_users': all_users,
 
         }
+        print("return home page...")
         return HttpResponse(template.render(context, request))
 
     else: # not authenticated, direct to login page
         uri = request.build_absolute_uri()
-        if "http://127.0.0.1:8000/" in uri:
+        print("\n\n\n",uri)
+        print("not authenticated...")
+        if "127.0.0.1:8000" in uri:
+            print("return login")
             return HttpResponseRedirect('/login/')
+
         elif "153.9.205.25" in uri:
             return HttpResponseRedirect('http://153.9.205.25/stonoriverapp/login/')
+
 
 
 
@@ -303,7 +397,13 @@ def forgot_password(request):
 @csrf_exempt
 def srp_login(request):
     if request.user.is_authenticated:
-        return HttpResponseRedirect('/stonoriverapp')
+        # this only works on server...
+        uri = request.build_absolute_uri()
+        if "127.0.0.1:8000" in uri:
+            return HttpResponseRedirect('/')
+
+        elif "153.9.205.25" in uri:
+            return HttpResponseRedirect('/stonoriverapp')
     if request.is_ajax() and request.POST.get('btnType') == 'login':
         rp = request.POST
         try:
@@ -381,11 +481,17 @@ def register(request):
                 print("Creating UID with base64 encoding....\n")
                 print(uid)
                 print("Domain:" + get_current_site(request).domain)
+                uri = request.build_absolute_uri()
+                # change the link that you give them if local host
+                localhost = False
+                if "127.0.0.1:8000" in uri:
+                    localhost = True
                 msg_html = render_to_string('main/acc_active_email.html', {
                     'user': newUser,
                     'domain': get_current_site(request).domain,
                     'uid': uid,
                     'token': account_activation_token.make_token(newUser),
+                    'localhost': localhost,
                 })
                 send_mail(
                     message=None,
