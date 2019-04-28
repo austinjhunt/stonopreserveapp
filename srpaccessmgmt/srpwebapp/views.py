@@ -179,7 +179,15 @@ def index(request):
                   datetime_visit_was_scheduled=datetime.datetime.now().replace(tzinfo=datetime.timezone.utc)).save()
             data = {'res':'success'}
             return render_to_json_response(data)
-
+        if request.is_ajax() and request.POST.get('btnType') == 'delete_visit':
+            try:
+                Visit.objects.get(id=request.POST.get("visit_id")).delete()
+                res = 'success'
+            except Exception as e:
+                print(e)
+                res = 'fail'
+            data = {'result': res}
+            return render_to_json_response(data)
         if request.is_ajax() and request.POST.get('btnType') == 'edit_lock_code':
             # lock id is actually the primary key of the Gate table
             lock_id, new_lock_code,new_gate_num = request.POST.get('lock_id'), request.POST.get('new_lock_code'), \

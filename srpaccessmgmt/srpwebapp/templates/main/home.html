@@ -70,7 +70,7 @@
                 <input id="emailaddress" placeholder="CofC Email Address">
                 <div id="is_superuser_container">
                     <input type="checkbox" id="is_super" onchange="$('#is_staff_container').toggle('slow');"><label
-                    for="is_super">Superuser?</label>
+                        for="is_super">Superuser?</label>
                 </div>
                 <!-- only show this one if not superuser -->
                 <div id="is_staff_container">
@@ -78,7 +78,8 @@
                 </div>
                 <h6>Default New User Password: drowssap</h6>
                 <button class="btn btn-primary btn-lg"
-                        onclick="create_new_user();"><i class="fa fa-user-circle"></i> Create User</button>
+                        onclick="create_new_user();"><i class="fa fa-user-circle"></i> Create User
+                </button>
             </div>
         </div>
     </div>
@@ -87,41 +88,41 @@
 <!-- include this script in the if block to avoid security issue of having a create_user function in the easily
 accessible js source -->
 <script>
-function create_new_user(){
-    $("#my_preloader_container").fadeIn();
-   var issuper = $("#is_super").val();
-   var isstaff;
-   if (!issuper){
-       isstaff = $("#is_staff").val();
-   }
-   else {
-       isstaff = 1;
-   }
-   $.ajax(
-        {
-            type: "POST",
-            data: {
-                btnType: 'super_create_user',
-                firstname : $("#firstname").val(),
-                lastname: $("#lastname").val(),
-                email: $("#emailaddress").val(),
-                pass: 'drowssap',
-                issuper: issuper,
-                isstaff: isstaff,
-                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
-            },
-            success: function (data) {
-                // ajax complete, change button.
-                if (data['result'] == 'success') {
-                    location.reload();
+    function create_new_user() {
+        $("#my_preloader_container").fadeIn();
+        var issuper = $("#is_super").val();
+        var isstaff;
+        if (!issuper) {
+            isstaff = $("#is_staff").val();
+        }
+        else {
+            isstaff = 1;
+        }
+        $.ajax(
+            {
+                type: "POST",
+                data: {
+                    btnType: 'super_create_user',
+                    firstname: $("#firstname").val(),
+                    lastname: $("#lastname").val(),
+                    email: $("#emailaddress").val(),
+                    pass: 'drowssap',
+                    issuper: issuper,
+                    isstaff: isstaff,
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                },
+                success: function (data) {
+                    // ajax complete, change button.
+                    if (data['result'] == 'success') {
+                        location.reload();
+                    }
+                    else { // fail
+                        $("#my_preloader_container").fadeOut();
+                        alert("Failed to create user. Please try again later.")
+                    }
                 }
-                else { // fail
-                    $("#my_preloader_container").fadeOut();
-                    alert("Failed to create user. Please try again later.")
-                }
-            }
-        });
-}
+            });
+    }
 </script>
 {% endif %}
 
@@ -136,12 +137,14 @@ function create_new_user(){
             </div>
             <div class="modal-body" style="text-align:center;">
                 <div
-                        style="text-align:center;"><input id="announcement_title" placeholder="Announcement Title"/></div>
+                        style="text-align:center;"><input id="announcement_title" placeholder="Announcement Title"/>
+                </div>
                 <textarea rows="8" id="announcement_body"></textarea>
             </div>
             <div class="modal-footer">
                 <button style="margin:10px auto;" class="btn btn-lg btn-primary" onclick="add_announcement();">Create
-                    Announcement</button>
+                    Announcement
+                </button>
             </div>
         </div>
     </div>
@@ -224,17 +227,17 @@ function create_new_user(){
             <form method="post" enctype="multipart/form-data">
                 <div style="text-align:center;width:100%; padding:4px;margin:10px;">
                     <input type="file" style="margin:0 auto;" name="photo_file">
-                    <input style="margin:18px auto; width:80%; height:100px;"id="caption"
-                           name="caption"placeholder="Caption">
+                    <input style="margin:18px auto; width:80%; height:100px;" id="caption"
+                           name="caption" placeholder="Caption">
                 </div>
                 <div style="text-align:center;width:100%; padding:4px;margin:10px;">
                     <button class="btn btn-lg btn-success"
-                        onclick="$('#my_preloader_container').fadeIn();location.reload();"
-                        type="submit">
-                    <i class="fa fa-upload"></i>
-                </button>
+                            onclick="$('#my_preloader_container').fadeIn();location.reload();"
+                            type="submit">
+                        <i class="fa fa-upload"></i>
+                    </button>
                 </div>
-              </form>
+            </form>
         </div>
     </div>
 </div>
@@ -250,7 +253,6 @@ function create_new_user(){
         </div>
     </div>
 </div>
-
 
 
 <div id="my_preloader_container">
@@ -464,10 +466,10 @@ function create_new_user(){
                         <i class="fas fa-fw fa-newspaper"></i> Announcements
                         <!-- only allow supers to create announcements -->
                         {% if current_user.is_superuser %}
-                            <button class="m-5 d-inline-block btn btn-lg btn-success"
-                                    onclick="$('#announcement_modal').modal('show');">
-                                <i class="fa fa-plus"></i> Add an Announcement
-                            </button>
+                        <button class="m-5 d-inline-block btn btn-lg btn-success"
+                                onclick="$('#announcement_modal').modal('show');">
+                            <i class="fa fa-plus"></i> Add an Announcement
+                        </button>
                         {% endif %}
                     </div>
                     <hr class="announcementsviewHR"/>
@@ -476,15 +478,17 @@ function create_new_user(){
                         {% for a in announcements %}
                         <div class="announcementcontainer">
                             <div class="announcement_titlebutton_container">
-                                <div class="announcementtitle">{{a.title}} (posted by {{a.username}} on {{a.date_created}}
-                                    at {{a.time_created}})</div>
+                                <div class="announcementtitle">{{a.title}} (posted by {{a.username}} on
+                                    {{a.date_created}}
+                                    at {{a.time_created}})
+                                </div>
                                 <!-- only allow supers to delete -->
                                 {% if current_user.is_superuser %}
-                                    <button
-                                            onclick="delete_announcement({{a.id}});"class="deleteannouncementbutton btn btn-lg
+                                <button
+                                        onclick="delete_announcement({{a.id}});" class="deleteannouncementbutton btn btn-lg
                                             btn-primary btn-danger">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
+                                    <i class="fa fa-trash"></i>
+                                </button>
                                 {% endif %}
                             </div>
                             <div class="announcementtext">
@@ -590,13 +594,11 @@ function create_new_user(){
                     <div class="tz-gallery">
                         <div id="mygallery" class="row">
                             {% for img in imgs %}
-                            <script>
-                                console.log({{img.id}});
-                            </script>
                             <div class="col-sm-12 col-md-4 myimgcontainer">
                                 <div class="custom_photo_button">
                                     <button
-                                            onclick="delete_photo('{{img.img_path}}',{{img.id}})"class="btn btn-lg btn-danger">
+                                            onclick="delete_photo('{{img.img_path}}',{{img.id}})"
+                                            class="btn btn-lg btn-danger">
                                         <i class="fa fa-trash"></i>
                                     </button>
                                 </div>
@@ -627,7 +629,6 @@ function create_new_user(){
                 </div>
 
 
-
                 <div class="announcementsview"><!-- DataTables Example -->
                     <div class="newsheader">
                         All Scheduled Visits
@@ -639,6 +640,7 @@ function create_new_user(){
                                 {% if current_user.is_superuser %}
                                 <thead>
                                 <tr>
+                                    <th style="text-align:center;">Options</th>
                                     <th style="text-align:center;">First Name</th>
                                     <th style="text-align:center;">Last Name</th>
                                     <th style="text-align:center;">Visit Date</th>
@@ -647,6 +649,11 @@ function create_new_user(){
                                 </thead>
                                 {% for visit in visit_objects %}
                                 <tr id="{{visit.id}}">
+                                    <td style="text-align:center;">
+                                        <button onclick="delete_visit({{visit.id}});" class="btn btn-danger">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
                                     <td style="text-align:center;">{{ visit.visitor_first_name}}</td>
                                     <td style="text-align:center;">{{ visit.visitor_last_name}}</td>
                                     <td style="text-align:center;">{{ visit.visit_date}}</td>
@@ -655,6 +662,7 @@ function create_new_user(){
                                 {% endfor %}
                                 <tfoot>
                                 <tr>
+                                    <th style="text-align:center;">Options</th>
                                     <th style="text-align:center;">First Name</th>
                                     <th style="text-align:center;">Last Name</th>
                                     <th style="text-align:center;">Visit Date</th>
@@ -664,24 +672,31 @@ function create_new_user(){
 
                                 <!-- for student, faculty users, only show personal scheduled visits -->
                                 {% else %}
-                                    <thead>
-                                    <tr>
-                                        <th style="text-align:center;">Visit Date</th>
-                                        <th style="text-align:center;">Visit Time Interval</th>
-                                    </tr>
-                                    </thead>
-                                    {% for visit in visit_objects %}
-                                    <tr id="{{visit.id}}">
-                                        <td style="text-align:center;">{{ visit.visit_date}}</td>
-                                        <td style="text-align:center;">{{ visit.start_time}} - {{ visit.end_time }}</td>
-                                    </tr>
-                                    {% endfor %}
-                                    <tfoot>
-                                    <tr>
-                                        <th style="text-align:center;">Visit Date</th>
-                                        <th style="text-align:center;">Visit Time Interval</th>
-                                    </tr>
-                                    </tfoot>
+                                <thead>
+                                <tr>
+                                    <th style="text-align:center;">Options</th>
+                                    <th style="text-align:center;">Visit Date</th>
+                                    <th style="text-align:center;">Visit Time Interval</th>
+                                </tr>
+                                </thead>
+                                {% for visit in visit_objects %}
+                                <tr id="{{visit.id}}">
+                                    <td style="text-align:center;">
+                                        <button onclick="delete_visit({{visit.id}});" class="btn btn-danger">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                    <td style="text-align:center;">{{ visit.visit_date}}</td>
+                                    <td style="text-align:center;">{{ visit.start_time}} - {{ visit.end_time }}</td>
+                                </tr>
+                                {% endfor %}
+                                <tfoot>
+                                <tr>
+                                    <th style="text-align:center;">Options</th>
+                                    <th style="text-align:center;">Visit Date</th>
+                                    <th style="text-align:center;">Visit Time Interval</th>
+                                </tr>
+                                </tfoot>
 
                                 {% endif %}
                             </table>
@@ -695,8 +710,8 @@ function create_new_user(){
                     <div class="newsheader">
                         All Users
                         <button class="m-5 d-inline-block btn btn-lg btn-success"
-                                    onclick="$('#add_user_modal').modal('show');">
-                                <i class="fa fa-plus"></i> Add a User
+                                onclick="$('#add_user_modal').modal('show');">
+                            <i class="fa fa-plus"></i> Add a User
                         </button>
                     </div>
                     <div class="card-body">

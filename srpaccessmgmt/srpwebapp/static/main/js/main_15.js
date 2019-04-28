@@ -901,4 +901,26 @@ function show_img_preview_modal(imgpath, uploadername, upload_datetime, caption)
 
 }
 
+function delete_visit(visit_id){
+    $("#my_preloader_container").fadeIn();
+    $.ajax(
+        {
+            type: "POST",
+            data: {
+                btnType: 'delete_visit',
+                visit_id: visit_id,
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success: function (data) {
+                // ajax complete, change button.
+                if (data['result'] == 'success') {
+                    location.reload();
+                }
+                else { // fail
+                    $("#my_preloader_container").fadeOut();
+                    alert("Failed to delete visit. Please try again later.")
+                }
+            }
+        });
+}
 
