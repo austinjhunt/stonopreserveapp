@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.contrib.auth import logout
 from django.core.files.storage import FileSystemStorage
 # default user table
+from django.contrib.staticfiles.templatetags.staticfiles import static
 
 # for forgot password feature
 from django.contrib.auth.tokens import default_token_generator
@@ -41,8 +42,7 @@ def render_to_json_response(context, **response_kwargs):
     return HttpResponse(data, **response_kwargs)
 
 
-
-
+import subprocess
 
 # home page function
 @csrf_exempt
@@ -65,13 +65,12 @@ def index(request):
         # send images list
         imgfiles = []
         for img in Uploaded_Image.objects.all():
-            # don't try to append if not a file
-            if os.path.isfile("srpwebapp/" + img.img_path):
+
+            if os.path.isfile(settings.STATIC_ROOT + img.img_path): # use a different url
                 # if exists, no exception, add to imgfiles
-                imgfiles.append(Image_Object(_id=img.id,_datetime=img.upload_datetime,_uploader_id=img.uploader_id,
-                                 _imgpath=img.img_path,_caption=img.caption))
-            else:
-                print("path does not exist yet.")
+                imgfiles.append(
+                    Image_Object(_id=img.id, _datetime=img.upload_datetime, _uploader_id=img.uploader_id,
+                                 _imgpath=img.img_path, _caption=img.caption))
 
 
         if request.is_ajax() and request.POST.get('btnType') == 'logout':
@@ -118,6 +117,8 @@ def index(request):
 
 
 
+        #FIXME: only updating location when page loads (during window.onload)
+        #THIS ALSO NEEDS TO HAPPEN EVERY 15 SECONDS. WRITE new location, then READ new locations.
 
         if request.is_ajax() and request.POST.get('btnType') == 'update_location':
             # get latitude and longitude; this will happen every 15 minutes, triggered by JS setInterval function.
@@ -126,11 +127,9 @@ def index(request):
             try: # assuming browser returns these values properly
                 lat = float(lat)
                 long = float(long)
-                print("\n\n\nUpdating location of user",request.user.first_name)
-                print("New Lat:",str(lat))
-                print("New Long:",str(long))
                 # update current user's location with new location values
                 current_user = User_On_Property.objects.get(user_id=request.user.id)
+                print("\n\nWriting new location!")
                 current_user.latitude = lat
                 current_user.longitude = long
                 current_user.save()
@@ -143,10 +142,10 @@ def index(request):
             return render_to_json_response(data)
         if request.is_ajax() and request.GET.get('btnType') == 'get_user_locations':
             user_on_property_objects = User_On_Property.objects.filter(on_site=True,
-                                                        longitude__gte=-80.4,
-                                                        longitude__lte=-79.8,
-                                                        latitude__gte=32.65,
-                                                        latitude__lte=32.8)
+                                                        longitude__gte=-80.9,
+                                                        longitude__lte=-78.5,
+                                                        latitude__gte=32.05,
+                                                        latitude__lte=33.5)
 
             # build locations dict structured as {userid: [long, lat]...}
             locations = {obj.user_id:[obj.longitude,obj.latitude] for obj in user_on_property_objects}
@@ -190,8 +189,10 @@ def index(request):
             return render_to_json_response(data)
         if request.is_ajax() and request.POST.get('btnType') == 'edit_lock_code':
             # lock id is actually the primary key of the Gate table
-            lock_id, new_lock_code,new_gate_num = request.POST.get('lock_id'), request.POST.get('new_lock_code'), \
-                                     request.POST.get('new_gate_num')
+            lock_id = request.POST.get('lock_id')
+            new_lock_code = int(request.POST.get('new_lock_code'))
+            new_gate_num = int(request.POST.get('new_gate_num'))
+
 
             gate_to_edit = Gate.objects.filter(id=lock_id)[0] # use filter instead of get to avoid backend error on empty result
             gate_to_edit.lock_code = new_lock_code
@@ -209,10 +210,10 @@ def index(request):
         if request.is_ajax() and request.POST.get('btnType') == 'create_new_gate':
             result = 'fail'
             try:
-                gate_num, gate_code = int(request.POST.get('new_gate_num')),int(request.POST.get('new_gate_code'))
+                gate_num = int(request.POST.get('new_gate_num'))
+                gate_code = int(request.POST.get('new_gate_code'))
                 result = 'success'
                 Gate(lock_code=gate_code,gate_number=gate_num).save()
-
                 # FIXME: send email notifying faculty and superusers (not the one requesting) that new gate has been
                 # created with code xxxx ^^
 
@@ -259,7 +260,7 @@ def index(request):
                 fs = FileSystemStorage(location='srpwebapp/static/main/img')
                 fname = fs.save(request.FILES['photo_file'].name, request.FILES['photo_file'])
                 # create record in database
-                imgpath = '/static/main/img/' + fname
+                imgpath = 'main/img/' + fname
                 Uploaded_Image(uploader_id=request.user.id,
                               upload_datetime=datetime.datetime.now(),
                               img_path=imgpath,
@@ -276,7 +277,7 @@ def index(request):
                 # delete db record
                 Uploaded_Image.objects.get(id=imgid).delete()
                 # delete actual file
-                os.remove('srpwebapp' + imgpath)
+                os.remove('srpwebapp/static/' + imgpath)
                 res = 'success'
             except Exception as e:
                 print(e)
@@ -324,19 +325,15 @@ def index(request):
                                                      ann=a.announcement,
                                                      _title=a.title,
                                                      _uname=username,
-                                                     date_created=dt.date(),
-                                                     time_created=dt.time()))
+                                                     _date_created=dt.date(),
+                                                     _time_created=dt.time()))
 
 
-        lock_codes = Gate.objects.all() # will only ever be one in table. delete current for gate when new one created
+        lock_codes = [GateObj(g) for g in Gate.objects.all()]
 
         all_users = [User_Object(_id=u.id, fn=u.first_name, ln=u.last_name,dj=u.date_joined,_email=u.email,
                                  nv=len(Visit.objects.filter(user_id=u.id))) for u in User.objects.all()]
-
         template = loader.get_template('main/home.html')
-
-        print("Your first name is", request.session['first_name'])
-
         context = {
             'current_user': request.user, # use this on front end for toggling visibilities of elements
             'first_name': request.session['first_name'],
@@ -352,17 +349,7 @@ def index(request):
         return HttpResponse(template.render(context, request))
 
     else: # not authenticated, direct to login page
-        uri = request.build_absolute_uri()
-        print("\n\n\n",uri)
-        print("not authenticated...")
-        if "127.0.0.1:8000" in uri:
-            print("return login")
-            return HttpResponseRedirect('/login/')
-
-        elif "153.9.205.25" in uri:
-            return HttpResponseRedirect('http://153.9.205.25/stonoriverapp/login/')
-
-
+        return HttpResponseRedirect('/login/')
 
 
 
@@ -441,13 +428,8 @@ def forgot_password(request):
 @csrf_exempt
 def srp_login(request):
     if request.user.is_authenticated:
-        # this only works on server...
-        uri = request.build_absolute_uri()
-        if "127.0.0.1:8000" in uri:
-            return HttpResponseRedirect('/')
+        return HttpResponseRedirect('/')
 
-        elif "153.9.205.25" in uri:
-            return HttpResponseRedirect('/stonoriverapp')
     if request.is_ajax() and request.POST.get('btnType') == 'login':
         rp = request.POST
         try:
@@ -522,20 +504,12 @@ def register(request):
                 # Send a verification email to the address they provided.
                 mail_subject = 'Activate your SRP Web App Account'
                 uid = urlsafe_base64_encode(force_bytes(newUser.id)).decode()
-                print("Creating UID with base64 encoding....\n")
-                print(uid)
-                print("Domain:" + get_current_site(request).domain)
-                uri = request.build_absolute_uri()
-                # change the link that you give them if local host
-                localhost = False
-                if "127.0.0.1:8000" in uri:
-                    localhost = True
+
                 msg_html = render_to_string('main/acc_active_email.html', {
                     'user': newUser,
                     'domain': get_current_site(request).domain,
                     'uid': uid,
                     'token': account_activation_token.make_token(newUser),
-                    'localhost': localhost,
                 })
                 send_mail(
                     message=None,

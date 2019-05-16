@@ -38,14 +38,17 @@ class Visit_Object:
 
 # class to store announcement with name of user who created it
 class Announcement_Object:
-    def __init__(self,_id,ann,_title,_uname,date_created,time_created):
+    def __init__(self,_id,ann,_title,_uname,_date_created,_time_created):
         self.id=_id
         self.announcement = ann
         self.title = _title
         self.username = _uname
-        self.date_created = date_created
-        self.time_created = time_created
+        self.date_created = _date_created
+        self.time_created = _time_created
+        # toJson method that converts data to json object for front end JS parsing
 
+    def toJSON(self):
+        return json.dumps(self, default=lambda o: json_default(o), sort_keys=True, indent=4)
 # class to store users along with their total number of visits
 class User_Object:
     def __init__(self,_id=0,fn='',ln='',dj='',nv='',_email=''):
@@ -68,6 +71,16 @@ class Image_Object:
         self.img_path = _imgpath
         self.id = _id
         self.caption = _caption
+        # toJson method that converts data to json object for front end JS parsing
+
+    def toJSON(self):
+        return json.dumps(self, default=lambda o: json_default(o), sort_keys=True, indent=4)
+
+class GateObj:
+    def __init__(self,GateQueryObj):
+        self.id = GateQueryObj.id
+        self.lock_code = str(GateQueryObj.lock_code).zfill(4)
+        self.gate_number = str(GateQueryObj.gate_number)
         # toJson method that converts data to json object for front end JS parsing
 
     def toJSON(self):
