@@ -243,10 +243,11 @@ accessible js source -->
 </div>
 
 <!-- photo preview modal -->
-<div class="modal" id="photopreviewmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal" id="photopreviewmodal" style="top:0; height:100%;" tabindex="-1" role="dialog"
+aria-labelledby="exampleModalLabel"
      aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
+    <div class="modal-dialog" style="height:100%; max-width: 70%; width:70%; margin:10px auto;" role="document">
+        <div class="modal-content" style="height:100%;" >
             <div id="photo_preview_container">
 
             </div>
@@ -410,7 +411,7 @@ accessible js source -->
                                         <td>
                                             <!-- only allow edit/delete for superuser -->
                                             <button class="btn btn-info"
-                                                    onclick="showeditlockcodemodal({{lc.id}},{{lc.gate_number}},{{lc.lock_code}});">
+                                                    onclick="showeditlockcodemodal({{lc.id}},'{{lc.gate_number}}','{{lc.lock_code}}');">
                                                 <i class="fa fa-edit"></i></button>
 
                                             <button class="btn btn-danger"
@@ -597,15 +598,15 @@ accessible js source -->
                             <div class="col-sm-12 col-md-4 myimgcontainer">
                                 <div class="custom_photo_button">
                                     <button
-                                            onclick="delete_photo('{{img.img_path}}',{{img.id}})"
+                                            onclick="delete_photo('{% static img.img_path %}',{{img.id}})"
                                             class="btn btn-lg btn-danger">
                                         <i class="fa fa-trash"></i>
                                     </button>
                                 </div>
                                 <a target="_blank"
-                                   onclick="show_img_preview_modal('{{img.img_path}}','{{img.uploader_name }}',
+                                   onclick="show_img_preview_modal('{% static img.img_path %}','{{img.uploader_name }}',
                                    '{{img.upload_datetime }}','{{img.caption}}')" class="lightbox">
-                                    <img class="mygalleryimg" src="{{img.img_path}}">
+                                    <img class="mygalleryimg" src="{% static img.img_path %}">
                                     <div class="custom_photo_overlay">
                                         <div class="custom_photo_text">
                                             Uploaded by {{img.uploader_name }} on {{ img.upload_datetime }}

@@ -26,6 +26,8 @@ class Announcement(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE) #who made it?
     announcement = models.TextField() # what is the announcement?
     title = models.CharField(max_length=50,default='')
+    date_created=models.DateField(null=True)
+    time_created=models.DateField(null=True)
 
 # model to extend User model, keep track of whether each user is on property with toggle var
 class User_On_Property(models.Model):
