@@ -37,3 +37,14 @@ You should instead use
 ###### python manage.py runserver_plus --cert certname
 
 This will enable the HTTPS protocol to work on localhost. 
+
+
+### Maintenance/Updates
+
+#### For anyone with access to the server who is making updates to the site, the following is the process to follow for making changes: 
+##### 1) If the file you changed is a static file (i.e. javascript or css, most likely), you need to rename that file before uploading to the server so that users' browsers do not use the old cached version. I've added a script for this. In the outer directory of the repo, you can use (with your virtual environment activated) 
+###### python renamestaticfile.py <full path to static file, e.g. srpaccessmgmt/srpwebapp/static/main/js/main_xx.js>
+##### The same command can be used for updating a CSS file. This will update the name of the file as well as any references to it in the HTML templates.
+
+##### 2) Use an SFTP client (I prefer Forklift) to move the files to the server. 
+##### 3) SSH to the server and run ./updateApp.sh from the stono user's home directory. This will run the collectstatic command and restart Apache. You need to know the root password for this. 

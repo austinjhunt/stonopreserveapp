@@ -696,6 +696,40 @@ li .calendar-li:hover:nth-child(n+8):nth-child(-n+38), li .calendar-li:nth-child
     transition: background-color 0.6s ease;
 }
 
+/*modal for previewing photo */
+#photo_preview_container{
+    text-align:center;
+    padding:20px;
+    background-color: rgba(40, 40, 40, 0.9);
+    height:100%;
+    border-radius:10px;
+}
+.photopreviewtext{
+    font-size:1.6rem;
+    color:white;
+}
+.previewphoto{
+    margin:0 auto;
+    width: 95% ;
+}
+#photopreviewmodal{
+    height:50%;
+    padding:8px;
+    top:20%;
+    border-radius:10px;
+}
+#photopreviewmodal .modal-dialog,.modal-content{
+    height:100%;
+    border-radius:10px;
+}
+#photopreviewexitbtn{
+    position:absolute;
+    display:block;
+    top:2px;
+    right:2px;
+    z-index:1010;
+}
+
 .custom_image_active, .custom_image_slideshow_dot:hover {
     background-color: #717171;
 }
@@ -874,6 +908,29 @@ li .calendar-li:hover:nth-child(n+8):nth-child(-n+38), li .calendar-li:nth-child
     float:right;
 }
 
+
+#add_user_modal input{
+    display:block;
+    padding:10px;
+    font-size:2.5rem;
+    margin: 10px auto;
+    background-color: rgba(224,255,255,0.9);
+    width:100%;
+
+}
+#is_superuser_container input,label{
+    display:inline-block;
+    margin:10px;
+    width:fit-content;
+    font-size:2.5rem;
+}
+#is_staff_container input,label{
+    font-size:2.5rem;
+    width:fit-content;
+    margin:10px;
+    display:inline-block;
+}
+
 /* modifications for smartphones*/
 /* Smartphones (portrait and landscape) ----------- */
 @media only screen
@@ -1034,6 +1091,10 @@ and (max-device-width: 480px) {
 
     .swipinggif {
         /**/
+    }
+
+    .custom_photo_text{
+        display:none;
     }
 
     /* Styles */

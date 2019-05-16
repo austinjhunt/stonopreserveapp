@@ -56,6 +56,77 @@
     </div>
 </div>
 
+<!-- add user modal for superusers -->
+{% if current_user.is_superuser %}
+<div class="modal" id="add_user_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="text-align:center;">
+                <h3 class="modal-title" style="margin:0 auto;">New User Information</h3>
+            </div>
+            <div class="modal-body" style="text-align:center;">
+                <input id="firstname" placeholder="First Name"><input id="lastname" placeholder="Last Name">
+                <input id="emailaddress" placeholder="CofC Email Address">
+                <div id="is_superuser_container">
+                    <input type="checkbox" id="is_super" onchange="$('#is_staff_container').toggle('slow');"><label
+                        for="is_super">Superuser?</label>
+                </div>
+                <!-- only show this one if not superuser -->
+                <div id="is_staff_container">
+                    <input type="checkbox" id="is_staff"><label for="is_super">Staff?</label>
+                </div>
+                <h6>Default New User Password: drowssap</h6>
+                <button class="btn btn-primary btn-lg"
+                        onclick="create_new_user();"><i class="fa fa-user-circle"></i> Create User
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- include this script in the if block to avoid security issue of having a create_user function in the easily
+accessible js source -->
+<script>
+    function create_new_user() {
+        $("#my_preloader_container").fadeIn();
+        var issuper = $("#is_super").val();
+        var isstaff;
+        if (!issuper) {
+            isstaff = $("#is_staff").val();
+        }
+        else {
+            isstaff = 1;
+        }
+        $.ajax(
+            {
+                type: "POST",
+                data: {
+                    btnType: 'super_create_user',
+                    firstname: $("#firstname").val(),
+                    lastname: $("#lastname").val(),
+                    email: $("#emailaddress").val(),
+                    pass: 'drowssap',
+                    issuper: issuper,
+                    isstaff: isstaff,
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                },
+                success: function (data) {
+                    // ajax complete, change button.
+                    if (data['result'] == 'success') {
+                        location.reload();
+                    }
+                    else { // fail
+                        $("#my_preloader_container").fadeOut();
+                        alert("Failed to create user. Please try again later.")
+                    }
+                }
+            });
+    }
+</script>
+{% endif %}
+
+
 <!-- new announcement modal -->
 <div class="modal" id="announcement_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
@@ -66,12 +137,14 @@
             </div>
             <div class="modal-body" style="text-align:center;">
                 <div
-                        style="text-align:center;"><input id="announcement_title" placeholder="Announcement Title"/></div>
+                        style="text-align:center;"><input id="announcement_title" placeholder="Announcement Title"/>
+                </div>
                 <textarea rows="8" id="announcement_body"></textarea>
             </div>
             <div class="modal-footer">
                 <button style="margin:10px auto;" class="btn btn-lg btn-primary" onclick="add_announcement();">Create
-                    Announcement</button>
+                    Announcement
+                </button>
             </div>
         </div>
     </div>
@@ -154,17 +227,30 @@
             <form method="post" enctype="multipart/form-data">
                 <div style="text-align:center;width:100%; padding:4px;margin:10px;">
                     <input type="file" style="margin:0 auto;" name="photo_file">
-                    <input style="margin:18px auto; width:80%; height:100px;"id="caption"
-                           name="caption"placeholder="Caption">
+                    <input style="margin:18px auto; width:80%; height:100px;" id="caption"
+                           name="caption" placeholder="Caption">
                 </div>
                 <div style="text-align:center;width:100%; padding:4px;margin:10px;">
                     <button class="btn btn-lg btn-success"
-                        onclick="$('#my_preloader_container').fadeIn();location.reload();"
-                        type="submit">
-                    <i class="fa fa-upload"></i>
-                </button>
+                            onclick="$('#my_preloader_container').fadeIn();location.reload();"
+                            type="submit">
+                        <i class="fa fa-upload"></i>
+                    </button>
                 </div>
-              </form>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- photo preview modal -->
+<div class="modal" id="photopreviewmodal" style="top:0; height:100%;" tabindex="-1" role="dialog"
+aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" style="height:100%; max-width: 70%; width:70%; margin:10px auto;" role="document">
+        <div class="modal-content" style="height:100%;" >
+            <div id="photo_preview_container">
+
+            </div>
         </div>
     </div>
 </div>
@@ -325,7 +411,7 @@
                                         <td>
                                             <!-- only allow edit/delete for superuser -->
                                             <button class="btn btn-info"
-                                                    onclick="showeditlockcodemodal({{lc.id}},{{lc.gate_number}},{{lc.lock_code}});">
+                                                    onclick="showeditlockcodemodal({{lc.id}},'{{lc.gate_number}}','{{lc.lock_code}}');">
                                                 <i class="fa fa-edit"></i></button>
 
                                             <button class="btn btn-danger"
@@ -381,10 +467,10 @@
                         <i class="fas fa-fw fa-newspaper"></i> Announcements
                         <!-- only allow supers to create announcements -->
                         {% if current_user.is_superuser %}
-                            <button class="m-5 d-inline-block btn btn-lg btn-success"
-                                    onclick="$('#announcement_modal').modal('show');">
-                                <i class="fa fa-plus"></i> Add an Announcement
-                            </button>
+                        <button class="m-5 d-inline-block btn btn-lg btn-success"
+                                onclick="$('#announcement_modal').modal('show');">
+                            <i class="fa fa-plus"></i> Add an Announcement
+                        </button>
                         {% endif %}
                     </div>
                     <hr class="announcementsviewHR"/>
@@ -393,15 +479,17 @@
                         {% for a in announcements %}
                         <div class="announcementcontainer">
                             <div class="announcement_titlebutton_container">
-                                <div class="announcementtitle">{{a.title}} (posted by {{a.username}} on {{a.date_created}}
-                                    at {{a.time_created}})</div>
+                                <div class="announcementtitle">{{a.title}} (posted by {{a.username}} on
+                                    {{a.date_created}}
+                                    at {{a.time_created}})
+                                </div>
                                 <!-- only allow supers to delete -->
                                 {% if current_user.is_superuser %}
-                                    <button
-                                            onclick="delete_announcement({{a.id}});"class="deleteannouncementbutton btn btn-lg
+                                <button
+                                        onclick="delete_announcement({{a.id}});" class="deleteannouncementbutton btn btn-lg
                                             btn-primary btn-danger">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
+                                    <i class="fa fa-trash"></i>
+                                </button>
                                 {% endif %}
                             </div>
                             <div class="announcementtext">
@@ -510,12 +598,15 @@
                             <div class="col-sm-12 col-md-4 myimgcontainer">
                                 <div class="custom_photo_button">
                                     <button
-                                            onclick="delete_photo('{{img.img_path}}',{{img.id}})"class="btn btn-lg btn-danger">
+                                            onclick="delete_photo('{% static img.img_path %}',{{img.id}})"
+                                            class="btn btn-lg btn-danger">
                                         <i class="fa fa-trash"></i>
                                     </button>
                                 </div>
-                                <a target="_blank" href="{{img.img_path}}" class="lightbox">
-                                    <img class="mygalleryimg" src="{{img.img_path}}">
+                                <a target="_blank"
+                                   onclick="show_img_preview_modal('{% static img.img_path %}','{{img.uploader_name }}',
+                                   '{{img.upload_datetime }}','{{img.caption}}')" class="lightbox">
+                                    <img class="mygalleryimg" src="{% static img.img_path %}">
                                     <div class="custom_photo_overlay">
                                         <div class="custom_photo_text">
                                             Uploaded by {{img.uploader_name }} on {{ img.upload_datetime }}
@@ -539,8 +630,6 @@
                 </div>
 
 
-                <!-- schedule list view -->
-                {% if current_user.is_superuser %}
                 <div class="announcementsview"><!-- DataTables Example -->
                     <div class="newsheader">
                         All Scheduled Visits
@@ -548,8 +637,11 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <!-- for superusers, show ALL scheduled visits -->
+                                {% if current_user.is_superuser %}
                                 <thead>
                                 <tr>
+                                    <th style="text-align:center;">Options</th>
                                     <th style="text-align:center;">First Name</th>
                                     <th style="text-align:center;">Last Name</th>
                                     <th style="text-align:center;">Visit Date</th>
@@ -558,6 +650,11 @@
                                 </thead>
                                 {% for visit in visit_objects %}
                                 <tr id="{{visit.id}}">
+                                    <td style="text-align:center;">
+                                        <button onclick="delete_visit({{visit.id}});" class="btn btn-danger">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
                                     <td style="text-align:center;">{{ visit.visitor_first_name}}</td>
                                     <td style="text-align:center;">{{ visit.visitor_last_name}}</td>
                                     <td style="text-align:center;">{{ visit.visit_date}}</td>
@@ -566,21 +663,57 @@
                                 {% endfor %}
                                 <tfoot>
                                 <tr>
+                                    <th style="text-align:center;">Options</th>
                                     <th style="text-align:center;">First Name</th>
                                     <th style="text-align:center;">Last Name</th>
                                     <th style="text-align:center;">Visit Date</th>
                                     <th style="text-align:center;">Visit Time Interval</th>
                                 </tr>
                                 </tfoot>
+
+                                <!-- for student, faculty users, only show personal scheduled visits -->
+                                {% else %}
+                                <thead>
+                                <tr>
+                                    <th style="text-align:center;">Options</th>
+                                    <th style="text-align:center;">Visit Date</th>
+                                    <th style="text-align:center;">Visit Time Interval</th>
+                                </tr>
+                                </thead>
+                                {% for visit in visit_objects %}
+                                <tr id="{{visit.id}}">
+                                    <td style="text-align:center;">
+                                        <button onclick="delete_visit({{visit.id}});" class="btn btn-danger">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                    <td style="text-align:center;">{{ visit.visit_date}}</td>
+                                    <td style="text-align:center;">{{ visit.start_time}} - {{ visit.end_time }}</td>
+                                </tr>
+                                {% endfor %}
+                                <tfoot>
+                                <tr>
+                                    <th style="text-align:center;">Options</th>
+                                    <th style="text-align:center;">Visit Date</th>
+                                    <th style="text-align:center;">Visit Time Interval</th>
+                                </tr>
+                                </tfoot>
+
+                                {% endif %}
                             </table>
                         </div>
                     </div>
                 </div>
 
                 <!-- all users view -->
+                {% if current_user.is_superuser %}
                 <div class="announcementsview"><!-- DataTables Example -->
                     <div class="newsheader">
                         All Users
+                        <button class="m-5 d-inline-block btn btn-lg btn-success"
+                                onclick="$('#add_user_modal').modal('show');">
+                            <i class="fa fa-plus"></i> Add a User
+                        </button>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">

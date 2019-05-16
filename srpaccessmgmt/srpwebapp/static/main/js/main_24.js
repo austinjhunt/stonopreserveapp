@@ -7,13 +7,31 @@
 // coordPairs (dict for maintaining locations of users {userid: [long,lat]..}), mapVectorLayer (a layer that
 // contains the mapVectorSource), mapVectorSource (the lower level container for all of the position icons where
 // position icons will need to be updated periodically); use mapVectorSource so that you can use getFeatureById()
-var map, view, coordPairs, mapVectorLayer, mapVectorSource;
-
-var updatelocations;
-
+var map, view, coordPairs, mapVectorLayer, mapVectorSource, updatelocations;
 
 $(document).ready(function () {
-    $("#my_preloader_container").fadeOut('slow');
+    /* when a user is on the property, their button at the top says "Leaving".
+    If they reload the page, and they have not "left", we don't want the button status to
+    go back to the default "Arrived." so send a quick request to check if their location is listed
+    as active in database. if so, toggle button status to "leaving" state. use ajax, don't reload page.
+     */
+    $.ajax(
+    {
+        type: "GET",
+        data: {
+            btnType: 'check_user_status_init',
+            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+        },
+        success: function (data) {
+            if (data['status'] == 'on'){
+                //toggle button to the orange leaving state
+                $("#arrivebtn").html($("#arrivebtn").html().replace("Arrived", "Leaving"));
+                $("#arrivebtn").toggleClass('btn-info  btn-warning');
+                $("#arrivebtnicon").toggleClass('fa-check fa-sign-out-alt');
+            }
+            $("#my_preloader_container").fadeOut('slow');
+        }
+    });
 
     /* Show the HTML page only after the js and css are completely loaded */
     setTimeout(function () {
@@ -75,8 +93,6 @@ $(document).ready(function () {
         closeOnClear: false,
     });
     var picker = $input3.pickatime('picker');
-
-
     $(function () {
         $('#datetimepicker6').datetimepicker();
         $('#datetimepicker7').datetimepicker({
@@ -88,9 +104,7 @@ $(document).ready(function () {
         $("#datetimepicker7").on("dp.change", function (e) {
             $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
         });
-
     });
-
 
     <!-- use js to set button contents to only icons, can't be done with css -->
     if ($(window).width() < 480) {
@@ -121,7 +135,6 @@ $(document).ready(function () {
         console.log('Geolocation is not supported for this Browser/OS.');
     }
 
-
     // Create a live map. Initialize user locations to empty list.
     function init() {
         /* Live Map */
@@ -139,7 +152,6 @@ $(document).ready(function () {
             view: view
         });
         coordPairs = [];
-
         /* create a static vector layer that will contain all of the "position" features */
         mapVectorLayer = new ol.layer.Vector({
             map: map,
@@ -150,10 +162,11 @@ $(document).ready(function () {
         }
 
     }
-
     // call the init() function on page load.
     init();
 
+    // globally defined function updatelocations; this will load the active user's locations from the database
+    // (stored as lat/long coordinates) into the dynamic map.
     updatelocations = function (map) {
 
         // get the long/lat of all active users from backend
@@ -164,25 +177,26 @@ $(document).ready(function () {
                 csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
             },
             success: function (data) {
+
+                console.log("Loading new locations");
                 // Update global locations dictionary with updated locations.
                 var coordPairs = data['locations'];
+                console.log(coordPairs);
                 var posFeatures = [];
+                // if there are no active users (no locations to show in map), then only show "no users on site" header.
                 if (Object.keys(coordPairs).length == 0) {
                     $("#map").fadeOut();
                     $("#users_on_site_table").empty();
                     $("#users_on_site_table_container").fadeOut();
                     $("#nousersonsiteheader").fadeIn();
-
-
                 }
+                // otherwise, load into the dynamic map the lat/long coordinate pairs. also present below the map a
+                //table with active users such that a user can be clicked to recenter map onto their location.
                 else {
                     $("#users_on_site_table_container").fadeIn();
                     $("#map").fadeIn();
                     $("#nousersonsiteheader").fadeOut();
-
-                    //var firstloc = ol.proj.fromLonLat(coordPairs[0]);
                     /* for each pair of coordinates retrieved from backend */
-                    var lastuid;
                     for (var userID in coordPairs) {
                         var coordinates = ol.proj.fromLonLat(coordPairs[userID]); // [long,lat]
                         /* Create a position feature for each location */
@@ -206,10 +220,7 @@ $(document).ready(function () {
                         positionFeature.setGeometry(coordinates != null ? new ol.geom.Point(coordinates) : null);
                         /* add this position feature to the posFeatures list */
                         posFeatures.push(positionFeature);
-                        lastuid = userID;
                     }
-                    // center the view on one of the users (logically, the last one in the previous loop)
-                    var centerloc = ol.proj.fromLonLat(coordPairs[lastuid]);
                     // Update the vector layer defined globally with these new positions.
                     mapVectorSource = new ol.source.Vector({
                         features: posFeatures
@@ -217,8 +228,7 @@ $(document).ready(function () {
                     mapVectorLayer.setSource(
                         mapVectorSource
                     );
-                    // set the center to one of the locations retrieved
-                    map.getView().setCenter(centerloc);
+
 
                     // now update the table with active users
                     var users_on_site = data['users_on_site'];
@@ -234,22 +244,21 @@ $(document).ready(function () {
                 }
             },
         });
-    }
+    };
 
+    // initialize map by centering it on stono property.
+     center_map_on_stono();
 
-    // setInterval doesn't make initial call, first call of setInterval will be after the first 15 minutes, so make
-    // initial call manually.
-    updatelocations(map);
-    // call update locations every 15 minutes.
-    setInterval(function () {
-        updatelocations(map)
-    }, 1 * 60 * 1000);
-
-
+    // make initial call manually on document ready. after this, the setInterval function will call it every minute.
+    // this function writethenreadlocations will 1) write this current user's location to the DB, then 2)
+    // load all active locations in DB into the dynamic map
+    writethenreadlocations(function(){
+        updatelocations(map);
+    });
 });
 
 
-// function for locating user
+// function for locating user; click "find user" to recenter map onto their location
 function locateUser(userid) {
     // set since each position feature has the id of some user in that table, set the center of the view to the
     // coordinates of the appropriate position feature
@@ -258,67 +267,80 @@ function locateUser(userid) {
     map.getView().setCenter(coordsToCenter);
 }
 
+// Use Google's Geolocation API. User consent to being tracked is assumed by their presence on a CofC Foundation
+// owned property, so for now, no real need for asking for consent to be tracked.
+// Future implementation idea: use a toggle button in the nav bar to turn GPS tracking on/off.
 
-// window onload, happens after document ready
-// Note: GEOLOCATION SERVICE DOES NOT WORK WITH INSECURE CONNECTION. NEED HTTPS.
-
-window.onload = function () {
-    // Use Google's Geolocation API. User consent to being tracked is assumed by their presence on a CofC Foundation
-    // owned property, so for now, no real need for asking for consent to be tracked.
-    // Future implementation idea: use a toggle button in the nav bar to turn GPS tracking on/off.
-
-    // Instead of continuous tracking which would drain user battery, use a periodic "one-shot" method to obtain
-    // user location at 15 minute intervals.
-    var startPos;
-    var geoSuccess = function (position) {
-        startPos = position;
-        // pass these values to backend with ajax, update lat/long in the User_On_Property table
-        $.ajax(
-            {
-                type: "POST",
-                data: {
-                    btnType: 'update_location',
-                    latitude: startPos.coords.latitude,
-                    longitude: startPos.coords.longitude,
-                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
-                },
-                success: function (data) {
-                    console.log(data); // don't do anything, want this to be a background process
-                }
-            });
-    };
-
-
-    // Unfortunately, not all location lookups are successful. Perhaps a GPS could not be located or
-    // the user has suddenly disabled location lookups. In the event of an error, a second, optional
-    // argument to getCurrentPosition() is called so that you can notify the user inside the callback:
-    var geoError = function (error) {
-        console.log('Error occurred. Error code: ' + error.code);
-
-        // error.code can be:
-        //   0: unknown error
-        //   1: permission denied
-        //   2: position unavailable (error response from location provider)
-        //   3: timed out
-    };
-
-    // pass geoOptions to getCurrentPosition as 3rd argument.
-    var geoOptions = {
-        // 1: For many use cases, you don't need the user's most up-to-date location; you just need a rough estimate.
-        // Use the maximumAge optional property to tell the browser to use a recently obtained geolocation result.
-        maximumAge: 5 * 60 * 1000,
-
-        // 2: Unless you set a timeout, your request for the current position might never return.
-        timeout: 10 * 1000
-    }
-
-    navigator.geolocation.getCurrentPosition(geoSuccess, geoError, geoOptions); // init
-    setInterval(function () {
-        navigator.geolocation.getCurrentPosition(geoSuccess, geoError, geoOptions);
-    }, 15 * 60 * 1000); // update location every 15 minutes
-
-
+// Instead of continuous tracking which would drain user battery, use a periodic "one-shot" method to obtain
+// user location at 1 min intervals.
+//Note: geoSuccess,geoError and geoOptions will be used for WRITING CURRENT USER'S UPDATED LOCATION TO DATABASE.
+// Always write this prior to loading locations into the dynamic map to ensure map is most updated version of locations.
+//var startPos;
+var geoSuccess = function (position) {
+    //console.log("Writing new location... Lat = " + position.coords.latitude + ', Long = ' +
+    // position.coords.longitude);
+    // pass these values to backend with ajax, update lat/long in the User_On_Property table
+    $.ajax(
+        {
+            type: "POST",
+            data: {
+                btnType: 'update_location',
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success: function (data) {
+               // don't do anything, want this to be a background process
+            }
+        });
 };
+
+// don't recenter every minute, just center it on the stono property when the page initially loads
+function center_map_on_stono(){
+    var propertylocation = [-80.176227, 32.738898];
+    // center the view on one of the users (logically, the last one in the previous loop)
+    var centerloc = ol.proj.fromLonLat(propertylocation);
+    map.getView().setCenter(centerloc);
+
+
+}
+
+// Unfortunately, not all location lookups are successful. Perhaps a GPS could not be located or
+// the user has suddenly disabled location lookups. In the event of an error, a second, optional
+// argument to getCurrentPosition() is called so that you can notify the user inside the callback:
+var geoError = function (error) {
+    console.log('Error occurred. Error code: ' + error.code);
+    // error.code can be:
+    //   0: unknown error
+    //   1: permission denied
+    //   2: position unavailable (error response from location provider)
+    //   3: timed out
+};
+
+// pass geoOptions to getCurrentPosition as 3rd argument.
+var geoOptions = {
+    // 1: For many use cases, you don't need the user's most up-to-date location; you just need a rough estimate.
+    // Use the maximumAge optional property to tell the browser to use a recently obtained geolocation result.
+    maximumAge: 0,
+    // 2: Unless you set a timeout, your request for the current position might never return.
+    timeout: 10 * 1000
+};
+
+// Function to write the user's new location and then read the new locations from the database to update the
+// dynamic map. Use a callback function to ensure the read happens after the write.
+function writethenreadlocations(callback){
+    navigator.geolocation.getCurrentPosition(geoSuccess, geoError, geoOptions); // update current user's location.
+    callback(); // load all locations into dynamic map.
+}
+
+// the initial writethenreadlocations call is made on document.ready. after that initial call, this setInterval
+// takes over.
+setInterval(function () {
+    writethenreadlocations(function(){
+        updatelocations(map);
+    });
+}, 60000);
+
 
 
 function register_new_account() {
@@ -418,8 +440,6 @@ function login() {
                 if (data['result'] == 'auth fail')
                     alert("Could not authenticate. Please try a different email or password.");
                 else {
-                    //document.location.href = "/";
-                    //window.location.href = window.location.href.replace('login', '').replace('//','');
                     location.reload();
                 }
 
@@ -585,7 +605,6 @@ function savelockcodeedits(lockid) {
 
 }
 
-
 function showdeletelockcodemodal(lockid) {
     $("#deletelockcodemodal").modal('show');
     $("#deletelockcodecontent").html("Are you sure you want to delete this lock code?");
@@ -686,6 +705,7 @@ function toggleuserstatus_success(to, callback) {
     // Do stuff before callback.
     if (to == 'on') { //arrived on property
         $("#arrivebtn").html($("#arrivebtn").html().replace("Arrived", "Leaving"));
+        navigator.geolocation.getCurrentPosition(geoSuccess, geoError, geoOptions); // update current user's location.
     }
     else { // leaving property.
         $("#arrivebtn").html($("#arrivebtn").html().replace("Leaving", "Arrived"));
@@ -693,10 +713,9 @@ function toggleuserstatus_success(to, callback) {
     $("#arrivebtn").toggleClass('btn-info  btn-warning');
     $("#arrivebtnicon").toggleClass('fa-check fa-sign-out-alt');
 
-    // Execute callback.
+    // Execute callback. (load all active locations into dynamic map)
     callback();
 }
-
 
 function swipingtoggle() {
     $('#swipinggifcontainer').toggle('slow');
@@ -711,7 +730,6 @@ function redirectToLoginAfterVerified() {
         var regexp = /activate.*/gi
         window.location.href = window.location.href.replace(regexp, 'login');
     }
-
 }
 
 function redirectToRegisterAfterFailedVerified() {
@@ -769,7 +787,7 @@ function triggerslideshow() {
 }
 
 function deleteuser(userid) {
-
+    $("#my_preloader_container").fadeIn();
     $.ajax(
         {
             type: "POST",
@@ -842,7 +860,8 @@ function delete_announcement(a_id) {
         });
 }
 
-function delete_photo(imgpath,imgid){
+function delete_photo(imgpath, imgid) {
+    $("#my_preloader_container").fadeIn();
     $.ajax(
         {
             type: "POST",
@@ -864,3 +883,38 @@ function delete_photo(imgpath,imgid){
             }
         });
 }
+
+function show_img_preview_modal(imgpath, uploadername, upload_datetime, caption) {
+    $("#photo_preview_container").html('<button id="photopreviewexitbtn"' +
+        ' onclick="$(\'#photopreviewmodal\').modal(\'hide\');" class="btn btn-primary btn-danger"><i' +
+        ' class="fa fa-window-close"></i></button><img class="previewphoto" ' +
+        'src="' + imgpath + '">' +
+        '<div class="photopreviewtext">Uploaded by ' + uploadername + ' on ' + upload_datetime + '<hr' +
+        ' style="border:1px solid white; margin:5px auto;"/><br/>' + caption + '</div>');
+    $("#photopreviewmodal").modal('show');
+
+}
+
+function delete_visit(visit_id){
+    $("#my_preloader_container").fadeIn();
+    $.ajax(
+        {
+            type: "POST",
+            data: {
+                btnType: 'delete_visit',
+                visit_id: visit_id,
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            },
+            success: function (data) {
+                // ajax complete, change button.
+                if (data['result'] == 'success') {
+                    location.reload();
+                }
+                else { // fail
+                    $("#my_preloader_container").fadeOut();
+                    alert("Failed to delete visit. Please try again later.")
+                }
+            }
+        });
+}
+
