@@ -10,9 +10,9 @@ https://www.linode.com/docs/databases/mysql/create-an-ssh-tunnel-for-mysql-remot
 
 Shortcut: if you're using Mac OS, use the following command to create an SSH tunnel to the Stono App database: 
 
-###### ssh stono@153.9.205.25 -L 3306:127.0.0.1:3306 -N
+###### ssh <username>@<the server's ip address> -L 3306:127.0.0.1:3306 -N
 
-to create the tunnel. This must be done before running the dev server. You must know the database password for this to work. 
+to create the tunnel. This must be done before running the dev server. You must know the database password for this to work. Login information may be provided by Dr. Sebastian van Delden. 
 
 Since location services have been added to the project, we must run the application using HTTPS. It will not work over HTTP. So, in order to serve with HTTPS from localhost, I added the django-extensions app to the project. So now, instead of running 
 
