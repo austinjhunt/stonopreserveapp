@@ -10,7 +10,7 @@ https://www.linode.com/docs/databases/mysql/create-an-ssh-tunnel-for-mysql-remot
 
 Shortcut: if you're using Mac OS, use the following command to create an SSH tunnel to the Stono App database: 
 
-###### ssh <username>@<the server's ip address> -L 3306:127.0.0.1:3306 -N
+###### ssh <your username>@<the server's ip address> -L 3306:127.0.0.1:3306 -N
 
 to create the tunnel. This must be done before running the dev server. You must know the database password for this to work. Login information may be provided by Dr. Sebastian van Delden. 
 
